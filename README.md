@@ -1,6 +1,6 @@
 # Kinopoisk on Django
 
-One Paragraph of project description goes here
+Aggregator of movies
 
 ## Getting Started
 
