@@ -13,7 +13,7 @@ Aggregator of movies
 
 1. Clone repo 
 ```shell
-git clone https://github.com/Little-Pogchamp-Team/kinopoisk_on_django.git
+git clone https://github.com/Pogchamp-company/kinopoisk_on_django.git
 ```
 2. Create Python Virtual Environment
 3. Install requirements
@@ -56,6 +56,10 @@ Add additional notes about how to deploy this on a live system
 ## Contributing
 
 * [Trello Desk](https://trello.com/b/fju3vs7M/kinopoisk-on-django)
+
+### Branch naming
+
+{username}/{task_short_description}
 
 
 ## Authors
