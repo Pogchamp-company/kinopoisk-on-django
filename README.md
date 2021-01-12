@@ -71,4 +71,4 @@ Add additional notes about how to deploy this on a live system
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Little-Pogchamp-Team/kinopoisk_on_django/blob/main/LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Pogchamp-company/kinopoisk_on_django/blob/main/LICENSE.md) file for details
