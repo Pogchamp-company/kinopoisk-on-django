@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'movies.apps.MoviesConfig',
+    'news.apps.NewsConfig',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +83,9 @@ DATABASES = {
         'USER': getenv('POSTGRESQL_USER', 'postgres'),
         'PASSWORD': getenv('POSTGRESQL_PASSWORD'),
         'HOST': getenv('POSTGRESQL_HOST', 'localhost'),
-        'PORT': getenv('POSTGRESQL_PORT', 5432)
-    }
+        'PORT': int(getenv('POSTGRESQL_PORT', 5432)),
+    },
+    # 'AUTOCOMMIT': False,
 }
 
 
