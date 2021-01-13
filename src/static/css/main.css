@@ -17,6 +17,10 @@ body, html {
     height: 100%
 }
 
+.page-wrapper{
+    background: url("../icon/background.png");
+}
+
 body {
     background: #f5f5f5;
     color: #2d2d2d;
