@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
 
 
@@ -20,6 +20,9 @@ class Movie(models.Model):
     title = models.CharField(max_length=150)
     original_name = models.CharField(max_length=150)
     genres = models.ManyToManyField('Genre', related_name='movies')
+    year = models.IntegerField(validators=[MinValueValidator(1895)])
+    slogan = models.TextField(max_length=500)
+    duration = models.DurationField()
 
     def __str__(self):
         return self.title

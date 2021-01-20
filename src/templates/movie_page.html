@@ -8,19 +8,20 @@
                 <img class="img-thumbnail m-2" src="{% static 'icon/poster_film.jpg' %}" alt="">
             </div>
             <div class="col-9">
-                <h4>Год: 2010</h4>
-                <h4>Жанр: фантастика, боевик, триллер</h4>
+                <h2>{{ movie.title }}</h2>
+                <h3>{{ movie.original_name }}</h3>
+                <h4>Год: {{ movie.year }}</h4>
+                <h4>Жанр: {{ movie.genres.all | join:", " }}</h4>
                 <h4>Категория: фильм</h4>
                 <h4>Страна: США</h4>
-                <h4>Альт. название: Skyline</h4>
-                <h4>Слоган: «Не смотри вверх»</h4>
+                <h4>Слоган: {{ movie.slogan }}</h4>
                 <h4>Бюджет: $10 000 000</h4>
                 <h4>Режиссер: Колин Штраус, Грег Штраус</h4>
                 <h4>Продюсер: Кристиан Джеймс Андресен, Лайам О'Доннелл, Пол Бэрри</h4>
                 <h4>Сценарист: Джошуа Кордес, Лайам О'Доннелл</h4>
                 <h4>Премьера Мир: 11 ноября 2010</h4>
                 <h4>Премьера РФ: 11 ноября 2010</h4>
-                <h4>Время: 88 мин.</h4>
+                <h4>Время: {{ movie.duration }}</h4>
             </div>
         </div>
         <!--        <video controls preload="metadata" class="video-player" src="../static/video/clip.mp4"></video> kk3_5AHEZxE 7odYmXqmYl0-->
