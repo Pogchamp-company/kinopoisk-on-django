@@ -12,7 +12,7 @@
             </ol>
             <div class="carousel-inner">
                 {% for movie in preview %}
-                    <div class="carousel-item active">
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
                         <img class="first-slide" src="{% static 'icon/poster_1.jpg' %}" alt="{{ movie.title }} poster">
                         <div class="container">
                             <div class="carousel-caption text-left">

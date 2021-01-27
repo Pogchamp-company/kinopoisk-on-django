@@ -30,6 +30,13 @@ class Genre(models.Model):
         return self.title
 
 
+class Actor(models.Model):
+    role_name = models.CharField(max_length=100)
+
+    person = models.ForeignKey('Person', models.CASCADE, related_name="actor_in_movies")
+    movie = models.ForeignKey('Movie', models.CASCADE, related_name="actors")
+
+
 class Movie(models.Model):
     title = models.CharField(max_length=150)
     original_name = models.CharField(max_length=150)
@@ -37,6 +44,16 @@ class Movie(models.Model):
     year = models.IntegerField(validators=[MinValueValidator(1895)])
     slogan = models.TextField(max_length=500)
     duration = models.DurationField()
+    budget = models.IntegerField(validators=[MinValueValidator(0)])
+
+    # Person relationships
+    directors = models.ManyToManyField('Person', related_name='directed_movies')
+    writers = models.ManyToManyField('Person', related_name='wrote_movies')
+    producers = models.ManyToManyField('Person', related_name='produced_movies')
+    operators = models.ManyToManyField('Person', related_name='operated_movies')
+    composers = models.ManyToManyField('Person', related_name='composed_movies')
+    production_designers = models.ManyToManyField('Person', related_name='production_designed_movies')
+    editors = models.ManyToManyField('Person', related_name='edited_movies')
 
     def __str__(self):
         return self.title
