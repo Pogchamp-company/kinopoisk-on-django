@@ -37,10 +37,18 @@ class Actor(models.Model):
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
 
 
+class MovieType(models.Model):
+    title = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.title
+
+
 class Movie(models.Model):
     title = models.CharField(max_length=150)
-    original_name = models.CharField(max_length=150)
+    original_title = models.CharField(max_length=150)
     genres = models.ManyToManyField('Genre', related_name='movies')
+    movie_type = models.ForeignKey('MovieType', on_delete=models.PROTECT, related_name='movies', null=True)
     year = models.IntegerField(validators=[MinValueValidator(1895)])
     slogan = models.TextField(max_length=500)
     duration = models.DurationField()
