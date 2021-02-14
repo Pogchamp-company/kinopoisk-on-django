@@ -1,5 +1,6 @@
-from django.http import Http404, HttpResponseBadRequest
+from django.http import Http404
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .models import Movie, Person
@@ -25,7 +26,6 @@ class SearchView(APIView):
     person_serializer_class = PersonSerializer
 
     def get(self, request: Request, format=None):
-
         query_filter = request.GET.get('query')
         if not query_filter:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -37,7 +37,8 @@ class SearchView(APIView):
         response = {
             # 'topResult': {},
             'movies': [self.movie_serializer_class(movie).data for movie in movies],
-            'persons': [self.person_serializer_class(person).data for person in persons]
+            'persons': [self.person_serializer_class(person).data for person in persons],
+            'window': render_to_string('search_result.html', dict(movies=movies, persons=persons), request),
         }
 
         return Response(response, status=status.HTTP_200_OK)

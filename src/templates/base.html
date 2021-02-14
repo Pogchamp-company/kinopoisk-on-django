@@ -20,7 +20,7 @@
                 <img src="{% static 'icon/orig.png' %}" alt="">
             </a>
             <div class="col-4 pt-3 row">
-                <input type="text" class="col-11 form-control" placeholder="Фильмы, сериалы, персоны">
+                <input type="search" class="col-11 form-control movie-search" placeholder="Фильмы, сериалы, персоны">
                 <a class="col-1 pt-1" href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                          class="bi bi-search" viewBox="0 0 16 16">
@@ -38,6 +38,10 @@
 
     {% block content %}{% endblock %}
 </div>
+<script>
+     const urlForSearch = '{% url "movies.search" %}';
+</script>
+
 <script src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
