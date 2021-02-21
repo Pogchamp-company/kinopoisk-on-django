@@ -17,8 +17,9 @@ body, html {
     height: 100%
 }
 
-.page-wrapper{
+.page-wrapper {
     background: url("../icon/background.png");
+    padding-bottom: 15px;
 }
 
 body {
@@ -27,6 +28,114 @@ body {
     font-family: 'Arial', 'Helvetica';
     font-size: 16px;
     line-height: 1.5;
+}
+
+/**************** Карточки категории фильмов **********************/
+.container-more {
+    background-color: #505050;
+    color: white;
+    padding: .5rem;
+    border-radius: .75rem;
+    margin-top: 30px;
+}
+
+.container-kod {
+    background-color: white;
+    margin-bottom: 40px;
+    padding: 20px;
+    border-radius: .75rem;
+}
+
+.header-container-more {
+    background-color: #323232;
+    padding: 10px 20px 10px 20px;
+    margin: 10px 5px 10px 5px;
+    border-radius: .5rem;
+}
+
+.text-title-container-more {
+    color: #ff7200;
+    margin-bottom: 0;
+    margin-left: 20px;
+}
+
+.img-border-black {
+    padding: .25rem;
+    background-color: #303030;
+    border: 1px solid #101010;
+    border-radius: .25rem;
+    max-width: 100%;
+    height: auto;
+}
+
+.button_more {
+    border: 3px solid #000000;
+    border-radius: 5px;
+    font-size: 25px;
+    color: #ff7200;
+    text-decoration: none;
+    width: 250px;
+    height: 35px;
+    display: block;
+    text-align: center;
+    line-height: 27px;
+    position: relative;
+    transition: 0.5s;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.button_more::before,
+.button_more::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    top: 0;
+    left: -100%;
+    opacity: .5;
+    transition: .5s;
+    z-index: -1;
+}
+
+.button_more::after {
+    opacity: 1;
+    transition-delay: .1s;
+}
+
+.button_more:hover {
+    color: #ff7200;
+}
+
+.button_more:hover::before,
+.button_more:hover::after {
+    left: 0;
+}
+
+.pulse {
+    background-color: #ff7200;
+    border-radius: 50%;
+    animation: pulse 0.7s ease-out;
+    transform: scale(0);
+    position: absolute;
+}
+@keyFrames pulse {
+    to {
+        transform: scale(2);
+        background-color: #000000;
+        opacity: 0;
+    }
+}
+
+.load-more{
+    padding: 1rem 2rem;
+    border-color: #000000;
+    border-radius: 0px;
+}
+
+.load-more span{
+    display: none;
 }
 
 /************************* Шапка *****************************/
