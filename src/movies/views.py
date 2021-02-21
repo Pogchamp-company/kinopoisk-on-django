@@ -1,6 +1,13 @@
 from django.http import Http404
 from django.shortcuts import render
-from .models import Movie
+from django.template.loader import render_to_string
+from rest_framework.request import Request
+from rest_framework.response import Response
+from .models import Movie, Person
+from rest_framework.views import APIView
+from django.db.models import Q
+from rest_framework import status
+from .serializers import MovieSerializer, PersonSerializer
 
 
 def movie_page(request, movie_id: int):
@@ -12,3 +19,26 @@ def movie_page(request, movie_id: int):
         movie=movie
     )
     return render(request, 'movie_page.html', context)
+
+
+class SearchView(APIView):
+    movie_serializer_class = MovieSerializer
+    person_serializer_class = PersonSerializer
+
+    def get(self, request: Request, format=None):
+        query_filter = request.GET.get('query')
+        if not query_filter:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        movies = Movie.objects.filter(
+            Q(title__icontains=query_filter) | Q(original_title__icontains=query_filter))
+        persons = Person.objects.filter(
+            Q(name__icontains=query_filter) | Q(surname__icontains=query_filter))
+
+        response = {
+            # 'topResult': {},
+            'movies': [self.movie_serializer_class(movie).data for movie in movies],
+            'persons': [self.person_serializer_class(person).data for person in persons],
+            'window': render_to_string('search_result.html', dict(movies=movies, persons=persons), request),
+        }
+
+        return Response(response, status=status.HTTP_200_OK)
