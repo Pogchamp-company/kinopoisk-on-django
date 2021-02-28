@@ -26,7 +26,8 @@ body, html {
     background-color: white;
     margin-bottom: 40px;
     padding: 20px;
-    border-radius: .75rem;
+    border-bottom-left-radius: .75rem;
+    border-bottom-right-radius: .75rem;
 }
 
 body {
@@ -43,13 +44,13 @@ body {
     color: white;
     padding: .5rem;
     border-radius: .75rem;
-    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .header-container-more {
     background-color: #323232;
     padding: 10px 20px 10px 20px;
-    margin: 10px 5px 10px 5px;
+    margin: 10px 5px;
     border-radius: .5rem;
 }
 
@@ -239,6 +240,78 @@ body {
     left: 0;
 }
 
+/****************************************/
+.wrapper {
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 5px;
+    height: 50px;
+}
+
+.list {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    min-width: 3500px;
+    margin-top: 0px;
+}
+
+.list li {
+    display: table-cell;
+    position: relative;
+    text-align: center;
+    cursor: grab;
+    cursor: -webkit-grab;
+    color: #efefef;
+    vertical-align: middle;
+}
+
+.scroller {
+    text-align: center;
+    cursor: pointer;
+    display: none;
+    padding: 7px;
+    padding-top: 13px;
+    white-space: no-wrap;
+    vertical-align: middle;
+    background-color: white;
+}
+
+.list-person-info {
+    border-left: 1px solid #dedede;
+    border-right: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+.list-person-info-item {
+    color: #000000;
+    text-decoration: none;
+    display: block;
+    text-align: start;
+    position: relative;
+    transition: none;
+    overflow: hidden;
+    z-index: 1;
+
+}
+
+.list-person-info-item:hover {
+    background-color: #eeeeee;
+    color: #000000;
+}
+
+.list-person-info-item .index {
+    text-align: center;
+    width: 30px;
+}
+
+.text-mute {
+    color: #acacac;
+}
+
 
 /*********************Параша from Russia*******************/
 .autocomplete {
@@ -246,6 +319,7 @@ body {
     position: relative;
     display: inline-block;
 }
+
 .movie-search {
     z-index: 99;
 }
@@ -264,6 +338,7 @@ body {
     left: 14px;
     right: 63px;
 }
+
 .autocomplete-items .result {
     border-radius: 5px;
     font-size: 25px;

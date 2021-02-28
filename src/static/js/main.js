@@ -16,7 +16,7 @@ $(document).ready(function () {
         //------------- ссылка на бэкэнд для запроса "Больше статей"
         var postLink = '/';
 
-        if (!button.hasClass('working')){
+        if (!button.hasClass('working')) {
             button.addClass('working');
 
             //------------- атрибуты для передачи на бэкэнд
@@ -29,22 +29,22 @@ $(document).ready(function () {
                 type: 'POST',
                 dataType: 'json',
                 data: data,
-                success: function(data) {
+                success: function (data) {
                 },
-                error: function(data){
+                error: function (data) {
                     button.removeClass('working');
                 }
-            }).done(function(data){
-                    //---------------- результаты с бэкэнда
-                    //---------------- data.html - массив статей для вставки
-                    //---------------- data.last - нужна ли кнопка Больше
-                    container.append(data.html);
-                    if (data.last){
-                        button.removeClass('working');
-                    } else {
-                        button.remove();
-                    }
-                });
+            }).done(function (data) {
+                //---------------- результаты с бэкэнда
+                //---------------- data.html - массив статей для вставки
+                //---------------- data.last - нужна ли кнопка Больше
+                container.append(data.html);
+                if (data.last) {
+                    button.removeClass('working');
+                } else {
+                    button.remove();
+                }
+            });
         }
     });
 });
@@ -91,16 +91,15 @@ function autocomplete(inp, url) {
             method: "GET",
             headers: {"Content-Type": "application/json"}
         };
-        fetch(`${url}?query=${val}`, requestOptions).
-        then((response) => response.json())
-        .then((data) => {
-            console.log(data)
-            a = document.createElement("DIV");
-            a.setAttribute("id", this.id + "autocomplete-list");
-            a.setAttribute("class", "autocomplete-items");
-            this.parentNode.appendChild(a);
-            a.innerHTML = data.window;
-        }).catch((error) => console.log(error))
+        fetch(`${url}?query=${val}`, requestOptions).then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                a.innerHTML = data.window;
+            }).catch((error) => console.log(error))
 
         // a = document.createElement("DIV");
         // a.setAttribute("id", this.id + "autocomplete-list");
@@ -190,6 +189,89 @@ function autocomplete(inp, url) {
         closeAllLists(e.target);
     });
 }
+
+/*скролер*/
+var hidWidth;
+var scrollBarWidths = 40;
+
+var widthOfList = function () {
+    var itemsWidth = 0;
+    $('.list a').each(function () {
+        var itemWidth = $(this).outerWidth();
+        itemsWidth += itemWidth;
+    });
+    return itemsWidth;
+};
+
+var widthOfHidden = function () {
+    var ww = 0 - $('.wrapper').outerWidth();
+    var hw = (($('.wrapper').outerWidth()) - widthOfList() - getLeftPosi()) - scrollBarWidths;
+    var rp = $(document).width() - ($('.nav-item.nav-link').last().offset().left + $('.nav-item.nav-link').last().outerWidth());
+
+    if (ww > hw) {
+        //return ww;
+        return (rp > ww ? rp : ww);
+    } else {
+        //return hw;
+        return (rp > hw ? rp : hw);
+    }
+};
+
+var getLeftPosi = function () {
+
+    var ww = 0 - $('.wrapper').outerWidth();
+    var lp = $('.list').position().left;
+
+    if (ww > lp) {
+        return ww;
+    } else {
+        return lp;
+    }
+};
+
+var reAdjust = function () {
+
+    // check right pos of last nav item
+    var rp = $(document).width() - ($('.nav-item.nav-link').last().offset().left + $('.nav-item.nav-link').last().outerWidth());
+    if (($('.wrapper').outerWidth()) < widthOfList() && (rp < 0)) {
+        $('.scroller-right').show().css('display', 'flex');
+    } else {
+        $('.scroller-right').hide();
+    }
+
+    if (getLeftPosi() < 0) {
+        $('.scroller-left').show().css('display', 'flex');
+    } else {
+        $('.item').animate({left: "-=" + getLeftPosi() + "px"}, 'slow');
+        $('.scroller-left').hide();
+    }
+}
+
+reAdjust();
+
+$(window).on('resize', function (e) {
+    reAdjust();
+});
+
+$('.scroller-right').click(function () {
+
+    $('.scroller-left').fadeIn('slow');
+    $('.scroller-right').fadeOut('slow');
+
+    $('.list').animate({left: "+=" + widthOfHidden() + "px"}, 'slow', function () {
+        reAdjust();
+    });
+});
+
+$('.scroller-left').click(function () {
+
+    $('.scroller-right').fadeIn('slow');
+    $('.scroller-left').fadeOut('slow');
+
+    $('.list').animate({left: "-=" + getLeftPosi() + "px"}, 'slow', function () {
+        reAdjust();
+    });
+})
 
 autocomplete(document.getElementsByClassName("movie-search")[0], urlForSearch);
 
