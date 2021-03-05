@@ -220,30 +220,37 @@ var widthOfHidden = function () {
 var getLeftPosi = function () {
 
     var ww = 0 - $('.wrapper').outerWidth();
-    var lp = $('.list').position().left;
-
-    if (ww > lp) {
-        return ww;
-    } else {
-        return lp;
+    try {
+        var lp = $('.list').position().left;
+        if (ww > lp) {
+            return ww;
+        } else {
+            return lp;
+        }
+    } catch (e) {
+        console.log("Сережа, тестировать не учили?!")
     }
+
 };
 
 var reAdjust = function () {
 
     // check right pos of last nav item
-    var rp = $(document).width() - ($('.nav-item.nav-link').last().offset().left + $('.nav-item.nav-link').last().outerWidth());
-    if (($('.wrapper').outerWidth()) < widthOfList() && (rp < 0)) {
-        $('.scroller-right').show().css('display', 'flex');
-    } else {
-        $('.scroller-right').hide();
-    }
-
-    if (getLeftPosi() < 0) {
-        $('.scroller-left').show().css('display', 'flex');
-    } else {
-        $('.item').animate({left: "-=" + getLeftPosi() + "px"}, 'slow');
-        $('.scroller-left').hide();
+    try {
+        var rp = $(document).width() - ($('.nav-item.nav-link').last().offset().left + $('.nav-item.nav-link').last().outerWidth());
+        if (($('.wrapper').outerWidth()) < widthOfList() && (rp < 0)) {
+            $('.scroller-right').show().css('display', 'flex');
+        } else {
+            $('.scroller-right').hide();
+        }
+        if (getLeftPosi() < 0) {
+            $('.scroller-left').show().css('display', 'flex');
+        } else {
+            $('.item').animate({left: "-=" + getLeftPosi() + "px"}, 'slow');
+            $('.scroller-left').hide();
+        }
+    } catch (e) {
+        console.log("Сережа долбоеб");
     }
 }
 
