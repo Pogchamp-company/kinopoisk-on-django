@@ -21,11 +21,15 @@ def movie_page(request, movie_id: int):
     return render(request, 'movie_page.html', context)
 
 
+def person_page(request, person_id: int):
+    return render(request, 'person.html')
+
+
 class SearchView(APIView):
     movie_serializer_class = MovieSerializer
     person_serializer_class = PersonSerializer
 
-    def get(self, request: Request, format=None):
+    def get(self, request: Request):
         query_filter = request.GET.get('query')
         if not query_filter:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)

@@ -5,5 +5,5 @@
 
 <h3>Персоны</h3>
 {% for person in persons %}
-    <a href="#" class="result" style="text-decoration: none"><h5>Чебурек Чебоксаров</h5></a>
+    <a href="{% url "person.person_page" person_id=person.id %}" class="result" style="text-decoration: none"><h5>{{ person }}</h5></a>
 {% endfor %}
