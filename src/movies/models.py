@@ -1,6 +1,35 @@
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
+import uuid
+import datetime
+from django.db import models
+from django.db.models.fields.files import FieldFile
+from django.utils.timezone import utc
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django_minio_backend import MinioBackend, iso_date_prefix
+
+
+def get_iso_date() -> str:
+    now = datetime.datetime.utcnow().replace(tzinfo=utc)
+    return f"{now.year}-{now.month}-{now.day}"
+
+
+class Image:
+    """
+    This is just for uploaded image
+    """
+    objects = models.Manager()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    image = models.ImageField(upload_to=iso_date_prefix, storage=MinioBackend(bucket_name='images'))
+
+
+class Poster(models.Model):
+    movie = models.ForeignKey('Movie', related_name='posters', on_delete=models.CASCADE)
+    objects = models.Manager()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    image = models.ImageField(upload_to=iso_date_prefix, storage=MinioBackend(bucket_name='images'))
 
 
 class Person(models.Model):
