@@ -13,7 +13,7 @@
             <div class="carousel-inner">
                 {% for movie in preview %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <img class="first-slide" src="{{ movie.posters.first.image.url }}" alt="{{ movie.title }} poster">
+                        <img class="first-slide" src="{{ movie.first_poster_url }}" alt="{{ movie.title }} poster">
                         <div class="container">
                             <div class="carousel-caption text-left">
                                 <h1>{{ movie.title }}</h1>

@@ -3,11 +3,12 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from rest_framework.request import Request
 from rest_framework.response import Response
-from .models import Movie, Person
+from .models import Movie
 from rest_framework.views import APIView
 from django.db.models import Q
 from rest_framework import status
 from .serializers import MovieSerializer, PersonSerializer
+from person.models import Person
 
 
 def movie_page(request, movie_id: int):
