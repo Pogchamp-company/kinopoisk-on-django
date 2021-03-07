@@ -3,11 +3,12 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from rest_framework.request import Request
 from rest_framework.response import Response
-from .models import Movie, Person
+from .models import Movie
 from rest_framework.views import APIView
 from django.db.models import Q
 from rest_framework import status
 from .serializers import MovieSerializer, PersonSerializer
+from person.models import Person
 
 
 def movie_page(request, movie_id: int):
@@ -21,11 +22,15 @@ def movie_page(request, movie_id: int):
     return render(request, 'movie_page.html', context)
 
 
+def person_page(request, person_id: int):
+    return render(request, 'person.html')
+
+
 class SearchView(APIView):
     movie_serializer_class = MovieSerializer
     person_serializer_class = PersonSerializer
 
-    def get(self, request: Request, format=None):
+    def get(self, request: Request):
         query_filter = request.GET.get('query')
         if not query_filter:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)

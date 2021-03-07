@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 from os import getenv
+from datetime import timedelta
+from typing import List, Tuple
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,8 +27,7 @@ SECRET_KEY = '@oowa+)%q57uxhffto99*-b+mt%63!@r&*#17mqstv&%fr9*2*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'django_minio_backend',
 
     'movies.apps.MoviesConfig',
     'news.apps.NewsConfig',
+    'person.apps.PersonConfig',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -90,7 +91,6 @@ DATABASES = {
     },
     # 'AUTOCOMMIT': False,
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -110,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -124,9 +123,53 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+# #################### #
+# django_minio_backend #
+# #################### #
+
+dummy_policy = {"Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "",
+                        "Effect": "Allow",
+                        "Principal": {"AWS": "*"},
+                        "Action": "s3:GetBucketLocation",
+                        "Resource": f"arn:aws:s3:::django-backend-dev-private"
+                    },
+                    {
+                        "Sid": "",
+                        "Effect": "Allow",
+                        "Principal": {"AWS": "*"},
+                        "Action": "s3:ListBucket",
+                        "Resource": f"arn:aws:s3:::django-backend-dev-private"
+                    },
+                    {
+                        "Sid": "",
+                        "Effect": "Allow",
+                        "Principal": {"AWS": "*"},
+                        "Action": "s3:GetObject",
+                        "Resource": f"arn:aws:s3:::django-backend-dev-private/*"
+                    }
+                ]}
+
+MINIO_ENDPOINT = getenv('MINIO_ENDPOINT', '127.0.0.1:9001')
+MINIO_ACCESS_KEY = getenv('MINIO_ACCESS_KEY', 'minio')
+MINIO_SECRET_KEY = getenv('MINIO_SECRET_KEY', 'minio123')
+MINIO_USE_HTTPS = False
+MINIO_PRIVATE_BUCKETS = [
+    'gachi'
+]
+MINIO_PUBLIC_BUCKETS = [
+    'images',
+]
+MINIO_URL_EXPIRY_HOURS = timedelta(days=1)  # Default is 7 days (longest) if not defined
+MINIO_CONSISTENCY_CHECK_ON_START = True
+MINIO_POLICY_HOOKS: List[Tuple[str, dict]] = [
+    # ('django-backend-dev-private', dummy_policy)
+]

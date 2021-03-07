@@ -1,20 +1,14 @@
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
+from django.templatetags.static import static
+from utils.mixins import Image
+from person.models import Person
 
 
-class Person(models.Model):
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=100)
-
-    birth_date = models.DateField()
-
-    @property
-    def fullname(self):
-        return f'{self.name} {self.surname}'
-
-    def __str__(self):
-        return self.fullname
+class Poster(Image):
+    movie = models.ForeignKey('Movie', related_name='posters', on_delete=models.CASCADE)
 
 
 class Score(models.Model):
@@ -33,7 +27,7 @@ class Genre(models.Model):
 class Actor(models.Model):
     role_name = models.CharField(max_length=100)
 
-    person = models.ForeignKey('Person', on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
 
 
@@ -55,17 +49,24 @@ class Movie(models.Model):
     budget = models.IntegerField(validators=[MinValueValidator(0)])
 
     # Person relationships
-    directors = models.ManyToManyField('Person', related_name='directed_movies')
-    writers = models.ManyToManyField('Person', related_name='wrote_movies')
-    producers = models.ManyToManyField('Person', related_name='produced_movies')
-    operators = models.ManyToManyField('Person', related_name='operated_movies')
-    composers = models.ManyToManyField('Person', related_name='composed_movies')
-    production_designers = models.ManyToManyField('Person', related_name='production_designed_movies')
-    editors = models.ManyToManyField('Person', related_name='edited_movies')
-    actors = models.ManyToManyField('Person', through='Actor', related_name='actor_in_movies')
+    directors = models.ManyToManyField(Person, related_name='directed_movies')
+    writers = models.ManyToManyField(Person, related_name='wrote_movies')
+    producers = models.ManyToManyField(Person, related_name='produced_movies')
+    operators = models.ManyToManyField(Person, related_name='operated_movies')
+    composers = models.ManyToManyField(Person, related_name='composed_movies')
+    production_designers = models.ManyToManyField(Person, related_name='production_designed_movies')
+    editors = models.ManyToManyField(Person, related_name='edited_movies')
+    actors = models.ManyToManyField(Person, through='Actor', related_name='actor_in_movies')
 
     # User relationships
     scores = models.ManyToManyField(User, through='Score', related_name='movies_scores')
 
     def __str__(self):
         return self.title
+
+    @property
+    def first_poster_url(self):
+        poster = self.posters.first()
+        if not poster:
+            return static('icon/poster_1.jpg')
+        return poster.image.url
