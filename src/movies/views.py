@@ -22,10 +22,6 @@ def movie_page(request, movie_id: int):
     return render(request, 'movie_page.html', context)
 
 
-def person_page(request, person_id: int):
-    return render(request, 'person.html')
-
-
 class SearchView(APIView):
     movie_serializer_class = MovieSerializer
     person_serializer_class = PersonSerializer
