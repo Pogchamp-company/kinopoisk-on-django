@@ -19,6 +19,34 @@ class Person(models.Model):
     # САНТИМЕТРы)))))
     height = models.PositiveIntegerField()
 
+    @cached_property
+    def movies(self):
+        from movies.models import Movie
+        # from person.models import Person
+        # person = Person.objects.first()
+        return Movie.sa.query().all()
+
+    @cached_property
+    def roles(self):
+        possible_roles = ['directed_movies',  'wrote_movies', 'produced_movies',
+                          'operated_movies', 'composed_movies', 'edited_movies',
+                          'actor_in_movies', 'production_designed_movies']
+        return list(filter(lambda rel_name: getattr(self, rel_name, False), possible_roles))
+
+    @property
+    def formatted_roles(self):
+        roles_translations = {
+            'directed_movies': 'Режиссер',
+            'wrote_movies': 'Сценарист',
+            'produced_movies': 'Продюсер',
+            'operated_movies': 'Оператор',
+            'composed_movies': 'Композитор',
+            'edited_movies': 'Монтажер',
+            'actor_in_movies': 'Актер',
+            'production_designed_movies': 'Художник-постановщик'
+        }
+        return [roles_translations.get(key) for key in self.roles]
+
     @property
     def age_word(self):
         last_digit_of_age = self.age % 10
