@@ -3,4 +3,3 @@ djangorestframework==3.12.2
 psycopg2-binary==2.8.6
 django-minio-backend==2.5.1
 Pillow==8.1.2
-ajdjemy==1.0.0

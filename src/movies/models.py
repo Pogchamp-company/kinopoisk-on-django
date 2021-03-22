@@ -4,7 +4,6 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator, MinVa
 from django.db import models
 from django.templatetags.static import static
 from utils.mixins import Image
-from person.models import Person
 
 
 class Poster(Image):
@@ -27,7 +26,7 @@ class Genre(models.Model):
 class Actor(models.Model):
     role_name = models.CharField(max_length=100)
 
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey('person.Person', on_delete=models.CASCADE)
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
 
 
@@ -49,14 +48,14 @@ class Movie(models.Model):
     budget = models.IntegerField(validators=[MinValueValidator(0)])
 
     # Person relationships
-    directors = models.ManyToManyField(Person, related_name='directed_movies')
-    writers = models.ManyToManyField(Person, related_name='wrote_movies')
-    producers = models.ManyToManyField(Person, related_name='produced_movies')
-    operators = models.ManyToManyField(Person, related_name='operated_movies')
-    composers = models.ManyToManyField(Person, related_name='composed_movies')
-    production_designers = models.ManyToManyField(Person, related_name='production_designed_movies')
-    editors = models.ManyToManyField(Person, related_name='edited_movies')
-    actors = models.ManyToManyField(Person, through='Actor', related_name='actor_in_movies')
+    # directors = models.ManyToManyField(Person, related_name='directed_movies')
+    # writers = models.ManyToManyField(Person, related_name='wrote_movies')
+    # producers = models.ManyToManyField(Person, related_name='produced_movies')
+    # operators = models.ManyToManyField(Person, related_name='operated_movies')
+    # composers = models.ManyToManyField(Person, related_name='composed_movies')
+    # production_designers = models.ManyToManyField(Person, related_name='production_designed_movies')
+    # editors = models.ManyToManyField(Person, related_name='edited_movies')
+    # actors = models.ManyToManyField('person.Person', through='Actor', related_name='actor_in_movies')
 
     # User relationships
     scores = models.ManyToManyField(User, through='Score', related_name='movies_scores')

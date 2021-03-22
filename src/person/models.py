@@ -1,3 +1,6 @@
+from enum import Enum
+from typing import List
+
 from django.db import models
 from django.utils.functional import cached_property
 
@@ -10,6 +13,26 @@ class Photo(Image):
     person = models.ForeignKey('Person', related_name='photos', on_delete=models.CASCADE)
 
 
+class PersonRole(models.Model):
+    class RoleType(Enum):
+        DIRECTED = 'Режиссер'
+        WROTE = 'Сценарист'
+        PRODUCED = 'Продюсер'
+        OPERATED = 'Оператор'
+        COMPOSED = 'Композитор'
+        EDITED = 'Монтажер'
+        ACTOR_IN = 'Актер'
+        PRODUCTION_DESIGNED = 'Художник-постановщик'
+
+    role_name = models.CharField(max_length=100, null=True)
+    role_type = models.CharField(max_length=100,
+                                 choices=tuple(map(lambda x: (x.name, x.value), RoleType)),
+                                 )
+
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles')
+    movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE)
+
+
 class Person(models.Model):
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=100)
@@ -19,33 +42,28 @@ class Person(models.Model):
     # САНТИМЕТРы)))))
     height = models.PositiveIntegerField()
 
-    @cached_property
-    def movies(self):
-        from movies.models import Movie
-        # from person.models import Person
-        # person = Person.objects.first()
-        return Movie.sa.query().all()
+    movies = models.ManyToManyField('movies.Movie', through='PersonRole', related_name='persons')
+
+    @property
+    def movies_genres(self):
+        genres = set()
+        for movie in self.movies.all():
+            genres = genres.union(movie.genres.all())
+        return genres
+
+    @property
+    def movies_info(self):
+        query = self.movies.order_by('year')
+        return f'{self.movies.count()} {query.first().year} - {query.last().year}'
 
     @cached_property
-    def roles(self):
-        possible_roles = ['directed_movies',  'wrote_movies', 'produced_movies',
-                          'operated_movies', 'composed_movies', 'edited_movies',
-                          'actor_in_movies', 'production_designed_movies']
-        return list(filter(lambda rel_name: getattr(self, rel_name, False), possible_roles))
+    def existing_roles(self) -> List[PersonRole.RoleType]:
+        return list(filter(lambda rel_name: self.roles.filter(role_type=rel_name.name).exists(),
+               PersonRole.RoleType))
 
     @property
     def formatted_roles(self):
-        roles_translations = {
-            'directed_movies': 'Режиссер',
-            'wrote_movies': 'Сценарист',
-            'produced_movies': 'Продюсер',
-            'operated_movies': 'Оператор',
-            'composed_movies': 'Композитор',
-            'edited_movies': 'Монтажер',
-            'actor_in_movies': 'Актер',
-            'production_designed_movies': 'Художник-постановщик'
-        }
-        return [roles_translations.get(key) for key in self.roles]
+        return list(map(lambda x: x.value, self.existing_roles))
 
     @property
     def age_word(self):
