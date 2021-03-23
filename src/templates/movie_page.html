@@ -5,7 +5,7 @@
     <div class="container bg-white mb-5">
         <div class="row pt-3">
             <div class="col-3">
-                <img class="img-thumbnail m-2" src="{% static 'icon/poster_film.jpg' %}" alt="">
+                <img class="img-thumbnail m-2" src="{{ movie.first_poster_url }}" alt="">
             </div>
             <div class="col-9">
                 <h2>{{ movie.title }}</h2>
@@ -44,7 +44,7 @@
                             allowfullscreen></iframe>
                 </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <iframe width="720" height="480" src="https://www.youtube.com/embed/kk3_5AHEZxE" frameborder="0"
+                    <iframe width="720" height="480" src="https://www.youtube.com/embed/6hi0etcrqO8" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>
                 </div>
@@ -52,30 +52,12 @@
         </div>
         <h3 class="text-center">Рекомендуем к просмотру:</h3>
         <div class="container row">
-            <div class="col-2">
-                <a href="/"><img class="img-thumbnail m-2" src="{% static 'icon/poster_film.jpg' %}" alt=""></a>
-                <h5 class="text-center">Скайлайн</h5>
-            </div>
-            <div class="col-2">
-                <a href="/"><img class="img-thumbnail m-2" src="{% static 'icon/poster_film.jpg' %}" alt=""></a>
-                <h5 class="text-center">Скайлайн</h5>
-            </div>
-            <div class="col-2">
-                <a href="/"><img class="img-thumbnail m-2" src="{% static 'icon/poster_film.jpg' %}" alt=""></a>
-                <h5 class="text-center">Скайлайн</h5>
-            </div>
-            <div class="col-2">
-                <a href="/"><img class="img-thumbnail m-2" src="{% static 'icon/poster_film.jpg' %}" alt=""></a>
-                <h5 class="text-center">Скайлайн</h5>
-            </div>
-            <div class="col-2">
-                <a href="/"><img class="img-thumbnail m-2" src="{% static 'icon/poster_film.jpg' %}" alt=""></a>
-                <h5 class="text-center">Скайлайн</h5>
-            </div>
-            <div class="col-2">
-                <a href="/"><img class="img-thumbnail m-2" src="{% static 'icon/poster_film.jpg' %}" alt=""></a>
-                <h5 class="text-center">Скайлайн</h5>
-            </div>
+            {% for recommendation in recommendations %}
+                <div class="col-2">
+                    <a href="{% url 'movies.movie_page' movie_id=recommendation.id %}"><img class="img-thumbnail m-2" src="{{ recommendation.first_poster_url }}" alt=""></a>
+                    <h5 class="text-center">{{ recommendation }}</h5>
+                </div>
+            {% endfor %}
         </div>
         <hr class="featurette-divider">
     </div>
