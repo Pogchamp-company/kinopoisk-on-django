@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ person.fullname }}{% endblock %}
+
 {% block content %}
     <div class="container container-kod">
         <div class="container-more">
@@ -43,7 +45,7 @@
                          id="tab{{ existing_role.name }}" aria-labelledby="public-tab"
                          aria-expanded="true">
                         {% for movie in movies %}
-                            <a href="#" class="list-person-info-item" style="text-decoration: none">
+                            <a href="{% url 'movies.movie_page' movie_id=movie.id %}" class="list-person-info-item" style="text-decoration: none">
                                 <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
                                     <h5 class="index text-mute">{{ forloop.counter }}</h5>
                                     <div class="column">

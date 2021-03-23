@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}КиноПоиск. Все фильмы планеты.{% endblock %}
+
 {% block content %}
     <div class="container bg-white mb-5">
         <!--Карусель-->
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 {% for _ in preview %}
-                    <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></li>
                 {% endfor %}
             </ol>
             <div class="carousel-inner">

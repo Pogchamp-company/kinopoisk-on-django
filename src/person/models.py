@@ -1,4 +1,5 @@
 from enum import Enum
+from itertools import starmap
 from typing import TYPE_CHECKING
 
 from django.db import models
@@ -29,7 +30,7 @@ class PersonRole(models.Model):
 
     role_name = models.CharField(max_length=100, null=True)
     role_type = models.CharField(max_length=100,
-                                 choices=tuple(map(lambda x: (x.name, x.value), RoleType)),
+                                 choices=tuple(map(lambda role_type: (role_type.name, role_type.value), RoleType)),
                                  )
 
     person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles')
@@ -62,7 +63,7 @@ class Person(models.Model):
     @property
     def movies_info(self) -> str:
         query = self.movies.order_by('year')
-        return f'{self.movies.count()} {query.first().year} - {query.last().year}'
+        return f'{self.movies.count()}, {query.first().year} - {query.last().year}'
 
     @cached_property
     def existing_roles(self) -> list[PersonRole.RoleType]:
@@ -76,7 +77,7 @@ class Person(models.Model):
 
     @property
     def formatted_roles(self) -> list[str]:
-        return list(map(lambda x: x[0].value, self.roles_with_movies))
+        return list(starmap(lambda role_type, _: role_type.value, self.roles_with_movies))
 
     @property
     def age_word(self) -> str:
@@ -112,7 +113,8 @@ class Person(models.Model):
         months = ('января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
                   'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря')
 
-        return f'{self.birth_date.day} {months[self.birth_date.month - 1]}, {self.birth_date.year} • {self.zodiac_sign} • {self.age} {self.age_word}'
+        return f'{self.birth_date.day} {months[self.birth_date.month - 1]}, ' \
+               f'{self.birth_date.year} • {self.zodiac_sign} • {self.age} {self.age_word}'
 
     @property
     def fullname(self) -> str:
