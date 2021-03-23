@@ -14,13 +14,13 @@
                 <h3>{{ movie.original_name }}</h3>
                 <h4>Год: {{ movie.year }}</h4>
                 <h4>Жанр: {{ movie.genres.all | join:", " }}</h4>
-                <h4>Категория: фильм</h4>
+                <h4>Категория: {{ movie.movie_type }}</h4>
                 <h4>Страна: США</h4>
                 <h4>Слоган: {{ movie.slogan }}</h4>
                 <h4>Бюджет: ${{ movie.budget }}</h4>
-                <h4>Режиссер: {{ movie.directors.all | join:", " }}</h4>
-                <h4>Продюсер: {{ movie.producers.all | join:", " }}</h4>
-                <h4>Сценарист: {{ movie.writers.all | join:", " }}</h4>
+                <h4>Режиссер: {{ movie.directors | join:", " }}</h4>
+                <h4>Продюсер: {{ movie.producers | join:", " }}</h4>
+                <h4>Сценарист: {{ movie.writers | join:", " }}</h4>
                 <h4>Премьера Мир: 11 ноября 2010</h4>
                 <h4>Премьера РФ: 11 ноября 2010</h4>
                 <h4>Время: {{ movie.duration }}</h4>

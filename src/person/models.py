@@ -10,7 +10,7 @@ from datetime import date, datetime
 import bisect
 
 if TYPE_CHECKING:
-    from src.movies.models import Movie
+    from movies.models import Movie
 
 
 class Photo(Image):
@@ -34,7 +34,7 @@ class PersonRole(models.Model):
                                  )
 
     person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles')
-    movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE)
+    movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE, related_name='roles')
 
     def __str__(self):
         f_role_name = f' ({self.role_name})' if self.role_name else ''

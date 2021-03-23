@@ -5,6 +5,8 @@ from django.db import models
 from django.templatetags.static import static
 from utils.mixins import Image
 
+from person.models import PersonRole, Person
+
 
 class Poster(Image):
     movie = models.ForeignKey('Movie', related_name='posters', on_delete=models.CASCADE)
@@ -42,6 +44,21 @@ class Movie(models.Model):
 
     # User relationships
     scores = models.ManyToManyField(User, through='Score', related_name='movies_scores')
+
+    def get_person_in_role(self, role_type: PersonRole.RoleType) -> list[Person]:
+        return list(map(lambda role: role.person, self.roles.filter(role_type=role_type.name).all()))
+
+    @property
+    def directors(self) -> list[Person]:
+        return self.get_person_in_role(PersonRole.RoleType.DIRECTED)
+
+    @property
+    def producers(self) -> list[Person]:
+        return self.get_person_in_role(PersonRole.RoleType.PRODUCED)
+
+    @property
+    def writers(self) -> list[Person]:
+        return self.get_person_in_role(PersonRole.RoleType.WROTE)
 
     def __str__(self):
         return self.title
