@@ -23,13 +23,6 @@ class Genre(models.Model):
         return self.title
 
 
-class Actor(models.Model):
-    role_name = models.CharField(max_length=100)
-
-    person = models.ForeignKey('person.Person', on_delete=models.CASCADE)
-    movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
-
-
 class MovieType(models.Model):
     title = models.CharField(max_length=150)
 

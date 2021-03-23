@@ -29,7 +29,7 @@
             <div class="scroller scroller-right float-right mt-2"><i class="fa fa-chevron-right"></i></div>
             <div class="wrapper">
                 <nav class="nav nav-tabs list mt-2" id="myTab" role="tablist">
-                    {% for existing_role in person.existing_roles %}
+                    {% for existing_role, _ in person.roles_with_movies %}
                         <a class="nav-item nav-link {% if forloop.first %}active{% endif %}" data-toggle="tab"
                            href="#tab{{ existing_role.name }}" role="tab"
                            aria-controls="public"
@@ -38,36 +38,21 @@
                 </nav>
             </div>
             <div class="tab-content list-person-info" id="myTabContent">
-                {% for existing_role in person.existing_roles %}
-                    <div role="tabpanel" class="tab-pane fade {% if forloop.first %}active show{% endif %}" id="tab{{ existing_role.name }}" aria-labelledby="public-tab"
+                {% for existing_role, movies in person.roles_with_movies %}
+                    <div role="tabpanel" class="tab-pane fade {% if forloop.first %}active show{% endif %}"
+                         id="tab{{ existing_role.name }}" aria-labelledby="public-tab"
                          aria-expanded="true">
-                        <a href="#" class="list-person-info-item" style="text-decoration: none">
-                            <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
-                                <h5 class="index text-mute">1</h5>
-                                <div class="column">
-                                    <h5 class="text-mute">{% lorem 2 w random %}</h5>
-                                    <h2 style="font-size: 15px">{% lorem 5 w random %}</h2>
+                        {% for movie in movies %}
+                            <a href="#" class="list-person-info-item" style="text-decoration: none">
+                                <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
+                                    <h5 class="index text-mute">{{ forloop.counter }}</h5>
+                                    <div class="column">
+                                        <h5 class="text-mute">{{ movie.title }}</h5>
+                                        <h2 style="font-size: 15px">{{ movie.genres.all|join:', ' }}</h2>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-person-info-item" style="text-decoration: none">
-                            <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
-                                <h5 class="index text-mute">2</h5>
-                                <div class="column">
-                                    <h5 class="text-mute">{% lorem 2 w random %}</h5>
-                                    <h2 style="font-size: 15px">{% lorem 5 w random %}</h2>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-person-info-item" style="text-decoration: none">
-                            <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
-                                <h5 class="index text-mute">3</h5>
-                                <div class="column">
-                                    <h5 class="text-mute">{% lorem 2 w random %}</h5>
-                                    <h2 style="font-size: 15px">{% lorem 5 w random %}</h2>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
+                        {% endfor %}
                     </div>
                 {% endfor %}
             </div>
