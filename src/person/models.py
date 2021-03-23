@@ -1,10 +1,9 @@
-from enum import Enum
 from itertools import starmap
 from typing import TYPE_CHECKING
 
 from django.db import models
 from django.utils.functional import cached_property
-
+from utils.enums import ChoiceEnum
 from utils.mixins import Image
 from datetime import date, datetime
 import bisect
@@ -18,7 +17,7 @@ class Photo(Image):
 
 
 class PersonRole(models.Model):
-    class RoleType(Enum):
+    class RoleType(ChoiceEnum):
         DIRECTED = 'Режиссер'
         WROTE = 'Сценарист'
         PRODUCED = 'Продюсер'
@@ -29,9 +28,7 @@ class PersonRole(models.Model):
         PRODUCTION_DESIGNED = 'Художник-постановщик'
 
     role_name = models.CharField(max_length=100, null=True)
-    role_type = models.CharField(max_length=100,
-                                 choices=tuple(map(lambda role_type: (role_type.name, role_type.value), RoleType)),
-                                 )
+    role_type = models.CharField(max_length=20, choices=RoleType.choices())
 
     person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles')
     movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE, related_name='roles')
