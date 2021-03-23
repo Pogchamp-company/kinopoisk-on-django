@@ -40,16 +40,6 @@ class Movie(models.Model):
     duration = models.DurationField()
     budget = models.IntegerField(validators=[MinValueValidator(0)])
 
-    # Person relationships
-    # directors = models.ManyToManyField(Person, related_name='directed_movies')
-    # writers = models.ManyToManyField(Person, related_name='wrote_movies')
-    # producers = models.ManyToManyField(Person, related_name='produced_movies')
-    # operators = models.ManyToManyField(Person, related_name='operated_movies')
-    # composers = models.ManyToManyField(Person, related_name='composed_movies')
-    # production_designers = models.ManyToManyField(Person, related_name='production_designed_movies')
-    # editors = models.ManyToManyField(Person, related_name='edited_movies')
-    # actors = models.ManyToManyField('person.Person', through='Actor', related_name='actor_in_movies')
-
     # User relationships
     scores = models.ManyToManyField(User, through='Score', related_name='movies_scores')
 
@@ -60,5 +50,5 @@ class Movie(models.Model):
     def first_poster_url(self):
         poster = self.posters.first()
         if not poster:
-            return static('icon/poster_1.jpg')
+            return static('icon/default_poster.webp')
         return poster.image.url

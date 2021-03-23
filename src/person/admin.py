@@ -3,4 +3,13 @@ from .models import Person, Photo, PersonRole
 
 admin.site.register(Person)
 admin.site.register(Photo)
-admin.site.register(PersonRole)
+
+
+class PersonRoleAdmin(admin.ModelAdmin):
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['role_name'].required = False
+        return form
+
+
+admin.site.register(PersonRole, PersonRoleAdmin)

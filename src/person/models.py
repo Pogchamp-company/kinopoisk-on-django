@@ -35,6 +35,11 @@ class PersonRole(models.Model):
     person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles')
     movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE)
 
+    def __str__(self):
+        f_role_name = f' ({self.role_name})' if self.role_name else ''
+        return f'<{self.__class__.__name__} ({self.person}, ' \
+               f'{getattr(self.RoleType, self.role_type).value}{f_role_name}, {self.movie})>'
+
 
 class Person(models.Model):
     name = models.CharField(max_length=50)
