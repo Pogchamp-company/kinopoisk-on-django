@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from django.db import models
 from django.utils.functional import cached_property
 from utils.enums import ChoiceEnum
-from utils.mixins import Image
+from utils.mixins import Image, ImageProperties
 from datetime import date, datetime
 import bisect
 
@@ -39,7 +39,7 @@ class PersonRole(models.Model):
                f'{getattr(self.RoleType, self.role_type).value}{f_role_name}, {self.movie})>'
 
 
-class Person(models.Model):
+class Person(models.Model, ImageProperties):
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=100)
 
@@ -119,3 +119,12 @@ class Person(models.Model):
 
     def __str__(self):
         return self.fullname
+
+    @property
+    def images(self):
+        return self.photos
+
+    @property
+    def default_images_folder(self) -> str:
+        return 'icon/default_photos'
+

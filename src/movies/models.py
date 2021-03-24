@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
 from django.templatetags.static import static
-from utils.mixins import Image
+from utils.mixins import Image, ImageProperties
 
 from person.models import PersonRole, Person
 
@@ -32,7 +32,7 @@ class MovieType(models.Model):
         return self.title
 
 
-class Movie(models.Model):
+class Movie(models.Model, ImageProperties):
     title = models.CharField(max_length=150)
     original_title = models.CharField(max_length=150)
     genres = models.ManyToManyField('Genre', related_name='movies')
@@ -69,3 +69,11 @@ class Movie(models.Model):
         if not poster:
             return static('icon/default_poster.webp')
         return poster.image.url
+
+    @property
+    def images(self):
+        return self.posters
+
+    @property
+    def default_images_folder(self) -> str:
+        return 'icon/default_posters'
