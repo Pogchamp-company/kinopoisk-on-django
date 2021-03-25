@@ -3,8 +3,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
 from django.templatetags.static import static
-from utils.mixins import Image
-from person.models import Person
+from utils.mixins import Image, ImageProperties
+
+from person.models import PersonRole, Person
 
 
 class Poster(Image):
@@ -24,13 +25,6 @@ class Genre(models.Model):
         return self.title
 
 
-class Actor(models.Model):
-    role_name = models.CharField(max_length=100)
-
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
-
-
 class MovieType(models.Model):
     title = models.CharField(max_length=150)
 
@@ -38,7 +32,7 @@ class MovieType(models.Model):
         return self.title
 
 
-class Movie(models.Model):
+class Movie(models.Model, ImageProperties):
     title = models.CharField(max_length=150)
     original_title = models.CharField(max_length=150)
     genres = models.ManyToManyField('Genre', related_name='movies')
@@ -48,18 +42,23 @@ class Movie(models.Model):
     duration = models.DurationField()
     budget = models.IntegerField(validators=[MinValueValidator(0)])
 
-    # Person relationships
-    directors = models.ManyToManyField(Person, related_name='directed_movies')
-    writers = models.ManyToManyField(Person, related_name='wrote_movies')
-    producers = models.ManyToManyField(Person, related_name='produced_movies')
-    operators = models.ManyToManyField(Person, related_name='operated_movies')
-    composers = models.ManyToManyField(Person, related_name='composed_movies')
-    production_designers = models.ManyToManyField(Person, related_name='production_designed_movies')
-    editors = models.ManyToManyField(Person, related_name='edited_movies')
-    actors = models.ManyToManyField(Person, through='Actor', related_name='actor_in_movies')
-
     # User relationships
     scores = models.ManyToManyField(User, through='Score', related_name='movies_scores')
+
+    def get_person_in_role(self, role_type: PersonRole.RoleType) -> list[Person]:
+        return list(map(lambda role: role.person, self.roles.filter(role_type=role_type.name).all()))
+
+    @property
+    def directors(self) -> list[Person]:
+        return self.get_person_in_role(PersonRole.RoleType.DIRECTED)
+
+    @property
+    def producers(self) -> list[Person]:
+        return self.get_person_in_role(PersonRole.RoleType.PRODUCED)
+
+    @property
+    def writers(self) -> list[Person]:
+        return self.get_person_in_role(PersonRole.RoleType.WROTE)
 
     def __str__(self):
         return self.title
@@ -68,5 +67,13 @@ class Movie(models.Model):
     def first_poster_url(self):
         poster = self.posters.first()
         if not poster:
-            return static('icon/poster_1.jpg')
+            return static('icon/default_poster.webp')
         return poster.image.url
+
+    @property
+    def images(self):
+        return self.posters
+
+    @property
+    def default_images_folder(self) -> str:
+        return 'icon/default_posters'

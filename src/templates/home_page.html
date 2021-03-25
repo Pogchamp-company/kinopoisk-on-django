@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}КиноПоиск. Все фильмы планеты.{% endblock %}
+
 {% block content %}
     <div class="container bg-white mb-5">
         <!--Карусель-->
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 {% for _ in preview %}
-                    <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></li>
                 {% endfor %}
             </ol>
             <div class="carousel-inner">
                 {% for movie in preview %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <img class="first-slide" src="{{ movie.first_poster_url }}" alt="{{ movie.title }} poster">
+                        <img class="first-slide" src="{{ movie.big_horizontal_image }}" alt="{{ movie.title }} poster">
                         <div class="container">
                             <div class="carousel-caption text-left">
                                 <h1>{{ movie.title }}</h1>

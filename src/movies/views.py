@@ -17,13 +17,10 @@ def movie_page(request, movie_id: int):
         raise Http404
 
     context = dict(
-        movie=movie
+        movie=movie,
+        recommendations=Movie.objects.filter(~Q(id=movie_id))[:6]
     )
     return render(request, 'movie_page.html', context)
-
-
-def person_page(request, person_id: int):
-    return render(request, 'person.html')
 
 
 class SearchView(APIView):

@@ -1,0 +1,125 @@
+[
+{
+    "model": "movies.poster",
+    "pk": "61f701fe-a76a-4cbe-98c3-9fdd9b02d83f",
+    "fields": {
+        "image": "2021-3-23/Снимок_экрана_от_2021-03-07_20-14-00.png",
+        "movie": 1
+    }
+},
+{
+    "model": "movies.genre",
+    "pk": 1,
+    "fields": {
+        "title": "чикибамбони"
+    }
+},
+{
+    "model": "movies.genre",
+    "pk": 2,
+    "fields": {
+        "title": "чоррор"
+    }
+},
+{
+    "model": "movies.genre",
+    "pk": 3,
+    "fields": {
+        "title": "триллер"
+    }
+},
+{
+    "model": "movies.genre",
+    "pk": 4,
+    "fields": {
+        "title": "криминал"
+    }
+},
+{
+    "model": "movies.genre",
+    "pk": 5,
+    "fields": {
+        "title": "драма"
+    }
+},
+{
+    "model": "movies.genre",
+    "pk": 6,
+    "fields": {
+        "title": "боевик"
+    }
+},
+{
+    "model": "movies.genre",
+    "pk": 7,
+    "fields": {
+        "title": "комедия"
+    }
+},
+{
+    "model": "movies.movietype",
+    "pk": 1,
+    "fields": {
+        "title": "Сериал"
+    }
+},
+{
+    "model": "movies.movietype",
+    "pk": 2,
+    "fields": {
+        "title": "Фильм"
+    }
+},
+{
+    "model": "movies.movie",
+    "pk": 1,
+    "fields": {
+        "title": "Королевы Бомбея",
+        "original_title": "Bombay Begums",
+        "movie_type": 1,
+        "year": 2005,
+        "slogan": "Пять женщин разных поколений бросают вызов обществу в поисках возможности проявить свои амбиции, индивидуальность и захватить власть в жестоком мире финансов.",
+        "duration": "1 03:46:39",
+        "budget": 1,
+        "genres": [
+            1
+        ]
+    }
+},
+{
+    "model": "movies.movie",
+    "pk": 2,
+    "fields": {
+        "title": "Во все тяжкие",
+        "original_title": "Breaking bad",
+        "movie_type": 1,
+        "year": 2008,
+        "slogan": "In the no-holds-barred world of Walt White, the end justifies the extreme",
+        "duration": "00:47:00",
+        "budget": 121,
+        "genres": [
+            3,
+            4,
+            5
+        ]
+    }
+},
+{
+    "model": "movies.movie",
+    "pk": 3,
+    "fields": {
+        "title": "Большой куш",
+        "original_title": "Snatch",
+        "movie_type": 2,
+        "year": 2000,
+        "slogan": "Stealing stones is hazardous",
+        "duration": "01:44:00",
+        "budget": 10000000,
+        "genres": [
+            4,
+            6,
+            7
+        ]
+    }
+}
+]

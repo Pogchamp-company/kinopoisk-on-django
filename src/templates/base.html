@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 {% load static %}
+{% load admin_urls %}
 <html lang="en">
 <head>
-    <title>КиноПоиск. Все фильмы планеты.</title>
+    <title>{% block title %}{% endblock %}</title>
     <meta charset="UTF-8">
     <meta name="description" content="Просмотр фильмов">
     <meta name="keywords" content="кино, фильм, кинопоиск">
@@ -28,10 +29,21 @@
                     </svg>
                 </a>
             </div>
-            <div class="col-4 text-right">
-                <a class="px-4 nav-link" href="#">
+            <div class="col-4 text-right row">
+                {% if request.user.is_superuser %}
+                    <a class="px-4 nav-link" href="{% url 'admin:index' %}">
+                        <h1 class="" style="font-size: 42px">Admin panel</h1>
+                    </a>
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                    <a class="px-4 nav-link" href="#">
+                        <h1 class="" style="font-size: 42px">Profile</h1>
+                    </a>
+                {% else %}
+                    <a class="px-4 nav-link" href="#">
                     <h1 class="" style="font-size: 42px">Вход</h1>
                 </a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -39,7 +51,7 @@
     {% block content %}{% endblock %}
 </div>
 <script>
-     const urlForSearch = '{% url "movies.search" %}';
+    const urlForSearch = '{% url "movies.search" %}';
 </script>
 
 <script src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>

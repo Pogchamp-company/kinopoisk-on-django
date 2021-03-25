@@ -1,148 +1,63 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ person.fullname }}{% endblock %}
+
 {% block content %}
-<div class="container container-kod">
-    <div class="container-more">
-        <div class="row">
-            <div class="col-4">
-                <img class="img-border-black m-2" src="../static/icon/person.jpg" alt="">
-            </div>
-            <div class="col-8">
-                <div class="text-center">
-                    <h1>Доширак Говяжий</h1>
-                    <h5>Doshirak Govyasiy</h5>
+    <div class="container container-kod">
+        <div class="container-more">
+            <div class="row">
+                <div class="col-4">
+                    <img class="img-border-black m-2" src="{{ person.medium_vertical_image }}" alt="">
                 </div>
-                <h4 class="ml-1">О персоне:</h4>
-                <h5>Сценарист, Продюсер, Режиссер, Оператор, Монтажер, Актер, Композитор</h5>
-                <h5>Рост: 1.81 м</h5>
-                <h5>Дата рождения: 30 июля, 1970 • Лев • 50 лет</h5>
-                <h5>Место рождения: Лондон, Англия, Великобритания</h5>
-                <h5>Жанры: фантастика, триллер, драма</h5>
-                <h5>Супруга: Эмма Томас (четверо детей)</h5>
-                <h5>Всего фильмов: 70, 1989 — 2021</h5>
+                <div class="col-8">
+                    <div class="text-center">
+                        <h1>{{ person.fullname }}</h1>
+                    </div>
+                    <h4 class="ml-1">О персоне:</h4>
+                    <h5>{{ person.formatted_roles|join:", " }}</h5>
+                    <h5>Рост: {{ person.height }} см</h5>
+                    <h5>Дата рождения: {{ person.formatted_birth_date }}</h5>
+                    <h5>Место рождения: Лондон, Англия, Великобритания</h5>
+                    <h5>Жанры: {{ person.movies_genres|join:", " }}</h5>
+                    <h5>Супруга: Эмма Томас (четверо детей)</h5>
+                    <h5>Всего фильмов: {{ person.movies_info }}</h5>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-center my-3">Участие в фильмах в роли:</h2>
+        <div class="mx-3">
+            <div class="scroller scroller-left float-left mt-2"><i class="fa fa-chevron-left"></i></div>
+            <div class="scroller scroller-right float-right mt-2"><i class="fa fa-chevron-right"></i></div>
+            <div class="wrapper">
+                <nav class="nav nav-tabs list mt-2" id="myTab" role="tablist">
+                    {% for existing_role, _ in person.roles_with_movies %}
+                        <a class="nav-item nav-link {% if forloop.first %}active{% endif %}" data-toggle="tab"
+                           href="#tab{{ existing_role.name }}" role="tab"
+                           aria-controls="public"
+                           aria-expanded="true">{{ existing_role.value }}</a>
+                    {% endfor %}
+                </nav>
+            </div>
+            <div class="tab-content list-person-info" id="myTabContent">
+                {% for existing_role, movies in person.roles_with_movies %}
+                    <div role="tabpanel" class="tab-pane fade {% if forloop.first %}active show{% endif %}"
+                         id="tab{{ existing_role.name }}" aria-labelledby="public-tab"
+                         aria-expanded="true">
+                        {% for movie in movies %}
+                            <a href="{% url 'movies.movie_page' movie_id=movie.id %}" class="list-person-info-item" style="text-decoration: none">
+                                <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
+                                    <h5 class="index text-mute">{{ forloop.counter }}</h5>
+                                    <div class="column">
+                                        <h5 class="text-mute">{{ movie.title }}</h5>
+                                        <h2 style="font-size: 15px">{{ movie.genres.all|join:', ' }}</h2>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
-    <h2 class="text-center my-3">Участие в фильмах в роли:</h2>
-    <div class="mx-3">
-        <div class="scroller scroller-left float-left mt-2"><i class="fa fa-chevron-left"></i></div>
-        <div class="scroller scroller-right float-right mt-2"><i class="fa fa-chevron-right"></i></div>
-        <div class="wrapper">
-            <nav class="nav nav-tabs list mt-2" id="myTab" role="tablist">
-                <a class="nav-item nav-link active" data-toggle="tab" href="#tab1" role="tab" aria-controls="public"
-                   aria-expanded="true">Актёр: 1</a>
-                <a class="nav-item nav-link" href="#tab2" role="tab" data-toggle="tab">Сценарист: 2</a>
-                <a class="nav-item nav-link" href="#tab3" role="tab" data-toggle="tab">Продюсер: 3</a>
-                <a class="nav-item nav-link" href="#tab4" role="tab" data-toggle="tab">Режисёр: 4</a>
-                <a class="nav-item nav-link" href="#tab5" role="tab" data-toggle="tab">Оператор: 5</a>
-                <a class="nav-item nav-link" href="#tab6" role="tab" data-toggle="tab">Монтажёр: 6</a>
-                <a class="nav-item nav-link" href="#tab7" role="tab" data-toggle="tab">Актёр дубляжа: 7</a>
-                <a class="nav-item nav-link" href="#tab8" role="tab" data-toggle="tab">Актёр: играет самого себя:
-                    8</a>
-                <a class="nav-item nav-link" href="#tab9" role="tab" data-toggle="tab">Tab 9</a>
-                <a class="nav-item nav-link" href="#tab10" role="tab" data-toggle="tab">Tab 10</a>
-                <a class="nav-item nav-link" href="#tab11" role="tab" data-toggle="tab">Tab 11</a>
-                <a class="nav-item nav-link" href="#tab12" role="tab" data-toggle="tab">Tab 12</a>
-                <a class="nav-item nav-link" href="#tab13" role="tab" data-toggle="tab">Tab 13</a>
-                <a class="nav-item nav-link" href="#tab14" role="tab" data-toggle="tab">Tab 14</a>
-                <a class="nav-item nav-link" href="#tab15" role="tab" data-toggle="tab">Tab 15</a>
-                <a class="nav-item nav-link" href="#tab16" role="tab" data-toggle="tab">Tab 16</a>
-            </nav>
-        </div>
-        <div class="tab-content list-person-info" id="myTabContent">
-            <div role="tabpanel" class="tab-pane fade active show" id="tab1" aria-labelledby="public-tab"
-                 aria-expanded="true">
-                <a href="#" class="list-person-info-item" style="text-decoration: none">
-                    <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
-                        <h5 class="index text-mute">1</h5>
-                        <div class="column">
-                            <h5 class="text-mute">8 марта близко пацаны)</h5>
-                            <h2 style="font-size: 15px">8 marta blizlko pacani)</h2>
-                        </div>
-                    </div>
-                </a>
-                <a href="#" class="list-person-info-item" style="text-decoration: none">
-                    <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
-                        <h5 class="index text-mute">2</h5>
-                        <div class="column">
-                            <h5 class="text-mute">Я хочу спать - моя фантазия всё</h5>
-                            <h2 style="font-size: 15px">I have slip - my fantasy vce</h2>
-                        </div>
-                    </div>
-                </a>
-                <a href="#" class="list-person-info-item" style="text-decoration: none">
-                    <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
-                        <h5 class="index text-mute">3</h5>
-                        <div class="column">
-                            <h5 class="text-mute">Шашлык в стране чудес</h5>
-                            <h2 style="font-size: 15px">Shahlik in country AHASHA</h2>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 2</p>
-            </div>
-            <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 3</p>
-            </div>
-            <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 4</p>
-            </div>
-            <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 5</p>
-            </div>
-            <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 6</p>
-            </div>
-            <div class="tab-pane fade" id="tab7" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 7</p>
-            </div>
-            <div class="tab-pane fade" id="tab8" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 8</p>
-            </div>
-            <div class="tab-pane fade" id="tab9" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 9</p>
-            </div>
-            <div class="tab-pane fade" id="tab10" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 10</p>
-                <p class="h2 text-center">Горизонтальный скроллинг для TAB Bootstrap 4</p>
-            </div>
-            <div class="tab-pane fade" id="tab11" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 11</p>
-            </div>
-            <div class="tab-pane fade" id="tab12" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 12</p>
-            </div>
-            <div class="tab-pane fade" id="tab13" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 13</p>
-            </div>
-            <div class="tab-pane fade" id="tab14" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 14</p>
-            </div>
-            <div class="tab-pane fade" id="tab15" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 15</p>
-            </div>
-            <div class="tab-pane fade" id="tab16" role="tabpanel" aria-labelledby="group-dropdown2-tab"
-                 aria-expanded="false">
-                <p class="h1 text-center">Tab 16</p>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
