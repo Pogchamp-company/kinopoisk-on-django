@@ -18,14 +18,16 @@ class Photo(Image):
 
 class PersonRole(models.Model):
     class RoleType(ChoiceEnum):
-        DIRECTED = 'Режиссер'
-        WROTE = 'Сценарист'
-        PRODUCED = 'Продюсер'
-        OPERATED = 'Оператор'
-        COMPOSED = 'Композитор'
-        EDITED = 'Монтажер'
-        ACTOR_IN = 'Актер'
-        PRODUCTION_DESIGNED = 'Художник-постановщик'
+        DIRECTOR = 'Режиссер'
+        WRITER = 'Сценарист'
+        PRODUCER = 'Продюсер'
+        OPERATOR = 'Оператор'
+        COMPOSER = 'Композитор'
+        EDITOR = 'Монтажер'
+        ACTOR = 'Актер'
+        DESIGN = 'Постановщик'
+        VOICE_DIRECTOR = 'Звукорежиссер'
+        TRANSLATOR = 'Переводчик'
 
     role_name = models.CharField(max_length=100, null=True)
     role_type = models.CharField(max_length=20, choices=RoleType.choices())
@@ -40,13 +42,20 @@ class PersonRole(models.Model):
 
 
 class Person(models.Model, ImageProperties):
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=100)
+    fullname = models.CharField(max_length=150, null=True)
+    ru_fullname = models.CharField(max_length=150)
 
-    birth_date = models.DateField()
+    birth_date = models.DateField(null=True)
+    death = models.DateField(null=True)
 
     # САНТИМЕТРы)))))
-    height = models.PositiveIntegerField()
+    height = models.PositiveIntegerField(null=True)
+
+    class SexEnum(ChoiceEnum):
+        MALE = 'Мужчина'
+        FEMALE = 'Женщина'
+
+    sex = models.CharField(max_length=6, choices=SexEnum.choices())
 
     movies = models.ManyToManyField('movies.Movie', through='PersonRole', related_name='persons')
 
@@ -112,10 +121,6 @@ class Person(models.Model, ImageProperties):
 
         return f'{self.birth_date.day} {months[self.birth_date.month - 1]}, ' \
                f'{self.birth_date.year} • {self.zodiac_sign} • {self.age} {self.age_word}'
-
-    @property
-    def fullname(self) -> str:
-        return f'{self.name} {self.surname}'
 
     def __str__(self):
         return self.fullname

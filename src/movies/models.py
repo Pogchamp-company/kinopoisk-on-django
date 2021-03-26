@@ -3,6 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
 from django.templatetags.static import static
+
+from utils.enums import ChoiceEnum
 from utils.mixins import Image, ImageProperties
 
 from person.models import PersonRole, Person
@@ -38,9 +40,22 @@ class Movie(models.Model, ImageProperties):
     genres = models.ManyToManyField('Genre', related_name='movies')
     movie_type = models.ForeignKey('MovieType', on_delete=models.PROTECT, related_name='movies', null=True)
     year = models.IntegerField(validators=[MinValueValidator(1895)])
-    slogan = models.TextField(max_length=500)
+    slogan = models.CharField(max_length=500)
+    description = models.TextField(null=True)
     duration = models.DurationField()
     budget = models.IntegerField(validators=[MinValueValidator(0)])
+    premiere = models.DateField(null=True)
+    premiere_ru = models.DateField(null=True)
+
+    class MpaaRate(ChoiceEnum):
+        G = 'G'
+        PG = 'PG'
+        PG_13 = 'PG-13'
+        R = 'R'
+        NC_17 = 'NC-17'
+
+    rating_mpaa = models.CharField(max_length=5, choices=MpaaRate.choices(), null=True)
+    age_rating = models.SmallIntegerField(validators=[MinValueValidator(0), MaxLengthValidator(18)], null=True)
 
     # User relationships
     scores = models.ManyToManyField(User, through='Score', related_name='movies_scores')
@@ -50,15 +65,15 @@ class Movie(models.Model, ImageProperties):
 
     @property
     def directors(self) -> list[Person]:
-        return self.get_person_in_role(PersonRole.RoleType.DIRECTED)
+        return self.get_person_in_role(PersonRole.RoleType.DIRECTOR)
 
     @property
     def producers(self) -> list[Person]:
-        return self.get_person_in_role(PersonRole.RoleType.PRODUCED)
+        return self.get_person_in_role(PersonRole.RoleType.PRODUCER)
 
     @property
     def writers(self) -> list[Person]:
-        return self.get_person_in_role(PersonRole.RoleType.WROTE)
+        return self.get_person_in_role(PersonRole.RoleType.WRITER)
 
     def __str__(self):
         return self.title
