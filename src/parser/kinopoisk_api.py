@@ -1,7 +1,8 @@
+import asyncio
 import os
 import time
 import xml.etree.ElementTree as xml
-from dataclasses import dataclass
+from aiohttp import ClientSession, ClientTimeout
 from json import JSONDecodeError
 from pprint import pprint
 
@@ -23,8 +24,8 @@ class FILM:
         self.countries = [country['country'] for country in data['countries']]
         self.age_rating = data['ratingAgeLimits']
         self.mpaa_rating = data['ratingMpaa']
-        self.kp_rate = data['kp_rate']
-        self.imdb_rate = data['imdb_rate']
+        self.kp_rate = data.get('kp_rate', None)
+        self.imdb_rate = data.get('imdb_rate', None)
         self.kp_url = data['webUrl']
         self.premiere = data['premiereWorld']
         self.premiere_ru = data['premiereRu']
@@ -59,6 +60,8 @@ class KP:
         self.secret_API = 'https://videocdn.tv/api/short'
         self.version = self.api_version + '.2-release'
         self.about = 'KinoPoiskAPI'
+        self.requests_count = 0
+        self.REQUESTS_LIMIT = 15
 
     def get_film(self, film_id):
         cache = CACHE().load()
@@ -139,6 +142,19 @@ class KP:
                 continue
         return output
 
+    async def top250_async(self):
+        async with ClientSession(timeout=ClientTimeout(total=500), headers=self.headers) as session:
+            tasks = []
+            for page in range(1, 14):
+                tasks.append(asyncio.create_task(
+                    self.request(f'{self.API}films/top?type=BEST_FILMS_LIST&page={page}&listId=1', session)))
+            result = await asyncio.gather(*tasks)
+        output = []
+        for page in result:
+            for movie in page['films']:
+                output.append(SEARCH(movie))
+        return output
+
     def get_film_staff(self, film_id: int):
         request = requests.get(f'{self.STAFF_API}?filmId={film_id}', headers=self.headers)
         try:
@@ -159,6 +175,43 @@ class KP:
             time.sleep(1)
             return self.get_person(person_id)
         return PERSON(data)
+
+    async def request(self, url, session):
+        while self.requests_count > self.REQUESTS_LIMIT:
+            await asyncio.sleep(.25)
+        self.requests_count += 1
+        async with session.get(url) as response:
+            self.requests_count -= 1
+            html = await response.text()
+            try:
+                return json.loads(html)
+            except JSONDecodeError:
+                if response.status == 200:
+                    return html
+                elif response.status == 404:
+                    return {}
+                pprint(html)
+                raise
+
+    async def get_full_film_info(self, film_id):
+        person_tasks = []
+        async with ClientSession(timeout=ClientTimeout(total=500), headers=self.headers) as session:
+            base_film_info = await self.request(f'{self.API}films/{film_id}', session)
+            movie = FILM(base_film_info['data'])
+            roles = await self.request(f'{self.STAFF_API}?filmId={film_id}', session)
+            movie.roles = roles
+            for role in roles:
+                staff = STAFF(role)
+                task_request = asyncio.create_task(self.request(f'{self.STAFF_API}/{staff.kp_id}', session))
+                person_tasks.append(task_request)
+            raw_persons = await asyncio.gather(*person_tasks)
+            persons = []
+            for person in raw_persons:
+                try:
+                    persons.append(PERSON(person).__dict__)
+                except KeyError:
+                    pass
+            return movie.__dict__, persons
 
 
 class CACHE:
