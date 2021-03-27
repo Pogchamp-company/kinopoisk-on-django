@@ -75,6 +75,10 @@ class Movie(models.Model, ImageProperties):
     def writers(self) -> list[Person]:
         return self.get_person_in_role(PersonRole.RoleType.WRITER)
 
+    @property
+    def actors(self) -> list[PersonRole]:
+        return self.roles.filter(role_type=PersonRole.RoleType.ACTOR.name).all()
+
     def __str__(self):
         return self.title
 

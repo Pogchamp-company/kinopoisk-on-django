@@ -98,4 +98,4 @@ for i, movie_json in enumerate(movie_list_json, 1):
     })
 
 save_json('../seed/movies.json', movies_model_list)
-save_json('../seed/person.json', person_model_list)
+save_json('../seed/persons.json', person_model_list)

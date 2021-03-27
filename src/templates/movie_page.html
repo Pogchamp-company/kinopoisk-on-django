@@ -9,7 +9,7 @@
             <div class="col-3">
                 <img class="img-thumbnail m-2" src="{{ movie.medium_vertical_image }}" alt="">
             </div>
-            <div class="col-9">
+            <div class="col-6">
                 <h2>{{ movie.title }}</h2>
                 <h3>{{ movie.original_name }}</h3>
                 <h4>Год: {{ movie.year }}</h4>
@@ -21,9 +21,32 @@
                 <h4>Режиссер: {{ movie.directors | join:", " }}</h4>
                 <h4>Продюсер: {{ movie.producers | join:", " }}</h4>
                 <h4>Сценарист: {{ movie.writers | join:", " }}</h4>
-                <h4>Премьера Мир: 11 ноября 2010</h4>
-                <h4>Премьера РФ: 11 ноября 2010</h4>
+                <h4>Премьера Мир: {{ movie.premiere }}</h4>
+                <h4>Премьера РФ: {{ movie.premiere_ru }}</h4>
                 <h4>Время: {{ movie.duration }}</h4>
+            </div>
+            <div class="col-3">
+                <div class="rating">
+                    <div class="rating-label rating-green">9.8</div>
+                    <!--                <div class="rating-label rating-orange">6.5</div>-->
+                    <!--                <div class="rating-label rating-red">4.1</div>-->
+                    <div class="qty-rating">278к</div>
+                </div>
+                <div class="container-actors">
+                    <div class="container-actors-block">
+                        {% for actor in movie.actors %}
+                            <div class="actor-block">
+                            <div class="row px-3">
+                                <img class="actor-info-photo" src="{{ actor.person.small_vertical_image }}" alt="">
+                                <div class="actor-info">
+                                    <div class="actor-name">{{ actor.person.ru_fullname }}</div>
+                                    <div class="actor-description text">{{ actor.role_name }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
         <!--        <video controls preload="metadata" class="video-player" src="../static/video/clip.mp4"></video> kk3_5AHEZxE 7odYmXqmYl0-->
