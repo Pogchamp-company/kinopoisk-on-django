@@ -31,6 +31,26 @@ class FILM:
         self.premiere_ru = data['premiereRu']
         self.poster = data['posterUrl']
         self.poster_preview = data['posterUrlPreview']
+        self.roles = []
+
+    def to_dict(self):
+        return {
+            "title": self.ru_name,
+            "original_title": self.name,
+            "movie_type": self.type,
+            "year": self.year,
+            "slogan": self.tagline,
+            "description": self.description,
+            "duration": self.duration + ":00",
+            "premiere": self.premiere,
+            "premiere_ru": self.premiere_ru,
+            "rating_mpaa": self.mpaa_rating,
+            "age_rating": self.age_rating,
+            "kp_rate": self.kp_rate,
+            "imdb_rate": self.imdb_rate,
+            "genres": self.genres,
+            "roles": self.roles,
+        }
 
 
 class SEARCH:
@@ -63,10 +83,8 @@ class KP:
         self.requests_count = 0
         self.REQUESTS_LIMIT = 15
 
-    def get_film(self, film_id):
-        cache = CACHE().load()
-
-        rate_request = requests.get(f'https://rating.kinopoisk.ru/{film_id}.xml').text
+    async def get_film(self, film_id: int, session: ClientSession):
+        rate_request = await self.request(f'https://rating.kinopoisk.ru/{film_id}.xml', session)
         try:
             kp_rate = xml.fromstring(rate_request)[0].text
         except IndexError:
@@ -76,39 +94,10 @@ class KP:
         except IndexError:
             imdb_rate = 0
 
-        if str(film_id) in cache:
-            data = {}
-            for a in cache[str(film_id)]:
-                data[a] = cache[str(film_id)][a]
-            data['kp_rate'] = kp_rate
-            data['imdb_rate'] = imdb_rate
-            return FILM(data)
-
-        for _ in range(10):
-            try:
-                request = requests.get(self.API + 'films/' + str(film_id), headers=self.headers)
-                request_json = json.loads(request.text)
-                request_json['data']['kp_rate'] = kp_rate
-                request_json['data']['imdb_rate'] = imdb_rate
-                try:
-                    if self.secret is not None:
-                        request_secret = requests.get(self.secret_API, params={
-                            "kinopoisk_id": film_id,
-                            "api_token": self.secret
-                        })
-                        print(1, request_secret.text)
-                        request_secret_json = json.loads(request_secret.text)
-                        request_json['data']['secret'] = request_secret_json
-                    else:
-                        request_json['data']['secret'] = {"result": False}
-                except (Exception, BaseException):
-                    request_json['data']['secret'] = {"result": False}
-                cache[str(film_id)] = request_json['data']
-                CACHE().write(cache)
-                return FILM(request_json['data'])
-            except json.decoder.JSONDecodeError:
-                time.sleep(0.5)
-                continue
+        request_json = await self.request(self.API + 'films/' + str(film_id), session)
+        request_json['data']['kp_rate'] = float(kp_rate)
+        request_json['data']['imdb_rate'] = float(imdb_rate)
+        return FILM(request_json['data'])
 
     def search(self, query):
         output = []
@@ -140,19 +129,6 @@ class KP:
             except json.decoder.JSONDecodeError:
                 time.sleep(0.5)
                 continue
-        return output
-
-    async def top250_async(self):
-        async with ClientSession(timeout=ClientTimeout(total=500), headers=self.headers) as session:
-            tasks = []
-            for page in range(1, 14):
-                tasks.append(asyncio.create_task(
-                    self.request(f'{self.API}films/top?type=BEST_FILMS_LIST&page={page}&listId=1', session)))
-            result = await asyncio.gather(*tasks)
-        output = []
-        for page in result:
-            for movie in page['films']:
-                output.append(SEARCH(movie))
         return output
 
     def get_film_staff(self, film_id: int):
@@ -196,22 +172,21 @@ class KP:
     async def get_full_film_info(self, film_id):
         person_tasks = []
         async with ClientSession(timeout=ClientTimeout(total=500), headers=self.headers) as session:
-            base_film_info = await self.request(f'{self.API}films/{film_id}', session)
-            movie = FILM(base_film_info['data'])
+            movie = await self.get_film(film_id, session)
             roles = await self.request(f'{self.STAFF_API}?filmId={film_id}', session)
-            movie.roles = roles
             for role in roles:
                 staff = STAFF(role)
+                movie.roles.append(staff.__dict__)
                 task_request = asyncio.create_task(self.request(f'{self.STAFF_API}/{staff.kp_id}', session))
                 person_tasks.append(task_request)
             raw_persons = await asyncio.gather(*person_tasks)
             persons = []
             for person in raw_persons:
                 try:
-                    persons.append(PERSON(person).__dict__)
+                    persons.append(PERSON(person).to_dict())
                 except KeyError:
                     pass
-            return movie.__dict__, persons
+            return movie.to_dict(), persons
 
 
 class CACHE:
@@ -244,9 +219,12 @@ class STAFF:
 class PERSON:
     def __init__(self, data: dict):
         self.kp_id = data["personId"]
-        self.name = data['nameRu'] if data['nameEn'] == '' else data['nameEn']
-        self.ru_name = data['nameRu']
+        self.fullname = data['nameRu'] if data['nameEn'] == '' else data['nameEn']
+        self.ru_fullname = data['nameRu']
         self.sex = data['sex']
         self.height = data['growth']
         self.birth_date = data['birthday']
         self.death = data['death']
+
+    def to_dict(self):
+        return self.__dict__

@@ -1,8 +1,8 @@
 import asyncio
 from os import getenv
-from kinopoisk_api import KP
+from kinopoisk_api import KP, SEARCH
 import time
-from src.parser.utils import save_json
+from utils import save_json
 
 
 async def main():
@@ -11,6 +11,7 @@ async def main():
     top250 = kinopoisk.top250()
     movies = []
     persons = []
+    item: SEARCH
     for item in top250:
         start = time.time()
         print(item.name)

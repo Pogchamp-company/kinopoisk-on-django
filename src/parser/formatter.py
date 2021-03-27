@@ -1,4 +1,4 @@
-from src.parser.utils import load_json, save_json
+from utils import load_json, save_json
 
 movie_list_json = load_json('movies.json')
 person_list_json = load_json('persons.json')
@@ -81,7 +81,7 @@ for i, movie_json in enumerate(movie_list_json, 1):
         'model': 'movies.movie',
         'pk': i,
         'fields': {
-            'movie_type': 2,
+            'movie_type': 2 if movie_json['type'] == 'FILM' else 1,
             'title': movie_json['title'],
             'original_title': movie_json['original_title'] if movie_json['original_title'] else movie_json['title'],
             'duration': movie_json['duration'],
