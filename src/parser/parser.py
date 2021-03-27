@@ -1,19 +1,10 @@
 from os import getenv
 from kinopoisk_api import KP
-from json import dumps, loads
 import time
 
+from src.parser.utils import load_json, save_json
+
 kinopoisk = KP(token=getenv('KP_API_KEY'))
-
-
-def save_json(filename, data: list[dict]) -> None:
-    with open(filename, 'w') as db:
-        db.write(dumps(data, indent=4, ensure_ascii=False))
-
-
-def load_json(filename) -> list[dict]:
-    with open(filename) as db:
-        return loads(db.read())
 
 
 top250 = kinopoisk.top250()

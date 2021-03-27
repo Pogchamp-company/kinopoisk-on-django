@@ -29,7 +29,7 @@ class PersonRole(models.Model):
         VOICE_DIRECTOR = 'Звукорежиссер'
         TRANSLATOR = 'Переводчик'
 
-    role_name = models.CharField(max_length=100, null=True)
+    role_name = models.CharField(max_length=1000, null=True)
     role_type = models.CharField(max_length=20, choices=RoleType.choices())
 
     person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles')
@@ -42,8 +42,8 @@ class PersonRole(models.Model):
 
 
 class Person(models.Model, ImageProperties):
-    fullname = models.CharField(max_length=150, null=True)
-    ru_fullname = models.CharField(max_length=150)
+    fullname = models.CharField(max_length=150)
+    ru_fullname = models.CharField(max_length=150, null=True)
 
     birth_date = models.DateField(null=True)
     death = models.DateField(null=True)
@@ -116,6 +116,8 @@ class Person(models.Model, ImageProperties):
 
     @property
     def formatted_birth_date(self) -> str:
+        if not self.birth_date:
+            return '-'
         months = ('января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
                   'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря')
 
