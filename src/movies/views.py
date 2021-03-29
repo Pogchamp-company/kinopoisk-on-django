@@ -34,7 +34,7 @@ class SearchView(APIView):
         movies = Movie.objects.filter(
             Q(title__icontains=query_filter) | Q(original_title__icontains=query_filter))
         persons = Person.objects.filter(
-            Q(name__icontains=query_filter) | Q(surname__icontains=query_filter))
+            Q(fullname__icontains=query_filter) | Q(ru_fullname__icontains=query_filter))
 
         response = {
             # 'topResult': {},
