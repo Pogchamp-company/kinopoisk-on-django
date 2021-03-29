@@ -1,7 +1,11 @@
 from utils import load_json, save_json
 
-movie_list_json = load_json('movies.json')
-person_list_json = load_json('persons.json')
+try:
+    movie_list_json = load_json('movies.json')
+    person_list_json = load_json('persons.json')
+except FileNotFoundError:
+    print('Run src/parser.parser.py to get raw json data')
+    raise
 
 movies_model_list = [
     {
@@ -60,8 +64,8 @@ for i, movie_json in enumerate(movie_list_json, 1):
             })
             last_genre_id += 1
     for role in movie_json['roles']:
-        if role['role_type'] == 'PRODUCER_USSR':
-            role['role_type'] = 'PRODUCER'
+        if role['role'] == 'PRODUCER_USSR':
+            role['role'] = 'PRODUCER'
             if role['role_name']:
                 role['role_name'] = f'{role["role_name"]} директор картины'
             else:
@@ -71,8 +75,8 @@ for i, movie_json in enumerate(movie_list_json, 1):
             'pk': last_role_id,
             'fields': {
                 'role_name': role['role_name'],
-                'role_type': role['role_type'],
-                'person': persons_kp_id_map[role['person']],
+                'role_type': role['role'],
+                'person': persons_kp_id_map[role['kp_id']],
                 'movie': i
             }
         })
@@ -81,7 +85,7 @@ for i, movie_json in enumerate(movie_list_json, 1):
         'model': 'movies.movie',
         'pk': i,
         'fields': {
-            'movie_type': 2 if movie_json['type'] == 'FILM' else 1,
+            'movie_type': 2 if movie_json['movie_type'] == 'FILM' else 1,
             'title': movie_json['title'],
             'original_title': movie_json['original_title'] if movie_json['original_title'] else movie_json['title'],
             'duration': movie_json['duration'],
