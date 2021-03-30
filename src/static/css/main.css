@@ -442,6 +442,11 @@ body {
     font-size: 13px;
 }
 
+.img-max-width-500 {
+    max-width: 480px;
+    max-height: 480px;
+}
+
 /*.autocomplete-active {*/
 /*    !*when navigating through the items using the arrow keys:*!*/
 /*    background-color: DodgerBlue !important;*/

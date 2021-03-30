@@ -9,7 +9,8 @@
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 {% for _ in preview %}
-                    <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></li>
+                    <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}"
+                        class="{% if forloop.first %}active{% endif %}"></li>
                 {% endfor %}
             </ol>
             <div class="carousel-inner">
@@ -19,7 +20,8 @@
                         <div class="container">
                             <div class="carousel-caption text-left">
                                 <h1>{{ movie.title }}</h1>
-                                <p><a class="btn btn-lg btn-dark" href="{% url "movies.movie_page" movie.id %}" role="button">Смотреть</a></p>
+                                <p><a class="btn btn-lg btn-dark" href="{% url "movies.movie_page" movie.id %}"
+                                      role="button">Смотреть</a></p>
                             </div>
                         </div>
                     </div>
@@ -61,42 +63,18 @@
                 </div>
             </div>
             <div class="col-9">
-                <div class="row featurette">
-                    <div class="col-md-7">
-                        <h2 class="featurette-heading">О МАЙ ГАРАБЛ <span
-                                class="text-muted">это даже больше чем крейзи</span></h2>
-                        <p class="lead">DISNEY и MARVEL в общей сложности онансировали более 50 сериалов</p>
+                {% for news_item in news %}
+                    <div class="row featurette">
+                        <div class="{% if forloop.counter|divisibleby:2 %}col-md-7{% else %}col-md-5 order-md-2{% endif %}">
+                            <h2 class="featurette-heading">{{ news_item.title }}</h2>
+                            <p class="lead">{{ news_item.content }}</p>
+                        </div>
+                        <div class="{% if forloop.counter|divisibleby:2 %}col-md-5{% else %}col-md-7 order-md-1{% endif %}">
+                            <img src="{{ news_item.photo.image.url }}" class="img-max-width-500">
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        <img src="{% static 'icon/loki.jpg' %}">
-                    </div>
-                </div>
-                <hr class="featurette-divider">
-                <div class="row featurette">
-                    <div class="col-md-5 order-md-2">
-                        <h2 class="featurette-heading">ПАЦАНЫ ИДУТ НА ЗАБИВ <span class="text-muted">съёмки скоро продолжаться</span>
-                        </h2>
-                        <p class="lead">Энтони Стар заявил, что новый сезон почти досняли и съёмки"пацанов" скоро
-                            продолжаться</p>
-                    </div>
-                    <div class="col-md-7 order-md-1">
-                        <img src="{% static 'icon/boys.jpg' %}">
-                    </div>
-                </div>
-                <hr class="featurette-divider">
-                <div class="row featurette">
-                    <div class="col-md-7">
-                        <h2 class="featurette-heading">Капитан джек воробей <span class="text-muted">больше не будет экранизирован Джони депом</span>
-                        </h2>
-                        <p class="lead">Как всегда произошла какая-то невиданная ситуация, в которой Джони сделал
-                            плохое
-                            зло. В итоге на него все обиделись(.</p>
-                    </div>
-                    <div class="col-md-5">
-                        <img src="{% static 'icon/Jec.jpg' %}">
-                    </div>
-                </div>
-                <hr class="featurette-divider">
+                    <hr class="featurette-divider">
+                {% endfor %}
             </div>
         </div>
     </div>
