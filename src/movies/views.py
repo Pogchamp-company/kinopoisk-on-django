@@ -20,7 +20,7 @@ def movie_page(request, movie_id: int):
         movie=movie,
         recommendations=Movie.objects.filter(~Q(id=movie_id))[:6]
     )
-    return render(request, 'movie_page.html', context)
+    return render(request, 'movies/movie_page.html', context)
 
 
 class SearchView(APIView):
@@ -40,7 +40,7 @@ class SearchView(APIView):
             # 'topResult': {},
             'movies': [self.movie_serializer_class(movie).data for movie in movies],
             'persons': [self.person_serializer_class(person).data for person in persons],
-            'window': render_to_string('search_result.html', dict(movies=movies, persons=persons), request),
+            'window': render_to_string('movies/search_result.html', dict(movies=movies, persons=persons), request),
         }
 
         return Response(response, status=status.HTTP_200_OK)

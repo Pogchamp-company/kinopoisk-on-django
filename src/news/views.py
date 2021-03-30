@@ -10,4 +10,4 @@ def index(request):
         news=News.objects.order_by("-id")[:3]
     )
 
-    return render(request, 'home_page.html', context)
+    return render(request, 'news/home_page.html', context)

@@ -8,4 +8,4 @@ def person_page(request, person_id: int):
         person=person,
         height=person.height / 100 if person.height else None
     )
-    return render(request, 'person.html', context)
+    return render(request, 'person/person.html', context)
