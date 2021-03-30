@@ -35,7 +35,7 @@ pip install -r requirements.txt
 cd src
 manage.py migrate
 ```
-7. Optional: run seed
+7. Optional: run seeds (generate this (check src/parser/README.md) or download from release)
 ```shell
 manage.py loaddata seed/movies.json
 manage.py loaddata seed/persons.json
