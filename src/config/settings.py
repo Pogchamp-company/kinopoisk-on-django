@@ -41,7 +41,6 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_minio_backend',
-    # 'aldjemy',
 
     'movies.apps.MoviesConfig',
     'news.apps.NewsConfig',
