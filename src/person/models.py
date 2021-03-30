@@ -69,7 +69,7 @@ class Person(models.Model, ImageProperties):
     @property
     def movies_info(self) -> str:
         query = self.movies.order_by('year')
-        return f'{self.movies.count()}, {query.first().year} - {query.last().year}'
+        return f'{len(set(self.movies.all()))}, {query.first().year} - {query.last().year}'
 
     @cached_property
     def existing_roles(self) -> list[PersonRole.RoleType]:
@@ -125,7 +125,7 @@ class Person(models.Model, ImageProperties):
                f'{self.birth_date.year} • {self.zodiac_sign} • {self.age} {self.age_word}'
 
     def __str__(self):
-        return self.fullname
+        return self.ru_fullname or self.fullname
 
     @property
     def images(self):
@@ -134,4 +134,3 @@ class Person(models.Model, ImageProperties):
     @property
     def default_images_folder(self) -> str:
         return 'icon/default_photos'
-

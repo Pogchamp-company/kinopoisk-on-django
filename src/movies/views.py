@@ -32,9 +32,9 @@ class SearchView(APIView):
         if not query_filter:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         movies = Movie.objects.filter(
-            Q(title__icontains=query_filter) | Q(original_title__icontains=query_filter))
+            Q(title__icontains=query_filter) | Q(original_title__icontains=query_filter))[:3]
         persons = Person.objects.filter(
-            Q(fullname__icontains=query_filter) | Q(ru_fullname__icontains=query_filter))
+            Q(fullname__icontains=query_filter) | Q(ru_fullname__icontains=query_filter))[:3]
 
         response = {
             # 'topResult': {},

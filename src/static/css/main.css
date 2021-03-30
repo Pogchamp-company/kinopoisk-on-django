@@ -436,6 +436,7 @@ body {
 }
 
 .actor-block .actor-name {
+    color: white;
 }
 
 .actor-block .actor-description {
@@ -445,6 +446,10 @@ body {
 .img-max-width-500 {
     max-width: 480px;
     max-height: 480px;
+}
+
+.text-black {
+    color: black;
 }
 
 /*.autocomplete-active {*/
