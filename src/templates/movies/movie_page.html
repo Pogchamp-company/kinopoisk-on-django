@@ -1,0 +1,106 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+    <div class="container bg-white mb-5">
+        <div class="row pt-3">
+            <div class="col-3">
+                <img class="img-thumbnail m-2" src="{{ movie.medium_vertical_image }}" alt="">
+            </div>
+            <div class="col-6">
+                <h2>{{ movie.title }}</h2>
+                <h3>{{ movie.original_title }}</h3>
+                <h4>Год: {{ movie.year }}</h4>
+                <h4>Жанр: {{ movie.genres.all | join:", " }}</h4>
+                <h4>Категория: {{ movie.movie_type }}</h4>
+                {% if movie.countries %}
+                    <h4>Страна: {{ movie.countries | join:", " }}</h4>
+                {% endif %}
+                <h4>Слоган: {{ movie.slogan }}</h4>
+                <h4>Бюджет: ${{ movie.budget }}</h4>
+                <h4>Режиссер:
+                    {% for director in movie.directors %}
+                        <a href="{% url "person.person_page" person_id=director.pk %}" class="text-black">{{ director }}{% if not forloop.last %}, {% endif %}</a>
+                    {% empty %}-
+                    {% endfor %}
+                </h4>
+                <h4>Продюсер:
+                    {% for producer in movie.producers %}
+                        <a href="{% url "person.person_page" person_id=producer.pk %}" class="text-black">{{ producer }}{% if not forloop.last %}, {% endif %}</a>
+                    {% empty %}-
+                    {% endfor %}
+                </h4>
+                <h4>Сценарист:
+                    {% for writer in movie.writers %}
+                        <a href="{% url "person.person_page" person_id=writer.pk %}" class="text-black">{{ writer }}{% if not forloop.last %}, {% endif %}</a>
+                    {% empty %}-
+                    {% endfor %}
+                </h4>
+                <h4>Премьера Мир: {% if movie.premiere %}{{ movie.premiere }}{% else %}-{% endif %}</h4>
+                <h4>Премьера РФ: {% if movie.premiere_ru %}{{ movie.premiere_ru }}{% else %}-{% endif %}</h4>
+                <h4>Время: {{ movie.duration }}</h4>
+            </div>
+            <div class="col-3">
+                <div class="rating">
+                    <div class="rating-label rating-green">9.1</div>
+                    <!--                <div class="rating-label rating-orange">6.5</div>-->
+                    <!--                <div class="rating-label rating-red">4.1</div>-->
+                    <div class="qty-rating">278к</div>
+                </div>
+                <div class="container-actors">
+                    <div class="container-actors-block">
+                        {% for actor in movie.actors %}
+                            <div class="actor-block">
+                            <div class="row px-3">
+                                <img class="actor-info-photo" src="{{ actor.person.small_vertical_image }}" alt="">
+                                <div class="actor-info">
+                                    <a class="actor-name" href="{% url "person.person_page" person_id=actor.person_id %}">{{ actor.person }}</a>
+                                    <div class="actor-description text">{{ actor.role_name }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mx-3 my-2 text-center">
+            <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                       aria-controls="home"
+                       aria-selected="true">Трейлер</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                       aria-controls="profile" aria-selected="false">Фильм</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <iframe width="720" height="480" src="https://www.youtube.com/embed/9-dIdFXeFhs" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <iframe width="720" height="480" src="https://www.youtube.com/embed/6hi0etcrqO8" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+        <h3 class="text-center">Рекомендуем к просмотру:</h3>
+        <div class="container row">
+            {% for recommendation in recommendations %}
+                <div class="col-2">
+                    <a href="{% url 'movies.movie_page' movie_id=recommendation.id %}"><img class="img-thumbnail m-2" src="{{ recommendation.small_vertical_image }}" alt=""></a>
+                    <h5 class="text-center">{{ recommendation }}</h5>
+                </div>
+            {% endfor %}
+        </div>
+        <hr class="featurette-divider">
+    </div>
+    <hr class="featurette-divider">
+{% endblock %}

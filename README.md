@@ -1,19 +1,28 @@
 # Kinopoisk on Django
 
+## Description
+
+### Short
 Aggregator of movies
+
+### Full
+A clone of kinopoisk. <br>
+At the moment, the user can view information about movies and persons, <br>
+watch news
 
 ## Getting Started
 
 ### Prerequisites
 
-1. Python3 [Installing](https://www.wikihow.com/Install-Python-on-Windows)
-2. PostgreSQL [Installing](https://gist.github.com/15Dkatz/321e83c4bdd7b78c36884ce92db26d38#file-installing_postgresql-md)
+1. Python3 [Docs](https://www.python.org)
+2. PostgreSQL [Docs](https://www.postgresql.org)
+3. Minio [Docs](https://docs.min.io)
 
 ### Installing
 
 1. Clone repo 
 ```shell
-git clone https://github.com/Little-Pogchamp-Team/kinopoisk_on_django.git
+git clone https://github.com/Pogchamp-company/kinopoisk_on_django.git
 ```
 2. Create Python Virtual Environment
 3. Install requirements
@@ -21,32 +30,30 @@ git clone https://github.com/Little-Pogchamp-Team/kinopoisk_on_django.git
 pip install -r requirements.txt
 ```
 4. Create PostgreSQL database
-5. Change Database setting (ToDo)
+5. Set env variables ([Vars](#environment-variables))
 6. Migrate database
 ```shell
+cd src
 manage.py migrate
 ```
-7. Run project
+7. Run minio
+```shell
+docker-compose up -d minio
+```   
+8. Initialize Minio buckets
+```shell
+manage.py initialize_buckets
+```
+9. Optional: run seeds (generate this (check src/parser/README.md) or download from release)
+```shell
+manage.py loaddata seed/movies.json
+manage.py loaddata seed/persons.json
+```   
+10. Run project
 ```shell
 manage.py runserver
 ```
 
-
-## Running the tests
-
-To Do: Add tests
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
@@ -56,6 +63,10 @@ Add additional notes about how to deploy this on a live system
 ## Contributing
 
 * [Trello Desk](https://trello.com/b/fju3vs7M/kinopoisk-on-django)
+
+### Branch naming
+
+{username}/{task_short_description}
 
 
 ## Authors
@@ -67,4 +78,15 @@ Add additional notes about how to deploy this on a live system
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Little-Pogchamp-Team/kinopoisk_on_django/blob/main/LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Pogchamp-company/kinopoisk_on_django/blob/main/LICENSE.md) file for details
+
+
+## Environment variables
+
+| Variable        | Short description | Default |
+| ------------- |:-------------:| -----:|
+| POSTGRESQL_USER | PostgreSQL user | postgres |
+| POSTGRESQL_PASSWORD | PostgreSQL user password | None |
+| POSTGRESQL_HOST | PostgreSQL host | localhost |
+| POSTGRESQL_PORT | PostgreSQL port | 5432 |
+| DATABASE_NAME | PostgreSQL database | KOD |

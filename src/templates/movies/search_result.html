@@ -1,0 +1,9 @@
+<h3>Фильмы и сериалы</h3>
+{% for movie in movies %}
+    <a href="{% url "movies.movie_page" movie_id=movie.id %}" class="result" style="text-decoration: none"><h5>{{ movie }}</h5></a>
+{% endfor %}
+
+<h3>Персоны</h3>
+{% for person in persons %}
+    <a href="{% url "person.person_page" person_id=person.id %}" class="result" style="text-decoration: none"><h5>{{ person }}</h5></a>
+{% endfor %}

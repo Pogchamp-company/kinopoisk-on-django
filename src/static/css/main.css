@@ -1,0 +1,459 @@
+/*************************** Сброс стилей *****************************/
+
+html, body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    background: transparent;
+}
+
+/************************* Общие стили ***************************/
+
+body, html {
+    padding: 0;
+    margin: 0;
+    height: 100%
+}
+
+.page-wrapper {
+    background: url("../icon/background.png");
+    padding-bottom: 15px;
+}
+
+.container-kod {
+    background-color: white;
+    margin-bottom: 40px;
+    padding: 20px;
+    border-bottom-left-radius: .75rem;
+    border-bottom-right-radius: .75rem;
+}
+
+body {
+    background: #f5f5f5;
+    color: #2d2d2d;
+    font-family: 'Arial', 'Helvetica';
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/**************** Карточки категории фильмов **********************/
+.container-more {
+    background-color: #505050;
+    color: white;
+    padding: .5rem;
+    border-radius: .75rem;
+    margin-bottom: 20px;
+}
+
+.header-container-more {
+    background-color: #323232;
+    padding: 10px 20px 10px 20px;
+    margin: 10px 5px;
+    border-radius: .5rem;
+}
+
+.text-title-container-more {
+    color: #ff7200;
+    margin-bottom: 0;
+    margin-left: 20px;
+}
+
+.img-border-black {
+    padding: .25rem;
+    background-color: #303030;
+    border: 1px solid #101010;
+    border-radius: .25rem;
+    max-width: 100%;
+    height: auto;
+}
+
+.button_more {
+    border: 3px solid #000000;
+    border-radius: 5px;
+    font-size: 25px;
+    color: #ff7200;
+    text-decoration: none;
+    width: 250px;
+    height: 35px;
+    display: block;
+    text-align: center;
+    line-height: 27px;
+    position: relative;
+    transition: 0.5s;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.button_more::before,
+.button_more::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    top: 0;
+    left: -100%;
+    opacity: .5;
+    transition: .5s;
+    z-index: -1;
+}
+
+.button_more::after {
+    opacity: 1;
+    transition-delay: .1s;
+}
+
+.button_more:hover {
+    color: #ff7200;
+}
+
+.button_more:hover::before,
+.button_more:hover::after {
+    left: 0;
+}
+
+.pulse {
+    background-color: #ff7200;
+    border-radius: 50%;
+    animation: pulse 0.7s ease-out;
+    transform: scale(0);
+    position: absolute;
+}
+
+@keyFrames pulse {
+    to {
+        transform: scale(2);
+        background-color: #000000;
+        opacity: 0;
+    }
+}
+
+.load-more {
+    padding: 1rem 2rem;
+    border-color: #000000;
+    border-radius: 0px;
+}
+
+.load-more span {
+    display: none;
+}
+
+/************************* Шапка *****************************/
+.site-header {
+    background-color: rgba(0, 0, 0, .85);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+}
+
+.site-header a {
+    color: #999;
+    transition: ease-in-out color .15s;
+}
+
+.site-header a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+/************************* Карусель ***************************/
+.carousel {
+    margin-bottom: 3rem;
+}
+
+.carousel-caption {
+    bottom: 4rem;
+    z-index: 1;
+}
+
+.carousel-item {
+    height: 600px;
+    background-color: #777;
+}
+
+.carousel-item > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 600px;
+}
+
+/************************* Левая панель **********************/
+.fixed_left_panel {
+    position: sticky;
+    top: 100px;
+}
+
+/******************* Заголовок левой панели ********************/
+.text_left_panel {
+    font-size: 25px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    color: #ff7200;
+}
+
+/********************* Кнопки левой панели *********************/
+.button_left_panel {
+    border-radius: 5px;
+    font-size: 25px;
+    color: #000000;
+    text-decoration: none;
+    width: 100%;
+    height: 35px;
+    display: block;
+    text-align: start;
+    text-indent: 5px;
+    line-height: 35px;
+    position: relative;
+    transition: 0.5s;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.button_left_panel::before,
+.button_left_panel::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: #ebebeb;
+    top: 0;
+    left: -100%;
+    opacity: .5;
+    transition: .3s;
+    z-index: -1;
+}
+
+.button_left_panel::after {
+    opacity: 1;
+    transition-delay: .1s;
+}
+
+.button_left_panel:hover {
+    color: #ff7200;
+}
+
+.button_left_panel:hover::before,
+.button_left_panel:hover::after {
+    left: 0;
+}
+
+/****************************************/
+.wrapper {
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 5px;
+    height: 50px;
+}
+
+.list {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    min-width: 3500px;
+    margin-top: 0px;
+}
+
+.list li {
+    display: table-cell;
+    position: relative;
+    text-align: center;
+    cursor: grab;
+    cursor: -webkit-grab;
+    color: #efefef;
+    vertical-align: middle;
+}
+
+.scroller {
+    text-align: center;
+    cursor: pointer;
+    display: none;
+    padding: 7px;
+    padding-top: 13px;
+    white-space: no-wrap;
+    vertical-align: middle;
+    background-color: white;
+}
+
+.list-person-info {
+    border-left: 1px solid #dedede;
+    border-right: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+.list-person-info-item {
+    color: #000000;
+    text-decoration: none;
+    display: block;
+    text-align: start;
+    position: relative;
+    transition: none;
+    overflow: hidden;
+    z-index: 1;
+
+}
+
+.list-person-info-item:hover {
+    background-color: #eeeeee;
+    color: #000000;
+}
+
+.list-person-info-item .index {
+    text-align: center;
+    width: 30px;
+}
+
+.text-mute {
+    color: #acacac;
+}
+
+
+/*********************Параша from Russia*******************/
+.autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: inline-block;
+}
+
+.movie-search {
+    z-index: 99;
+}
+
+.autocomplete-items {
+    position: absolute;
+    background-color: white;
+    padding: .5rem;
+    border: 1px solid #000000;
+    border-bottom-left-radius: .75rem;
+    border-bottom-right-radius: .75rem;
+    border-top: none;
+    z-index: 98;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 50px;
+    left: 14px;
+    right: 63px;
+}
+
+.autocomplete-items .result {
+    border-radius: 5px;
+    font-size: 25px;
+    color: #000000;
+    text-decoration: none;
+    width: 100%;
+    height: 35px;
+    display: block;
+    text-align: start;
+    text-indent: 5px;
+    line-height: 35px;
+    position: relative;
+    transition: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.autocomplete-items .result:hover {
+    color: #ff7200;
+}
+
+.rating {
+    background-color: rgb(80, 80, 80);
+    color: white;
+    margin-bottom: 10px;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+}
+
+.rating .rating-green {
+    background-color: rgb(66, 121, 66);
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(56, 102, 56);
+    border-image: initial;
+}
+
+.rating .rating-label {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    font-size: 50px;
+    color: white;
+    text-align: center;
+    line-height: 93px;
+    margin: 0px 5px;
+    border-radius: 2rem;
+}
+
+.rating .qty-rating {
+    display: inline-block;
+    font-size: 50px;
+    margin-top: auto;
+    color: rgb(136, 136, 136);
+}
+
+.container-actors {
+    background-color: rgb(80, 80, 80);
+    color: white;
+    margin-bottom: 20px;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+}
+
+.container-actors .container-actors-block {
+    max-height: 400px;
+    padding: 0px 10px;
+    overflow: auto;
+}
+
+.container-actors-block .actor-block {
+    background-color: rgb(64, 64, 64);
+    color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    margin: 10px 0px;
+}
+
+.actor-block .actor-info-photo {
+    height: 120px;
+    width: 88px;
+    border-radius: 0.5rem;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+    border-image: initial;
+}
+
+.actor-block .actor-info {
+    padding-left: 5px;
+}
+
+.actor-block .actor-name {
+    color: white;
+}
+
+.actor-block .actor-description {
+    font-size: 13px;
+}
+
+.img-max-width-500 {
+    max-width: 480px;
+    max-height: 480px;
+}
+
+.text-black {
+    color: black;
+}
+
+/*.autocomplete-active {*/
+/*    !*when navigating through the items using the arrow keys:*!*/
+/*    background-color: DodgerBlue !important;*/
+/*    color: #ffffff;*/
+/*}*/

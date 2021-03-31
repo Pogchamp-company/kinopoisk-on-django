@@ -1,0 +1,69 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}{{ person }}{% endblock %}
+
+{% block content %}
+    <div class="container container-kod">
+        <div class="container-more">
+            <div class="row">
+                <div class="col-4">
+                    <img class="img-border-black m-2" src="{{ person.medium_vertical_image }}" alt="">
+                </div>
+                <div class="col-8">
+                    <div class="text-center">
+                        <h1>{{ person }}</h1>
+                    </div>
+                    <h4 class="ml-1">О персоне:</h4>
+                    <h5>{{ person.formatted_roles|join:", " }}</h5>
+                    {% if height %}
+                        <h5>Рост: {{ height }} м</h5>
+                    {% endif %}
+                    <h5>Дата рождения: {{ person.formatted_birth_date }}</h5>
+                    {% if person.birth_place %}
+                        <h5>Место рождения: person.birth_place</h5>
+                    {% endif %}
+                    <h5>Жанры: {{ person.movies_genres|join:", " }}</h5>
+                    {% if person.family %}
+                        <h5>Супруга: Эмма Томас (четверо детей)</h5>
+                    {% endif %}
+                    <h5>Всего фильмов: {{ person.movies_info }}</h5>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-center my-3">Участие в фильмах в роли:</h2>
+        <div class="mx-3">
+            <div class="scroller scroller-left float-left mt-2"><i class="fa fa-chevron-left"></i></div>
+            <div class="scroller scroller-right float-right mt-2"><i class="fa fa-chevron-right"></i></div>
+            <div class="wrapper">
+                <nav class="nav nav-tabs list mt-2" id="myTab" role="tablist">
+                    {% for existing_role, _ in person.roles_with_movies %}
+                        <a class="nav-item nav-link {% if forloop.first %}active{% endif %}" data-toggle="tab"
+                           href="#tab{{ existing_role.name }}" role="tab"
+                           aria-controls="public"
+                           aria-expanded="true">{{ existing_role.value }}</a>
+                    {% endfor %}
+                </nav>
+            </div>
+            <div class="tab-content list-person-info" id="myTabContent">
+                {% for existing_role, movies in person.roles_with_movies %}
+                    <div role="tabpanel" class="tab-pane fade {% if forloop.first %}active show{% endif %}"
+                         id="tab{{ existing_role.name }}" aria-labelledby="public-tab"
+                         aria-expanded="true">
+                        {% for movie in movies %}
+                            <a href="{% url 'movies.movie_page' movie_id=movie.id %}" class="list-person-info-item" style="text-decoration: none">
+                                <div class="row px-4 py-3" style="border-bottom: 1px solid #eeeeee">
+                                    <h5 class="index text-mute">{{ forloop.counter }}</h5>
+                                    <div class="column">
+                                        <h5 class="text-mute">{{ movie.title }}</h5>
+                                        <h2 style="font-size: 15px">{{ movie.genres.all|join:', ' }}</h2>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
