@@ -131,3 +131,7 @@ dmypy.json
 
 
 .idea/
+
+src/parser/assets/
+src/parser/movies.json
+src/parser/persons.json

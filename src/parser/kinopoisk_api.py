@@ -3,8 +3,8 @@ import os
 import time
 import xml.etree.ElementTree as xml
 from aiohttp import ClientSession, ClientTimeout
+from aiohttp.web_exceptions import HTTPTooManyRequests
 from json import JSONDecodeError
-from pprint import pprint
 
 import requests
 import json
@@ -35,6 +35,7 @@ class FILM:
 
     def to_dict(self):
         return {
+            "kp_id": self.kp_id,
             "title": self.ru_name,
             "original_title": self.name,
             "movie_type": self.type,
@@ -69,19 +70,21 @@ class SEARCH:
 
 
 class KP:
-    def __init__(self, token, secret=None):
+    def __init__(self, token, secret=None, requests_limit=15):
         self.token = token
         self.secret = secret
         self.headers = {"X-API-KEY": self.token}
-        self.api_version = 'v2.1'
+        self.api_version = 'v2.2'
         self.staff_api_version = 'v1'
-        self.API = 'https://kinopoiskapiunofficial.tech/api/' + self.api_version + '/'
-        self.STAFF_API = f'https://kinopoiskapiunofficial.tech/api/{self.staff_api_version}/staff'
+        self.base_api_url = 'https://kinopoiskapiunofficial.tech/api/'
+        self.images_url = 'https://kinopoiskapiunofficial.tech/images/{container}/kp{size}/{kp_id}.jpg'
+        self.API = f'{self.base_api_url}{self.api_version}/'
+        self.STAFF_API = f'{self.base_api_url}{self.staff_api_version}/staff'
         self.secret_API = 'https://videocdn.tv/api/short'
         self.version = self.api_version + '.2-release'
         self.about = 'KinoPoiskAPI'
         self.requests_count = 0
-        self.REQUESTS_LIMIT = 15
+        self.REQUESTS_LIMIT = requests_limit
 
     async def get_film(self, film_id: int, session: ClientSession):
         rate_request = await self.request(f'https://rating.kinopoisk.ru/{film_id}.xml', session)
@@ -120,7 +123,7 @@ class KP:
         output = []
         for page in range(1, 14):
             try:
-                request = requests.get(f'{self.API}films/top?type=BEST_FILMS_LIST&page={page}&listId=1',
+                request = requests.get(f'{self.API}films/top?type=TOP_250_BEST_FILMS&page={page}&listId=1',
                                        headers=self.headers
                                        )
                 request_json = json.loads(request.text)
@@ -152,22 +155,66 @@ class KP:
             return self.get_person(person_id)
         return PERSON(data)
 
-    async def request(self, url, session):
+    async def _get_image(self, container_name: str, kp_id: int, size=""):
+        async with ClientSession(timeout=ClientTimeout(total=500), headers=self.headers) as session:
+            content = await self.request(self.images_url.format(container=container_name, size=size, kp_id=kp_id), session, 'image/jpeg')
+            return content
+
+    def _save_image(self, filename, data, assets_folder=""):
+        with open(os.path.join(assets_folder, filename), "wb") as f:
+            f.write(data)
+
+    async def get_person_photo(self, person_id: int, assets_folder=None):
+        filename = f"person_{person_id}.jpg"
+        if assets_folder is not None and os.path.exists(os.path.join(assets_folder, filename)):
+            print(f"{filename} exists")
+            return
+        photo = await self._get_image('actor_posters', person_id)
+        if assets_folder is not None and photo:
+            self._save_image(filename, photo, assets_folder)
+        print(filename)
+        if assets_folder is not None:
+            return {filename: photo}
+
+    async def get_film_photo(self, film_id: int, assets_folder=None):
+        large_poster_filename = f"movie_{film_id}"
+        small_poster_filename = f"movie_{film_id}_small"
+        large = await self._get_image('posters', film_id)
+        small = await self._get_image('posters', film_id, "_small")
+        resp = {large_poster_filename: large, small_poster_filename: small}
+        print(list(resp))
+        if assets_folder is not None and large and small:
+            self._save_image(large_poster_filename, large, assets_folder)
+            self._save_image(small_poster_filename, small, assets_folder)
+        if assets_folder is not None:
+            return resp
+
+    async def request(self, url, session, allowed_content_type=None):
         while self.requests_count > self.REQUESTS_LIMIT:
             await asyncio.sleep(.25)
         self.requests_count += 1
         async with session.get(url) as response:
             self.requests_count -= 1
-            html = await response.text()
-            try:
-                return json.loads(html)
-            except JSONDecodeError:
-                if response.status == 200:
-                    return html
-                elif response.status == 404:
-                    return {}
-                pprint(html)
-                raise
+            if response.status == 200:
+                if response.content_type != allowed_content_type:
+                    return
+                if response.content_type == 'application/json':
+                    return await response.json()
+                elif response.content_type == 'text/html':
+                    return await response.text()
+                else:
+                    return await response.content.read()
+            elif response.status == 404:
+                return {}
+            elif response.status == 429:
+                print("Limit exceeded")
+                print(f"Old limit: {self.REQUESTS_LIMIT}")
+                if self.REQUESTS_LIMIT > 3:
+                    self.REQUESTS_LIMIT -= 1
+                else:
+                    raise HTTPTooManyRequests
+                print(f"New limit: {self.REQUESTS_LIMIT}")
+                return await self.request(url, session)
 
     async def get_full_film_info(self, film_id):
         person_tasks = []
