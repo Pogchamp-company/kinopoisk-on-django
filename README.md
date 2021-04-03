@@ -44,7 +44,7 @@ docker-compose up -d minio
 ```shell
 manage.py initialize_buckets
 ```
-9. Optional: run seeds (generate this (check src/parser/README.md) or download from release)
+9. Optional: run seeds (generate this (check [README.md](https://github.com/Pogchamp-company/kinopoisk_on_django/blob/master/src/parser/README.md)) or download from release)
 ```shell
 manage.py loaddata seed/movies.json
 manage.py loaddata seed/persons.json

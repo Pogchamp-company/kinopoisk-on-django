@@ -1,6 +1,5 @@
 from django.http import Http404
 from django.shortcuts import render
-from django.template.loader import render_to_string
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .models import Movie
@@ -39,8 +38,7 @@ class SearchView(APIView):
         response = {
             # 'topResult': {},
             'movies': [self.movie_serializer_class(movie).data for movie in movies],
-            'persons': [self.person_serializer_class(person).data for person in persons],
-            'window': render_to_string('movies/search_result.html', dict(movies=movies, persons=persons), request),
+            'persons': [self.person_serializer_class(person).data for person in persons]
         }
 
         return Response(response, status=status.HTTP_200_OK)

@@ -452,8 +452,12 @@ body {
     color: black;
 }
 
-/*.autocomplete-active {*/
-/*    !*when navigating through the items using the arrow keys:*!*/
-/*    background-color: DodgerBlue !important;*/
-/*    color: #ffffff;*/
-/*}*/
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: #c9c9c9 !important;
+}
+
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
