@@ -54,7 +54,6 @@
                         {% for actor in movie.actors %}
                             <div class="actor-block">
                             <div class="row px-3">
-                                <img class="actor-info-photo" src="{{ actor.person.small_vertical_image }}" alt="">
                                 <div class="actor-info">
                                     <a class="actor-name" href="{% url "person.person_page" person_id=actor.person_id %}">{{ actor.person }}</a>
                                     <div class="actor-description text">{{ actor.role_name }}</div>
