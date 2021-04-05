@@ -36,7 +36,6 @@ async def main():
     print(round((time.time() - program_start) / 60, 2))
 
 
-
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(main())
