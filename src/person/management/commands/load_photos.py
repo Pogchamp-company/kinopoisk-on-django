@@ -1,9 +1,8 @@
 import os
 
 from django.core.files.images import ImageFile
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
-from movies.models import Poster, Movie
 from parser.utils import load_json
 from utils.mixins import Image
 from person.models import Photo, Person

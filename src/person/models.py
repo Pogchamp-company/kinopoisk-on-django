@@ -96,12 +96,12 @@ class Person(models.Model, ImageProperties):
 
     @cached_property
     def age(self) -> int:
-        today = date.today()
+        last_date = self.death if self.death else date.today()
         try:
-            birthday = self.birth_date.replace(year=today.year)
+            birthday = self.birth_date.replace(year=last_date.year)
         except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
-            birthday = self.birth_date.replace(year=today.year, month=self.birth_date.month + 1, day=1)
-        return today.year - self.birth_date.year - 1 if birthday > today else today.year - self.birth_date.year
+            birthday = self.birth_date.replace(year=last_date.year, month=self.birth_date.month + 1, day=1)
+        return last_date.year - self.birth_date.year - 1 if birthday > last_date else last_date.year - self.birth_date.year
 
     @property
     def zodiac_sign(self) -> str:
@@ -114,15 +114,18 @@ class Person(models.Model, ImageProperties):
         d, m = self.birth_date.day, self.birth_date.month
         return zod[bisect.bisect_left(tdays, (datetime(2021, m, d) - datetime(2020, 12, 31)).days)]
 
+    @staticmethod
+    def date_to_string(date):
+        months = ('января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря')
+        return f'{date.day} {months[date.month - 1]}, {date.year}'
+
     @property
     def formatted_birth_date(self) -> str:
         if not self.birth_date:
             return '-'
-        months = ('января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-                  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря')
 
-        return f'{self.birth_date.day} {months[self.birth_date.month - 1]}, ' \
-               f'{self.birth_date.year} • {self.zodiac_sign} • {self.age} {self.age_word}'
+        return f'{self.date_to_string(self.birth_date)} • {self.zodiac_sign} • {self.age} {self.age_word}'
 
     def __str__(self):
         return self.ru_fullname or self.fullname
