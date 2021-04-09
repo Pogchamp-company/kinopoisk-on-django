@@ -84,6 +84,7 @@ class Command(BaseCommand):
         formatted_movie_info['movie_type_id'] = formatted_movie_info.pop('movie_type')
         movie: Movie = Movie(**formatted_movie_info)
         movie.save()
+        self.stdout.write(f"Movie {movie} created")
         for genre in genres:
             movie.genres.add(genre)
         self.stdout.write("Movie saved")

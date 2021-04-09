@@ -77,7 +77,7 @@ function autocomplete(inp, url) {
     the text field element and an array of possible autocompleted values:*/
     let currentFocus;
     /*execute a function when someone writes in the text field:*/
-   $(inp).on("input", function (e) {
+    $(inp).on("input", function (e) {
         let result_container
         const val = this.value;
         /*close any already open lists of autocompleted values*/
@@ -96,7 +96,7 @@ function autocomplete(inp, url) {
             .then((data) => {
                 console.log(data)
                 result_container = $('.autocomplete-items')
-                if(!result_container.length) {
+                if (!result_container.length) {
                     result_container = $("<div/>", {
                         id: this.id + "autocomplete-list",
                         "class": "autocomplete-items"
@@ -104,16 +104,16 @@ function autocomplete(inp, url) {
                     $(this).parent().append(result_container)
                 }
                 let result_temp = '';
-                if(data.movies.length) {
+                if (data.movies.length) {
                     result_temp += `<h3>Фильмы и сериалы</h3>
                                     ${data.movies.map(
-                                         movie => `<div><a href="/movie/${movie.id}" class="result" style="text-decoration: none"><h5>${movie.title}</h5></a></div>`).join('')}
+                        movie => `<div><a href="/movie/${movie.id}" class="result" style="text-decoration: none"><h5>${movie.title}</h5></a></div>`).join('')}
                                     `
                 }
-                if(data.persons.length) {
+                if (data.persons.length) {
                     result_temp += `<h3>Персоны</h3>
                                      ${data.persons.map(
-                                         person => `<a href="/person/${person.id}" class="result" style="text-decoration: none"><h5>${person.ru_fullname ? person.ru_fullname: person.fullname}</h5></a>`).join('')}
+                        person => `<a href="/person/${person.id}" class="result" style="text-decoration: none"><h5>${person.ru_fullname ? person.ru_fullname : person.fullname}</h5></a>`).join('')}
                                     `
                 }
                 result_container.html(result_temp);
@@ -173,7 +173,7 @@ function autocomplete(inp, url) {
 
     /*execute a function when someone clicks in the document:*/
     document.addEventListener("click", function (e) {
-        if(!$(e.target).hasClass("movie-search")) {
+        if (!$(e.target).hasClass("movie-search")) {
             closeAllLists(e.target);
         }
     })
@@ -184,7 +184,10 @@ function autocomplete(inp, url) {
     ;
 }
 
-try {autocomplete(document.getElementsByClassName("movie-search")[0], urlForSearch)} catch {}
+try {
+    autocomplete(document.getElementsByClassName("movie-search")[0], urlForSearch)
+} catch {
+}
 
 /*скролер*/
 var hidWidth;
@@ -276,3 +279,34 @@ $('.scroller-left').click(function () {
     });
 })
 
+$(document).ready(function () {
+
+    if (!$('*').is('.form-panel')) {
+        console.log('лицей вечен');
+        return;
+    }
+
+    var panelOne = $('.form-panel.two').height(),
+        panelTwo = $('.form-panel.two')[0].scrollHeight;
+
+    $('.form-panel.two').not('.form-panel.two.active').on('click', function (e) {
+        e.preventDefault();
+
+        $('.form-toggle').addClass('visible');
+        $('.form-panel.one').addClass('hidden');
+        $('.form-panel.two').addClass('active');
+        // $('.form').animate({
+        //     'height': panelTwo
+        // }, 200);
+    });
+
+    $('.form-toggle').on('click', function (e) {
+        e.preventDefault();
+        $(this).removeClass('visible');
+        $('.form-panel.one').removeClass('hidden');
+        $('.form-panel.two').removeClass('active');
+        // $('.form').animate({
+        //     'height': panelOne
+        // }, 200);
+    });
+});
