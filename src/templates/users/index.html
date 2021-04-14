@@ -21,63 +21,62 @@
     <div class="form-toggle"></div>
     <div class="form-panel one">
         <div class="form-header">
-            <h1>Account Login</h1>
+            <h1>Вход в аккаунт</h1>
         </div>
         <div class="form-content">
-            <form method="post">
+            <form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="username">Email</label>
+                   {{ form.email.label }}
                     {{ form.email }}
-                    {#                    <input type="text" id="username" name="username" required="required"/>#}
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    {{ form.password.label }}
                     {{ form.password }}
-{#                    <input type="password" id="password" name="password" required="required"/>#}
                 </div>
                 <div class="form-group">
                     <label class="form-remember">
-                        <input type="checkbox"/>Remember Me
-                    </label><a class="form-recovery" href="#">Forgot Password?</a>
+                        <input type="checkbox"/>Запомнить меня
+                    </label><a class="form-recovery" href="#">Забыли пароль?</a>
                 </div>
                 <div class="form-group">
-                    <button type="submit">Log In</button>
+                    <button type="submit">Войти</button>
                 </div>
             </form>
         </div>
     </div>
     <div class="form-panel two">
         <div class="form-header">
-            <h1>Register Account</h1>
+            <h1>Регистрация аккаунта</h1>
         </div>
         <div class="form-content">
-            <form>
+            <form method="POST" action="{% url "users.register" %}">
+                {% csrf_token %}
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required="required"/>
+                    {{ register_form.username.label }}
+                    {{ register_form.username }}
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required="required"/>
+                    {{ register_form.email.label }}
+                    {{ register_form.email }}
                 </div>
                 <div class="form-group">
-                    <label for="cpassword">Confirm Password</label>
-                    <input type="password" id="cpassword" name="cpassword" required="required"/>
+                    {{ register_form.password.label }}
+                    {{ register_form.password }}
                 </div>
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required="required"/>
+                    {{ register_form.confirm_password.label }}
+                    {{ register_form.confirm_password }}
                 </div>
                 <div class="form-group">
-                    <button type="submit">Register</button>
+                    <button type="submit">Зарегистрироваться</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<script src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.6.0.js' %}"></script>
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>

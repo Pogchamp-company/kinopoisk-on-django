@@ -32,15 +32,18 @@
             <div class="col-4 text-right row">
                 {% if request.user.is_superuser %}
                     <a class="px-4 nav-link" href="{% url 'admin:index' %}">
-                        <h1 class="" style="font-size: 42px">Admin panel</h1>
+                        <h1 class="" style="font-size: 42px">Панель Администратора</h1>
                     </a>
                 {% endif %}
                 {% if request.user.is_authenticated %}
                     <a class="px-4 nav-link" href="#">
-                        <h1 class="" style="font-size: 42px">Profile</h1>
+                        <h1 class="" style="font-size: 42px">Профиль</h1>
+                    </a>
+                    <a class="px-4 nav-link" href="{% url 'users.logout' %}">
+                        <h1 class="" style="font-size: 42px">Выход</h1>
                     </a>
                 {% else %}
-                    <a class="px-4 nav-link" href="#">
+                    <a class="px-4 nav-link" href="{% url "users.login" %}">
                     <h1 class="" style="font-size: 42px">Вход</h1>
                 </a>
                 {% endif %}
@@ -54,7 +57,7 @@
     const urlForSearch = '{% url "movies.search" %}';
 </script>
 
-<script src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.6.0.js' %}"></script>
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
