@@ -1,0 +1,29 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="block-buttons justify-content-between">
+        <a href="#" class="button-menu" style="text-decoration: none">Профиль</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Настройки</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Оценки</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Фильмы</a>
+    </div>
+    <div class="container-profile">
+        <img class="img-profile" src="../../static/icon/poster_film.jpg">
+        <div class="profile-info-container">
+            <div class="user-name">{{ request.user.last_name }} {{ request.user.first_name }}</div>
+            <div class="address">Заглушка, Заглушка</div>
+            <div class="profile-info-date">
+                <div class="column profile-info-date-block">
+                    <div class="content">Дата регистрации</div>
+                    <div class="content">{{ request.user.date_joined|date:"d M, Y" }}</div>
+                </div>
+                <div class="column profile-info-date-block">
+                    <div class="content">Дата рождения</div>
+                    <div class="content">Заглушка</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

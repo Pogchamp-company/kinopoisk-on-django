@@ -27,7 +27,7 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                   {{ form.email.label }}
+                    {{ form.email.label }}
                     {{ form.email }}
                 </div>
                 <div class="form-group">
@@ -55,6 +55,14 @@
                 <div class="form-group">
                     {{ register_form.username.label }}
                     {{ register_form.username }}
+                </div>
+                <div class="form-group">
+                    {{ register_form.first_name.label }}
+                    {{ register_form.first_name }}
+                </div>
+                <div class="form-group">
+                    {{ register_form.last_name.label }}
+                    {{ register_form.last_name }}
                 </div>
                 <div class="form-group">
                     {{ register_form.email.label }}
