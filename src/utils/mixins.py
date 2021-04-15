@@ -80,3 +80,4 @@ class ImageProperties:
     def small_horizontal_image(self):
         return self._get_image_url_by_filter(Image.OrientationType.HORIZONTAL, Image.FormatType.SMALL,
                                              static(join(self.default_images_folder, "small_horizontal.webp")))
+
