@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>КиноПоиск. Все фильмы планеты.</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Просмотр фильмов">
+    <meta name="keywords" content="кино, фильм, кинопоиск">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../../static/icon/icon.png" sizes="57x57"/>
+    <link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/css/main.css">
+</head>
+<body>
+<div class="page-wrapper">
+    <!--Шапка-->
+    <nav class="site-header sticky-top py-1" style="background-color: #000000">
+        <div class="d-flex flex-column flex-md-row justify-content-between">
+            <a class="col-4 navbar-brand justify-content-start px-3 pt-2" href="/">
+                <img src="../../static/icon/orig.png" alt="">
+            </a>
+            <div class="col-4 pt-3 row">
+                <input type="search" class="col-11 form-control movie-search" placeholder="Фильмы, сериалы, персоны">
+                <a class="col-1 pt-1" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                         class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="col-4 text-right">
+                <a class="px-4 nav-link" href="#">
+                    <h1 class="" style="font-size: 42px">Вход</h1>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="block-buttons justify-content-between">
+        <a href="#" class="button-menu" style="text-decoration: none">Профиль</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Настройки</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Оценки</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Фильмы</a>
+    </div>
+    <div class="container-profile">
+        <div class="img-profile-block">
+            <img class="img-profile-img" src="../../static/icon/poster_film.jpg">
+            <a href="#" class="button-menu" style="text-decoration: none; margin-left: auto; margin-right: auto">Загрузить</a>
+        </div>
+        <div class="profile-info-container">
+            <div class="kod-form">
+                <h1 class="form__title">Настройки</h1>
+                <div class="form__group">
+                    <input class="form__input" placeholder=" ">
+                    <label class="form__label">Имя</label>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" placeholder=" ">
+                    <label class="form__label">Фамилия</label>
+                </div>
+                <button class="form__button">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../static/js/jquery-3.6.0.js"></script>
+<script src="../../static/js/popper.min.js"></script>
+<script src="../../static/js/bootstrap.min.js"></script>
+<script src="../../static/js/main.js"></script>
+</body>
+</html>
