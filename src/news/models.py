@@ -1,5 +1,5 @@
 from django.db import models
-from utils.mixins import Image, ImageProperties
+from utils.mixins import Image
 
 
 class NewsPhoto(Image):

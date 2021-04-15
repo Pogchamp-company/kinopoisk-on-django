@@ -7,9 +7,7 @@ from rest_framework.views import APIView
 from django.db.models import Q
 from rest_framework import status
 from .serializers import MovieSerializer, PersonSerializer
-from person.models import Person, Photo
-
-from utils.mixins import Image
+from person.models import Person
 
 
 def movie_page(request, movie_id: int):

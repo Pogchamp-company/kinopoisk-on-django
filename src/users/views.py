@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -26,12 +24,12 @@ def login_view(request):
 def register(request):
     form = RegisterForm(request.POST)
     if form.is_valid() and not User.objects.filter(email=form.data['email']).exists():
-        user = User.objects.create_user(username=form.data['username'],
-                                        email=form.data['email'],
+        user = User.objects.create_user(form.data['username'],
+                                        form.data['email'],
+                                        form.data['password'],
                                         last_name=form.data['last_name'],
                                         first_name=form.data['first_name'],
                                         )
-        user.set_password(form.data['password'])
         user.save()
         login(request, user=user)
         return redirect('/')

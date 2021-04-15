@@ -2,8 +2,6 @@ import asyncio
 import os
 from datetime import date
 from os import getenv
-from pprint import pprint
-
 from django.core.files.images import ImageFile
 from django.core.management.base import BaseCommand
 
@@ -68,6 +66,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         movie_id = options['movie_id']
         kinopoisk = KP(options['api_key'])
+        self.stdout.write("Collect data")
         loop = asyncio.get_event_loop()
         future = asyncio.ensure_future(self._get_movie_info(kinopoisk, movie_id))
         loop.run_until_complete(future)
