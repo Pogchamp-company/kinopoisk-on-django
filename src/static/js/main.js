@@ -308,3 +308,50 @@ $(document).ready(function () {
         }, 200);
     });
 });
+
+function updateStars(icon) {
+    let icon_index = icon.index();
+    icon.parent().children().each(function () {
+        el = $(this);
+
+        if (el.index() <= icon_index) {
+            el.css({'color': 'gold'});
+        } else {
+            el.css({'color': 'black'});
+        }
+    });
+}
+
+$('.score-star').click(
+    function (e) {
+        let icon = $(this);
+        let score = icon.index() + 1;
+        const requestOptions = {
+            method: "PUT",
+            headers: {"X-CSRFToken": $(csrfToken).val()},
+        };
+        fetch(`${urlForScore}?score=${score}`, requestOptions).then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+            }).catch((error) => console.log(error));
+        icon.parent().addClass('locked');
+        updateStars(icon);
+    }
+).mouseover(
+    function (e) {
+        let icon = $(this);
+        if (!icon.parent().hasClass('locked')) {
+            updateStars(icon);
+        }
+    }
+).mouseout(
+    function (e) {
+        let icon = $(this);
+        if (!icon.parent().hasClass('locked')) {
+            icon.parent().children().each(function () {
+                $(this).css({'color': 'black'});
+            });
+        }
+    }
+)
+

@@ -22,44 +22,55 @@
                 <h4>Бюджет: ${{ movie.budget }}</h4>
                 <h4>Режиссер:
                     {% for director in movie.directors %}
-                        <a href="{% url "person.person_page" person_id=director.pk %}" class="text-black">{{ director }}{% if not forloop.last %}, {% endif %}</a>
+                        <a href="{% url "person.person_page" person_id=director.pk %}" class="text-black">
+                            {{ director }}{% if not forloop.last %}, {% endif %}</a>
                     {% empty %}-
                     {% endfor %}
                 </h4>
                 <h4>Продюсер:
                     {% for producer in movie.producers %}
-                        <a href="{% url "person.person_page" person_id=producer.pk %}" class="text-black">{{ producer }}{% if not forloop.last %}, {% endif %}</a>
+                        <a href="{% url "person.person_page" person_id=producer.pk %}" class="text-black">
+                            {{ producer }}{% if not forloop.last %}, {% endif %}</a>
                     {% empty %}-
                     {% endfor %}
                 </h4>
                 <h4>Сценарист:
                     {% for writer in movie.writers %}
-                        <a href="{% url "person.person_page" person_id=writer.pk %}" class="text-black">{{ writer }}{% if not forloop.last %}, {% endif %}</a>
+                        <a href="{% url "person.person_page" person_id=writer.pk %}" class="text-black">
+                            {{ writer }}{% if not forloop.last %}, {% endif %}</a>
                     {% empty %}-
                     {% endfor %}
                 </h4>
                 <h4>Премьера Мир: {% if movie.premiere %}{{ movie.premiere }}{% else %}-{% endif %}</h4>
                 <h4>Премьера РФ: {% if movie.premiere_ru %}{{ movie.premiere_ru }}{% else %}-{% endif %}</h4>
                 <h4>Время: {{ movie.duration }}</h4>
+                <h4 class="score-star-container {% if score %}locked{% endif %}">
+                    {% for i in '0123456789'|make_list %}
+                        <i class="fa fa-star score-star"
+                           style="color: {% if score and score.value >= forloop.counter %}gold{% else %}black{% endif %}"
+                           aria-hidden="true"></i>
+                    {% endfor %}
+                </h4>
             </div>
             <div class="col-3">
                 <div class="rating">
                     <div class="rating-label rating-green">9.1</div>
                     <!--                <div class="rating-label rating-orange">6.5</div>-->
                     <!--                <div class="rating-label rating-red">4.1</div>-->
-                    <div class="qty-rating">278к</div>
+                    <div class="qty-rating">{{ score_count }}</div>
                 </div>
                 <div class="container-actors">
                     <div class="container-actors-block">
                         {% for actor in movie.actors %}
                             <div class="actor-block">
-                            <div class="row px-3">
-                                <div class="actor-info">
-                                    <a class="actor-name" href="{% url "person.person_page" person_id=actor.person_id %}">{{ actor.person }}</a>
-                                    <div class="actor-description text">{{ actor.role_name }}</div>
+                                <div class="row px-3">
+                                    <div class="actor-info">
+                                        <a class="actor-name"
+                                           href="{% url "person.person_page" person_id=actor.person_id %}">{{ actor.person }}</a>
+                                        <div class="actor-description text">{{ actor.role_name }}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -94,7 +105,9 @@
         <div class="container row">
             {% for recommendation in recommendations %}
                 <div class="col-2">
-                    <a href="{% url 'movies.movie_page' movie_id=recommendation.id %}"><img class="img-thumbnail m-2" src="{{ recommendation.small_vertical_image }}" alt=""></a>
+                    <a href="{% url 'movies.movie_page' movie_id=recommendation.id %}"><img class="img-thumbnail m-2"
+                                                                                            src="{{ recommendation.small_vertical_image }}"
+                                                                                            alt=""></a>
                     <h5 class="text-center">{{ recommendation }}</h5>
                 </div>
             {% endfor %}
@@ -102,4 +115,8 @@
         <hr class="featurette-divider">
     </div>
     <hr class="featurette-divider">
+{% endblock %}
+
+{% block constants %}
+    const urlForScore = '{% url "movies.score" movie_id=movie.id %}';
 {% endblock %}

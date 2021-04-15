@@ -2,7 +2,7 @@ from django.http import Http404
 from django.shortcuts import render
 from rest_framework.request import Request
 from rest_framework.response import Response
-from .models import Movie
+from .models import Movie, Score
 from rest_framework.views import APIView
 from django.db.models import Q
 from rest_framework import status
@@ -19,9 +19,26 @@ def movie_page(request, movie_id: int):
 
     context = dict(
         movie=movie,
-        recommendations=Movie.objects.filter(~Q(id=movie_id))[:6]
+        recommendations=Movie.objects.filter(~Q(id=movie_id))[:6],
+        score=Score.objects.filter(movie=movie, user=request.user).first(),
+        score_count=Score.objects.filter(movie=movie).count()
     )
     return render(request, 'movies/movie_page.html', context)
+
+
+class ScoreView(APIView):
+    def put(self, request: Request, movie_id: int):
+        score_value = int(request.GET['score'])
+        movie = Movie.objects.get(pk=movie_id)
+        if not movie:
+            return Response({'errors': 'Movie not found'}, status.HTTP_404_NOT_FOUND)
+        score = Score.objects.filter(movie=movie, user=request.user).first()
+        if not score:
+            score = Score(movie=movie,
+                          user=request.user)
+        score.value = score_value
+        score.save()
+        return Response({'result': 'success'}, status.HTTP_200_OK)
 
 
 class SearchView(APIView):
