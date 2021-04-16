@@ -54,10 +54,10 @@
             </div>
             <div class="col-3">
                 <div class="rating">
-                    <div class="rating-label rating-green">9.1</div>
-                    <!--                <div class="rating-label rating-orange">6.5</div>-->
-                    <!--                <div class="rating-label rating-red">4.1</div>-->
-                    <div class="qty-rating">{{ score_count }}</div>
+                    <div class="rating-label {% if movie.average_score > 6.5 %}rating-green{% elif movie.average_score > 2.5 %}rating-orange{% else %}rating-red{% endif %}">
+                        {{ movie.average_score }}
+                    </div>
+                    <div class="qty-rating">{{ movie.score_count }}</div>
                 </div>
                 <div class="container-actors">
                     <div class="container-actors-block">

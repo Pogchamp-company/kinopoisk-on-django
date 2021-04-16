@@ -576,14 +576,22 @@ body {
     margin-bottom: 10px;
     padding: 0.5rem;
     border-radius: 0.75rem;
-}
-
-.rating .rating-green {
-    background-color: rgb(66, 121, 66);
     border-width: 2px;
     border-style: solid;
     border-color: rgb(56, 102, 56);
     border-image: initial;
+}
+
+.rating .rating-green {
+    background-color: rgb(66, 121, 66);
+}
+
+.rating .rating-orange {
+    background-color: rgb(256, 121, 66);
+}
+
+.rating .rating-red {
+    background-color: rgb(256, 0, 66);
 }
 
 .rating .rating-label {

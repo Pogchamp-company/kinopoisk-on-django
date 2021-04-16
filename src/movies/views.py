@@ -1,4 +1,4 @@
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -8,6 +8,7 @@ from django.db.models import Q
 from rest_framework import status
 from .serializers import MovieSerializer, PersonSerializer
 from person.models import Person
+from django.db.models import Avg
 
 
 def movie_page(request, movie_id: int):
@@ -19,9 +20,18 @@ def movie_page(request, movie_id: int):
         movie=movie,
         recommendations=Movie.objects.filter(~Q(id=movie_id))[:6],
         score=Score.objects.filter(movie=movie, user=request.user).first(),
-        score_count=Score.objects.filter(movie=movie).count()
     )
     return render(request, 'movies/movie_page.html', context)
+
+
+def top_250(request):
+    result = Movie.objects.annotate(
+        avg_score=Avg('score__value')).filter(~Q(avg_score=None)).order_by('-avg_score')[:250]
+    context = dict(
+        movies=result,
+    )
+
+    return render(request, 'movies/top_250.html', context)
 
 
 class ScoreView(APIView):
