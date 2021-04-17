@@ -1,8 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from rest_framework.request import Request
 from rest_framework.response import Response
-from .models import Movie, Score
+from .models import Movie, Score, MovieType
 from rest_framework.views import APIView
 from django.db.models import Q
 from rest_framework import status
@@ -24,11 +25,17 @@ def movie_page(request, movie_id: int):
     return render(request, 'movies/movie_page.html', context)
 
 
-def top_250(request):
+def top_250(request, movie_type: str):
+    try:
+        movie_type = MovieType.objects.get(title=movie_type)
+    except ObjectDoesNotExist:
+        raise Http404()
+    print(movie_type)
     result = Movie.objects.annotate(
-        avg_score=Avg('score__value')).filter(~Q(avg_score=None)).order_by('-avg_score')[:250]
+        avg_score=Avg('score__value')).filter(~Q(avg_score=None)).filter(movie_type=movie_type).order_by('-avg_score')[:250]
     context = dict(
         movies=result,
+        movie_type=movie_type,
     )
 
     return render(request, 'movies/top_250.html', context)

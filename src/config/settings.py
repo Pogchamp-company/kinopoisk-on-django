@@ -168,6 +168,7 @@ MINIO_PRIVATE_BUCKETS = [
 ]
 MINIO_PUBLIC_BUCKETS = [
     'images',
+    'avatars'
 ]
 MINIO_URL_EXPIRY_HOURS = timedelta(days=1)  # Default is 7 days (longest) if not defined
 MINIO_CONSISTENCY_CHECK_ON_START = True

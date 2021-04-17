@@ -9,9 +9,13 @@
         <a href="#" class="button-menu" style="text-decoration: none">Фильмы</a>
     </div>
     <div class="container-profile">
-        <img class="img-profile" src="../../static/icon/poster_film.jpg">
+        <img class="img-profile" src="{{ request.user.profile.photo.image.url }}">
         <div class="profile-info-container">
-            <div class="user-name">{{ request.user.last_name }} {{ request.user.first_name }}</div>
+            <div class="user-name">{{ request.user.last_name }} {{ request.user.first_name }}
+                <a href="{% url "users.edit_profile" %}">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </a>
+            </div>
             <div class="address">Заглушка, Заглушка</div>
             <div class="profile-info-date">
                 <div class="column profile-info-date-block">
@@ -20,7 +24,7 @@
                 </div>
                 <div class="column profile-info-date-block">
                     <div class="content">Дата рождения</div>
-                    <div class="content">Заглушка</div>
+                    <div class="content">{{ request.user.profile.birth_date }}</div>
                 </div>
             </div>
         </div>

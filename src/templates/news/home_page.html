@@ -51,13 +51,13 @@
                     <a href="#" class="button_left_panel" style="text-decoration: none">Кинотеатры</a>
                     <a href="#" class="button_left_panel" style="text-decoration: none">Акции и скидки</a>
                     <p class="text_left_panel pl-3">СЕРИАЛЫ</p>
-                    <a href="#" class="button_left_panel" style="text-decoration: none">Топ 250 сериалов</a>
+                    <a href="{% url "movies.top250" movie_type='Сериал' %}" class="button_left_panel" style="text-decoration: none">Топ 250 сериалов</a>
                     <a href="#" class="button_left_panel" style="text-decoration: none">Популярные сериалы</a>
                     <a href="#" class="button_left_panel" style="text-decoration: none">Списки сериалов</a>
                     <a href="#" class="button_left_panel" style="text-decoration: none">Сериалы в Медиа</a>
                     <p class="text_left_panel pl-3">ФИЛЬМЫ</p>
                     <a href="#" class="button_left_panel" style="text-decoration: none">Списки фильмов</a>
-                    <a href="{% url "movies.top250" %}" class="button_left_panel" style="text-decoration: none">Топ 250</a>
+                    <a href="{% url "movies.top250" movie_type='Фильм' %}" class="button_left_panel" style="text-decoration: none">Топ 250</a>
                     <a href="#" class="button_left_panel" style="text-decoration: none">Цифровые релизы</a>
                     <a href="#" class="button_left_panel" style="text-decoration: none">Рекомендации</a>
                 </div>

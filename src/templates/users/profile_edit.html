@@ -1,0 +1,39 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="block-buttons justify-content-between">
+        <a href="#" class="button-menu" style="text-decoration: none">Профиль</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Настройки</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Оценки</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Фильмы</a>
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container-profile">
+            <div class="img-profile-block">
+                <img class="img-profile-img" src="../../static/icon/poster_film.jpg">
+                <a href="#" class="button-menu" style="text-decoration: none; margin-left: auto; margin-right: auto">Загрузить</a>
+                {{ form.photo }}
+            </div>
+            <div class="profile-info-container">
+                <div class="kod-form">
+                    <h1 class="form__title">Настройки</h1>
+                    <div class="form__group">
+                        {{ form.last_name.label }}
+                        {{ form.last_name }}
+                    </div>
+                    <div class="form__group">
+                        {{ form.first_name.label }}
+                        {{ form.first_name }}
+                    </div>
+                    <div class="form__group">
+                        {{ form.birth_date.label }}
+                        {{ form.birth_date }}
+                    </div>
+                    <button class="form__button" type="submit">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

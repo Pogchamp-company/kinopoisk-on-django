@@ -1,5 +1,8 @@
 from django.contrib.auth.models import User
-from django.forms import ModelForm, CharField, PasswordInput, ValidationError
+from django.forms import ModelForm, CharField, PasswordInput, ValidationError, TextInput, Form, DateField, DateInput, \
+    ImageField
+
+from .models import Profile
 
 
 class LoginForm(ModelForm):
@@ -27,3 +30,14 @@ class RegisterForm(ModelForm):
             raise ValidationError(
                 "password and confirm_password does not match"
             )
+
+
+class EditForm(ModelForm):
+    last_name = CharField(label='Фамилия', widget=TextInput(attrs={'class': "form__input"}), required=False)
+    first_name = CharField(label='Имя', widget=TextInput(attrs={'class': "form__input"}), required=False)
+    birth_date = DateField(label='Дата рождения', widget=DateInput(attrs={'class': "form__input", 'type': 'date'}), required=False)
+    photo = ImageField(required=False)
+
+    class Meta:
+        model = User
+        fields = ()
