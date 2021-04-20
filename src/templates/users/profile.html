@@ -9,7 +9,7 @@
         <a href="#" class="button-menu" style="text-decoration: none">Фильмы</a>
     </div>
     <div class="container-profile">
-        <img class="img-profile" src="{{ request.user.profile.photo.image.url }}">
+        <img class="img-profile" src="{{ request.user.profile.photo.url }}">
         <div class="profile-info-container">
             <div class="user-name">{{ request.user.last_name }} {{ request.user.first_name }}
                 <a href="{% url "users.edit_profile" %}">

@@ -32,12 +32,29 @@ class RegisterForm(ModelForm):
             )
 
 
-class EditForm(ModelForm):
+class EditUserForm(ModelForm):
     last_name = CharField(label='Фамилия', widget=TextInput(attrs={'class': "form__input"}), required=False)
     first_name = CharField(label='Имя', widget=TextInput(attrs={'class': "form__input"}), required=False)
-    birth_date = DateField(label='Дата рождения', widget=DateInput(attrs={'class': "form__input", 'type': 'date'}), required=False)
-    photo = ImageField(required=False)
+
+    # birth_date = DateField(label='Дата рождения', widget=DateInput(attrs={'class': "form__input", 'type': 'date'}), required=False)
+    # photo = ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ()
+        fields = ('last_name', 'first_name')
+
+
+class EditProfileForm(ModelForm):
+    birth_date = DateField(label='Дата рождения', input_formats=['%Y-%m-%d'],
+                           widget=DateInput(format='%Y-%m-%d', attrs={'class': "form__input", 'type': 'date'}),
+                           required=False)
+
+    photo = ImageField()
+
+    # def __init__(self, *args, **kwargs):
+    #     kwargs.setdefault('input_formats', ("%d-%m-%Y",))
+    #     super(EditProfileForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Profile
+        fields = ('birth_date', 'photo')

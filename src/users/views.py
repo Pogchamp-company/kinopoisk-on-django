@@ -1,9 +1,12 @@
+import inspect
+from pprint import pprint
+
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from users.forms import LoginForm, RegisterForm, EditForm
+from users.forms import LoginForm, RegisterForm, EditUserForm, EditProfileForm
 
 
 def login_view(request):
@@ -45,19 +48,19 @@ def profile(request):
 
 @login_required
 def edit_profile(request):
-    form = EditForm(request.POST, request.FILES, instance=request.user)
+    if request.method == 'POST':
+        form_user = EditUserForm(data=request.POST, instance=request.user)
+        form_profile = EditProfileForm(data=request.POST, files=request.FILES, instance=request.user.profile)
+    else:
+        form_user = EditUserForm(instance=request.user)
+        form_profile = EditProfileForm(instance=request.user.profile)
     context = dict(
-        form=form
+        form_user=form_user,
+        form_profile=form_profile,
     )
 
-    if request.method == 'POST' and form.is_valid():
-        print('valid', form.data)
-        request.user.last_name = form.data['last_name']
-        request.user.first_name = form.data['first_name']
-        request.user.profile.birth_date = form.data['birth_date']
-
-        # request.user.profile.photo = form.data['photo']
-        request.user.save()
-    else:
-        print(form.errors, 'dasdad', form.data)
+    if request.method == 'POST' and form_user.is_valid() and form_profile.is_valid():
+        form_user.save()
+        form_profile.save()
+        return redirect(reverse('users.profile'))
     return render(request, 'users/profile_edit.html', context)
