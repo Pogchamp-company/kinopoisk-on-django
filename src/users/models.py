@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django_minio_backend import MinioBackend, iso_date_prefix
 
 from django.db import models
@@ -20,11 +21,12 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+    try:
+        instance.profile
+    except ObjectDoesNotExist:
+        Profile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    if not instance.profile:
-        instance.profile = Profile()
-
     instance.profile.save()
