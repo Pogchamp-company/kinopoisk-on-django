@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig',
     'person.apps.PersonConfig',
     'users.apps.UsersConfig',
+
+    'ckeditor',
 ]
 
 MIDDLEWARE = [

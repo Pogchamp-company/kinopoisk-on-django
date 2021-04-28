@@ -3,8 +3,8 @@
 
 {% block content %}
     <div class="block-buttons justify-content-between">
-        <a href="#" class="button-menu" style="text-decoration: none">Профиль</a>
-        <a href="#" class="button-menu" style="text-decoration: none">Настройки</a>
+        <a href="{% url "users.profile" %}" class="button-menu" style="text-decoration: none">Профиль</a>
+        <a href="#" class="button-menu" style="text-decoration: none">Редактировать</a>
         <a href="#" class="button-menu" style="text-decoration: none">Оценки</a>
         <a href="#" class="button-menu" style="text-decoration: none">Фильмы</a>
     </div>

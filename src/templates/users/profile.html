@@ -4,18 +4,14 @@
 {% block content %}
     <div class="block-buttons justify-content-between">
         <a href="#" class="button-menu" style="text-decoration: none">Профиль</a>
-        <a href="#" class="button-menu" style="text-decoration: none">Настройки</a>
+        <a href="{% url "users.edit_profile" %}" class="button-menu" style="text-decoration: none">Редактировать</a>
         <a href="#" class="button-menu" style="text-decoration: none">Оценки</a>
         <a href="#" class="button-menu" style="text-decoration: none">Фильмы</a>
     </div>
     <div class="container-profile">
         <img class="img-profile" src="{{ request.user.profile.photo.url }}">
         <div class="profile-info-container">
-            <div class="user-name">{{ request.user.last_name }} {{ request.user.first_name }}
-                <a href="{% url "users.edit_profile" %}">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-            </a>
-            </div>
+            <div class="user-name">{{ request.user.last_name }} {{ request.user.first_name }}</div>
             <div class="address">Заглушка, Заглушка</div>
             <div class="profile-info-date">
                 <div class="column profile-info-date-block">

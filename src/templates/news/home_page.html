@@ -67,10 +67,10 @@
                     <div class="row featurette">
                         <div class="{% if forloop.counter|divisibleby:2 %}col-md-7{% else %}col-md-5 order-md-2{% endif %}">
                             <h2 class="featurette-heading">{{ news_item.title }}</h2>
-                            <p class="lead">{{ news_item.content }}</p>
+                            <p class="lead">{{ news_item.preview_content|safe }}</p>
                         </div>
                         <div class="{% if forloop.counter|divisibleby:2 %}col-md-5{% else %}col-md-7 order-md-1{% endif %}">
-                            <img src="{{ news_item.photo.image.url }}" class="img-max-width-500">
+                            <img src="{% if news_item.image %}{{ news_item.image.url }}{% endif %}" class="img-max-width-500">
                         </div>
                     </div>
                     <hr class="featurette-divider">
