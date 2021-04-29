@@ -10,11 +10,15 @@ from django.dispatch import receiver
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', verbose_name='Пользователь')
 
-    birth_date = models.DateField(null=True)
-    photo = models.ImageField(upload_to=iso_date_prefix, storage=MinioBackend(bucket_name='avatars'), null=True)
-    # death = models.DateField(null=True, default=datetime.date.today)
+    birth_date = models.DateField(null=True, verbose_name='Дата рождения')
+    photo = models.ImageField(upload_to=iso_date_prefix, storage=MinioBackend(bucket_name='avatars'), null=True,
+                              verbose_name='Аватар')
+
+    class Meta:
+        verbose_name = 'Профиль Пользователя'
+        verbose_name_plural = 'Профили пользователей'
 
 
 @receiver(post_save, sender=User)

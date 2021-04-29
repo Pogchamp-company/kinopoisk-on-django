@@ -42,13 +42,12 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_minio_backend',
+    'ckeditor',
 
     'movies.apps.MoviesConfig',
     'news.apps.NewsConfig',
     'person.apps.PersonConfig',
     'users.apps.UsersConfig',
-
-    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +135,6 @@ else:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_URL = '/static/'
 
-
 # #################### #
 # django_minio_backend #
 # #################### #
@@ -171,10 +169,10 @@ MINIO_ACCESS_KEY = getenv('MINIO_ACCESS_KEY', 'minio')
 MINIO_SECRET_KEY = getenv('MINIO_SECRET_KEY', 'minio123')
 MINIO_USE_HTTPS = False
 MINIO_PRIVATE_BUCKETS = [
-    'gachi'
+    'images',
+    'news-images'
 ]
 MINIO_PUBLIC_BUCKETS = [
-    'images',
     'avatars'
 ]
 MINIO_URL_EXPIRY_HOURS = timedelta(days=1)  # Default is 7 days (longest) if not defined

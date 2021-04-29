@@ -11,20 +11,20 @@ class Image(models.Model):
     This is just for uploaded image
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    image = models.ImageField(upload_to=iso_date_prefix, storage=MinioBackend(bucket_name='images'))
+    image = models.ImageField(upload_to=iso_date_prefix, storage=MinioBackend(bucket_name='images'), verbose_name='Картинка')
 
     class OrientationType(ChoiceEnum):
         VERTICAL = "Вертикальный"
         HORIZONTAL = "Горизонтальный"
 
-    orientation = models.CharField(max_length=10, choices=OrientationType.choices())
+    orientation = models.CharField(max_length=10, choices=OrientationType.choices(), verbose_name='Ориентация')
 
     class FormatType(ChoiceEnum):
         LARGE = "Большой"  # 800×600
         MEDIUM = "Средний"  # 400×300
         SMALL = "Маленький"  # 240×180
 
-    format = models.CharField(max_length=10, choices=FormatType.choices())
+    format = models.CharField(max_length=10, choices=FormatType.choices(), verbose_name='Размер')
 
     class Meta:
         abstract = True

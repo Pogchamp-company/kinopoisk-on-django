@@ -13,7 +13,11 @@ if TYPE_CHECKING:
 
 
 class Photo(Image):
-    person = models.ForeignKey('Person', related_name='photos', on_delete=models.CASCADE)
+    person = models.ForeignKey('Person', related_name='photos', on_delete=models.CASCADE, verbose_name='Персона')
+
+    class Meta:
+        verbose_name = 'Фото персоны'
+        verbose_name_plural = 'Фотографии персон'
 
 
 class PersonRole(models.Model):
@@ -29,11 +33,15 @@ class PersonRole(models.Model):
         VOICE_DIRECTOR = 'Звукорежиссер'
         TRANSLATOR = 'Переводчик'
 
-    role_name = models.CharField(max_length=1000, null=True)
-    role_type = models.CharField(max_length=20, choices=RoleType.choices())
+    role_name = models.CharField(max_length=1000, null=True, verbose_name='Название роли')
+    role_type = models.CharField(max_length=20, choices=RoleType.choices(), verbose_name='Тип')
 
-    person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles')
-    movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE, related_name='roles')
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles', verbose_name='Персона')
+    movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE, related_name='roles', verbose_name='Фильм')
+
+    class Meta:
+        verbose_name = 'Роль в фильме'
+        verbose_name_plural = 'Роли в фильмах'
 
     def __str__(self):
         f_role_name = f' ({self.role_name})' if self.role_name else ''
@@ -42,22 +50,26 @@ class PersonRole(models.Model):
 
 
 class Person(models.Model, ImageProperties):
-    fullname = models.CharField(max_length=150)
-    ru_fullname = models.CharField(max_length=150, null=True)
+    fullname = models.CharField(max_length=150, verbose_name='Полное имя')
+    ru_fullname = models.CharField(max_length=150, null=True, verbose_name='Полное имя (На русском)')
 
-    birth_date = models.DateField(null=True)
-    death = models.DateField(null=True)
+    birth_date = models.DateField(null=True, verbose_name='Дата рождения')
+    death = models.DateField(null=True, verbose_name='Дата смерти')
 
     # САНТИМЕТРы)))))
-    height = models.PositiveIntegerField(null=True)
+    height = models.PositiveIntegerField(null=True, verbose_name='Рост в сантиметрах')
 
     class SexEnum(ChoiceEnum):
         MALE = 'Мужчина'
         FEMALE = 'Женщина'
 
-    sex = models.CharField(max_length=6, choices=SexEnum.choices())
+    sex = models.CharField(max_length=6, choices=SexEnum.choices(), verbose_name='Пол')
 
     movies = models.ManyToManyField('movies.Movie', through='PersonRole', related_name='persons')
+
+    class Meta:
+        verbose_name = 'Персона'
+        verbose_name_plural = 'Персоны'
 
     @property
     def movies_genres(self) -> set['Movie']:

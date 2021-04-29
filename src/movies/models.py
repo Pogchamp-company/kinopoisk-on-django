@@ -12,7 +12,11 @@ from person.models import PersonRole, Person
 
 
 class Poster(Image):
-    movie = models.ForeignKey('Movie', related_name='posters', on_delete=models.CASCADE)
+    movie = models.ForeignKey('Movie', related_name='posters', on_delete=models.CASCADE, verbose_name='Фильм')
+
+    class Meta:
+        verbose_name = 'Постер'
+        verbose_name_plural = 'Постеры'
 
 
 class Score(models.Model):
@@ -22,36 +26,49 @@ class Score(models.Model):
 
 
 class Genre(models.Model):
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=30, verbose_name='Название')
+
+    class Meta:
+        verbose_name = 'Жанр'
+        verbose_name_plural = 'Жанры'
 
     def __str__(self):
         return self.title
 
 
 class MovieType(models.Model):
-    title = models.CharField(max_length=150)
+    title = models.CharField(max_length=150, verbose_name='Название')
+
+    class Meta:
+        verbose_name = 'Тип Фильма'
+        verbose_name_plural = 'Типы фильмов'
 
     def __str__(self):
         return self.title
 
 
 class MovieTrailer(models.Model):
-    movie = models.ForeignKey('Movie', related_name='trailers', on_delete=models.CASCADE)
-    link = models.URLField()
+    movie = models.ForeignKey('Movie', related_name='trailers', on_delete=models.CASCADE, verbose_name='Фильм')
+    link = models.URLField(verbose_name='Ссылка на трейлер (youtube)')
+
+    class Meta:
+        verbose_name = 'Трейлер'
+        verbose_name_plural = 'Трейлеры'
 
 
 class Movie(models.Model, ImageProperties):
-    title = models.CharField(max_length=150)
-    original_title = models.CharField(max_length=150)
-    genres = models.ManyToManyField('Genre', related_name='movies')
-    movie_type = models.ForeignKey('MovieType', on_delete=models.PROTECT, related_name='movies', null=True)
-    year = models.IntegerField(validators=[MinValueValidator(1895)])
-    slogan = models.CharField(max_length=500)
-    description = models.TextField(null=True)
-    duration = models.DurationField()
-    budget = models.IntegerField(validators=[MinValueValidator(0)])
-    premiere = models.DateField(null=True)
-    premiere_ru = models.DateField(null=True)
+    title = models.CharField(max_length=150, verbose_name='Название')
+    original_title = models.CharField(max_length=150, verbose_name='Оригинальное название')
+    genres = models.ManyToManyField('Genre', related_name='movies', verbose_name='Жанры')
+    movie_type = models.ForeignKey('MovieType', on_delete=models.PROTECT, related_name='movies', null=True,
+                                   verbose_name='Тип')
+    year = models.IntegerField(validators=[MinValueValidator(1895)], verbose_name='Год выхода')
+    slogan = models.CharField(max_length=500, verbose_name='Слоган')
+    description = models.TextField(null=True, verbose_name='Описание')
+    duration = models.DurationField(verbose_name='Продолжительность')
+    budget = models.IntegerField(validators=[MinValueValidator(0)], verbose_name='Бюджет')
+    premiere = models.DateField(null=True, verbose_name='Премьера (мир)')
+    premiere_ru = models.DateField(null=True, verbose_name='Премьера (Россия)')
 
     class MpaaRate(ChoiceEnum):
         G = 'G'
@@ -60,11 +77,16 @@ class Movie(models.Model, ImageProperties):
         R = 'R'
         NC_17 = 'NC-17'
 
-    rating_mpaa = models.CharField(max_length=5, choices=MpaaRate.choices(), null=True)
-    age_rating = models.SmallIntegerField(validators=[MinValueValidator(0), MaxLengthValidator(18)], null=True)
+    rating_mpaa = models.CharField(max_length=5, choices=MpaaRate.choices(), null=True, verbose_name='Рейтинг MPAA')
+    age_rating = models.SmallIntegerField(validators=[MinValueValidator(0), MaxLengthValidator(18)], null=True,
+                                          verbose_name='Возрастное ограничение')
 
     # User relationships
     scores = models.ManyToManyField(User, through='Score', related_name='movies_scores')
+
+    class Meta:
+        verbose_name = 'Фильм'
+        verbose_name_plural = 'Фильмы'
 
     def get_person_in_role(self, role_type: PersonRole.RoleType) -> list[Person]:
         return list(map(lambda role: role.person, self.roles.filter(role_type=role_type.name).all()))
