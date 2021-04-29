@@ -20,7 +20,7 @@ def movie_page(request, movie_id: int):
     context = dict(
         movie=movie,
         recommendations=Movie.objects.filter(~Q(id=movie_id))[:6],
-        score=Score.objects.filter(movie=movie, user=request.user).first(),
+        score=Score.objects.filter(movie=movie, user=request.user).first() if not request.user.is_anonymous else 0,
     )
     return render(request, 'movies/movie_page.html', context)
 
