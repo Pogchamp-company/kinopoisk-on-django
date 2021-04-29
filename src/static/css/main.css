@@ -45,6 +45,19 @@ body {
     border-bottom-right-radius: .75rem;
 }
 
+.container-kod-new {
+    background-color: #505050;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    max-width: 1200px;
+    padding: 10px 25px 0 25px;
+    border-radius: 1.2rem;
+    border: 2px solid #404040;
+    display: flex;
+}
+
 body {
     background: #f5f5f5;
     color: #2d2d2d;
@@ -378,7 +391,7 @@ body {
 }
 
 .form__input,
-.form__button{
+.form__button {
     letter-spacing: 1px;
     font-size: 16px;
 }
@@ -571,14 +584,14 @@ body {
 }
 
 .rating {
-    background-color: rgb(80, 80, 80);
+    background-color: rgb(64, 64, 64);
     color: white;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     padding: 0.5rem;
     border-radius: 0.75rem;
-    border-width: 2px;
+    border-width: 1px;
     border-style: solid;
-    border-color: rgb(56, 102, 56);
+    border-color: rgb(51, 51, 51);
     border-image: initial;
 }
 
@@ -614,21 +627,21 @@ body {
 }
 
 .container-actors {
-    background-color: rgb(80, 80, 80);
+    background-color: rgb(64, 64, 64);
     color: white;
-    margin-bottom: 20px;
     padding: 0.5rem;
     border-radius: 0.75rem;
+    border: 1px solid rgb(51, 51, 51);
 }
 
 .container-actors .container-actors-block {
-    max-height: 400px;
+    max-height: 340px;
     padding: 0px 10px;
     overflow: auto;
 }
 
 .container-actors-block .actor-block {
-    background-color: rgb(64, 64, 64);
+    background-color: rgb(58, 58, 58);
     color: white;
     border-width: 1px;
     border-style: solid;
@@ -643,7 +656,7 @@ body {
 .container-actors-block::-webkit-scrollbar {
     width: 10px; /* ширина для вертикального скролла */
     border-radius: 9em;
-    background-color: rgb(64, 64, 64);
+    background-color: rgb(55, 55, 55);
 }
 
 /* ползунок скроллбара */
@@ -655,16 +668,6 @@ body {
 
 .container-actors-block::-webkit-scrollbar-thumb:hover {
     background-color: #1a1a1a;
-}
-
-.actor-block .actor-info-photo {
-    height: 120px;
-    width: 88px;
-    border-radius: 0.5rem;
-    border-width: 2px;
-    border-style: solid;
-    border-color: rgb(0, 0, 0);
-    border-image: initial;
 }
 
 .actor-block .actor-info {
@@ -989,4 +992,128 @@ body {
 .cp-fab {
     background: #FFFFFF !important;
     color: #4285F4 !important;
+}
+
+.block-movie-info {
+    padding-top: 10px;
+    margin-bottom: 15px;
+}
+
+.block-movie-info .block-movie-info-block {
+    width: 73%;
+    background-color: rgb(64, 64, 64);
+    padding: 10px 10px 0 10px;
+    margin: 0 15px 0 15px;
+    color: white;
+    border-radius: 0.75rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+}
+
+.block-movie-info-block .block-movie-poster {
+    width: 35%;
+    padding: 5px;
+}
+
+.block-movie-info-block .block-movie-info-text {
+    width: 65%;
+    padding: 0 20px;
+}
+
+.block-movie-poster .title {
+    text-align: center;
+}
+
+.block-movie-poster .img-movie {
+    padding: .25rem;
+    background-color: rgb(51, 51, 51);
+    border: 1px solid rgb(51, 51, 51);
+    border-radius: .7rem;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.block-movie-info-text .title-smog {
+    color: #999999;
+    padding-left: 15px;
+}
+
+.text-color-link {
+    color: #ff7200;
+}
+
+.text-color-link:hover {
+    color: #ffffff;
+}
+
+.block-movie-info .block-movie-statistic {
+    width: 23%;
+}
+
+.score-star-container {
+    margin-left: 5px;
+}
+
+
+.container-trailer {
+    background-color: rgb(64, 64, 64);
+    color: white;
+    padding: 10px 10px 15px 5px;
+    margin-right: 15px;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(51, 51, 51);
+}
+
+.container-trailer .container-trailer-block {
+    max-height: 465px;
+    padding: 0 10px;
+    overflow: auto;
+}
+
+.container-trailer-block .trailer-block {
+    background-color: rgb(58, 58, 58);
+    color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+    padding: 5px 5px 0 5px;
+    border-radius: 0.75rem;
+    margin: 0 0 10px 0;
+}
+
+.container-trailer-block .trailer-block iframe{
+    border-radius: 0.75rem;
+}
+
+/* полоса прокрутки (скроллбар) */
+.container-trailer-block::-webkit-scrollbar {
+    width: 10px; /* ширина для вертикального скролла */
+    margin-top: 5px;
+    border-radius: 9em;
+    background-color: rgb(55, 55, 55);
+}
+
+/* ползунок скроллбара */
+.container-trailer-block::-webkit-scrollbar-thumb {
+    background-color: rgb(45, 45, 45);
+    border-radius: 9em;
+    /*box-shadow: inset 1px 1px 10px #f3faf7;*/
+}
+
+.container-trailer-block::-webkit-scrollbar-thumb:hover {
+    background-color: #1a1a1a;
+}
+
+.container-main-trailer {
+    position: relative;
+    background-color: rgb(64, 64, 64);
+    color: white;
+    padding: 10px;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(51, 51, 51);
+    max-height: 500px;
 }
