@@ -35,6 +35,11 @@ class MovieType(models.Model):
         return self.title
 
 
+class MovieTrailer(models.Model):
+    movie = models.ForeignKey('Movie', related_name='trailers', on_delete=models.CASCADE)
+    link = models.URLField()
+
+
 class Movie(models.Model, ImageProperties):
     title = models.CharField(max_length=150)
     original_title = models.CharField(max_length=150)

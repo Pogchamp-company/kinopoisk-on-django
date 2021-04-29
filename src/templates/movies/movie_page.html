@@ -90,9 +90,9 @@
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <iframe width="720" height="480" src="https://www.youtube.com/embed/9-dIdFXeFhs" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
+                        <iframe width="720" height="480" src="{% if movie.trailers.exists %}{{ movie.trailers.first.link }}{% else %}https://www.youtube.com/embed/9-dIdFXeFhs{% endif %}" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
                 </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <iframe width="720" height="480" src="https://www.youtube.com/embed/6hi0etcrqO8" frameborder="0"

@@ -137,3 +137,4 @@ src/parser/movies.json
 src/parser/persons.json
 src/static/ckeditor/
 src/static/admin/
+src/static/rest_framework/
