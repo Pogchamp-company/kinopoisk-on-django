@@ -78,52 +78,27 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="margin: 0">
-            <div class="container-trailer">
-                <div class="container-trailer-block">
-                    <div class="trailer-block">
-                        <iframe width="327" height="184" src="https://www.youtube.com/embed/0ly25OYC45M" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
-                    </div>
-                    <div class="trailer-block">
-                        <iframe width="327" height="184" src="https://www.youtube.com/embed/0ly25OYC45M" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
-                    </div>
-                    <div class="trailer-block">
-                        <iframe width="327" height="184" src="https://www.youtube.com/embed/0ly25OYC45M" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
-                    </div>
-                    <div class="trailer-block">
-                        <iframe width="327" height="184" src="https://www.youtube.com/embed/0ly25OYC45M" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
-                    </div>
-                    <div class="trailer-block">
-                        <iframe width="327" height="184" src="https://www.youtube.com/embed/0ly25OYC45M" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
-                    </div>
-                    <div class="trailer-block">
-                        <iframe width="327" height="184" src="https://www.youtube.com/embed/0ly25OYC45M" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
-                    </div>
-                    <div class="trailer-block">
-                        <iframe width="327" height="184" src="https://www.youtube.com/embed/0ly25OYC45M" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
+        {% if movie.trailers.exists %}
+            <div class="row" style="margin: 0">
+                <div class="container-trailer">
+                    <div class="container-trailer-block">
+                        {% for trailer in movie.trailers.all %}
+                            <div class="trailer-block">
+                                <iframe width="327" height="184" src="{{ trailer.link }}"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
+                <div class="container-main-trailer">
+                    <iframe width="720" height="480" src="{{ movie.trailers.first.link }}" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
             </div>
-            <div class="container-main-trailer">
-                <iframe width="720" height="480" src="https://www.youtube.com/embed/EqB72SBN1F8" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-            </div>
-        </div>
+        {% endif %}
         <div><h3 class="text-center">Рекомендуем к просмотру:</h3></div>
         <div class="container row">
             {% for recommendation in recommendations %}
