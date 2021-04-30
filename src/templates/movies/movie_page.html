@@ -10,13 +10,15 @@
                 <div class="block-movie-poster">
                     <h2 class="title">{{ movie.title }}</h2>
                     <img class="img-movie" src="{{ movie.medium_vertical_image }}" alt="">
-                    <h5 class="score-star-container {% if score %}locked{% endif %}">
-                        {% for i in '0123456789'|make_list %}
-                            <i class="fa fa-star score-star"
-                               style="color: {% if score and score.value >= forloop.counter %}gold{% else %}black{% endif %}"
-                               aria-hidden="true"></i>
-                        {% endfor %}
-                    </h5>
+                    {% if not request.user.is_anonymous %}
+                        <h5 class="score-star-container {% if score %}locked{% endif %}">
+                            {% for i in '0123456789'|make_list %}
+                                <i class="fa fa-star score-star"
+                                   style="color: {% if score and score.value >= forloop.counter %}gold{% else %}black{% endif %}"
+                                   aria-hidden="true"></i>
+                            {% endfor %}
+                        </h5>
+                    {% endif %}
                 </div>
                 <div class="block-movie-info-text">
                     <h3 class="title-smog">{{ movie.original_title }}</h3>
