@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}{{ movie.title }}{% endblock %}
 
@@ -21,7 +22,7 @@
                     {% endif %}
                 </div>
                 <div class="block-movie-info-text">
-                    <h3 class="title-smog">{{ movie.original_title }}</h3>
+                    <h3 class="title-smog">{% if movie.title != movie.original_title %}{{ movie.original_title }}{% endif %}</h3>
                     <h5>Год: {{ movie.year }}</h5>
                     <h5>Жанр: {{ movie.genres.all | join:", " }}</h5>
                     <h5>Категория: {{ movie.movie_type }}</h5>
@@ -58,10 +59,10 @@
             </div>
             <div class="block-movie-statistic">
                 <div class="rating">
-                    <div class="rating-label {% if movie.average_score > 6.5 %}rating-green{% elif movie.average_score > 2.5 %}rating-orange{% else %}rating-red{% endif %}">
-                        {{ movie.average_score }}
+                    <div class="rating-label {% if movie.average_score > 6.5 %}rating-green{% elif movie.average_score > 2.5 %}rating-orange{% elif movie.average_score != 0 %}rating-red{% else %}rating-grey{% endif %}">
+                        {% if movie.average_score %}{{ movie.average_score }}{% else %}-{% endif %}
                     </div>
-                    <div class="qty-rating">{{ movie.score_count }}</div>
+                    <div class="qty-rating">{{ movie.score_count | intword }}</div>
                 </div>
                 <div class="container-actors">
                     <div class="container-actors-block">
@@ -101,17 +102,20 @@
                 </div>
             </div>
         {% endif %}
-        <div><h3 class="text-center">Рекомендуем к просмотру:</h3></div>
-        <div class="container row">
-            {% for recommendation in recommendations %}
-                <div class="col-2">
-                    <a href="{% url 'movies.movie_page' movie_id=recommendation.id %}"><img class="img-thumbnail m-2"
-                                                                                            src="{{ recommendation.small_vertical_image }}"
-                                                                                            alt=""></a>
-                    <h5 class="text-center">{{ recommendation }}</h5>
-                </div>
-            {% endfor %}
-        </div>
+        {% if recommendations %}
+            <div><h3 class="text-center">Рекомендуем к просмотру:</h3></div>
+            <div class="container row">
+                {% for recommendation in recommendations %}
+                    <div class="col-2">
+                        <a href="{% url 'movies.movie_page' movie_id=recommendation.id %}"><img
+                                class="img-thumbnail m-2"
+                                src="{{ recommendation.small_vertical_image }}"
+                                alt=""></a>
+                        <h5 class="text-center">{{ recommendation }}</h5>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 

@@ -2,8 +2,9 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, Q, QuerySet
 from django.templatetags.static import static
+from django.utils.functional import cached_property
 
 from utils.enums import ChoiceEnum
 from utils.mixins import Image, ImageProperties
@@ -20,6 +21,8 @@ class Poster(Image):
 
 
 class Score(models.Model):
+    # created_at = models.DateTimeField(auto_now_add=True)
+
     value = models.IntegerField(validators=[MinLengthValidator(1), MaxLengthValidator(10)])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
@@ -91,7 +94,7 @@ class Movie(models.Model, ImageProperties):
     def get_person_in_role(self, role_type: PersonRole.RoleType) -> list[Person]:
         return list(map(lambda role: role.person, self.roles.filter(role_type=role_type.name).all()))
 
-    @property
+    @cached_property
     def average_score(self):
         return round(Score.objects.filter(movie=self).aggregate(Avg('value'))['value__avg'] or 0.0, 1)
 
@@ -132,3 +135,13 @@ class Movie(models.Model, ImageProperties):
     @property
     def default_images_folder(self) -> str:
         return 'icon/default_posters'
+
+    @classmethod
+    def get_top(cls, movie_type: MovieType = None, limit: int = None) -> QuerySet:
+        q = cls.objects.annotate(avg_score=Avg('score__value')).filter(~Q(avg_score=None))
+        if movie_type:
+            q = q.filter(movie_type=movie_type)
+        q = q.order_by('-avg_score')
+        if limit:
+            q = q[:limit]
+        return q

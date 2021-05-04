@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, JsonResponse
+from django.http import Http404
 from django.shortcuts import render
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -9,7 +9,6 @@ from django.db.models import Q
 from rest_framework import status
 from .serializers import MovieSerializer, PersonSerializer
 from person.models import Person
-from django.db.models import Avg
 
 
 def movie_page(request, movie_id: int):
@@ -17,10 +16,14 @@ def movie_page(request, movie_id: int):
     if not movie:
         raise Http404
 
+    recommendations = (Movie.get_top().filter(~Q(score__user=request.user))[:6]
+                       if request.user.is_authenticated else None)
+
     context = dict(
         movie=movie,
-        recommendations=Movie.objects.filter(~Q(id=movie_id))[:6],
-        score=Score.objects.filter(movie=movie, user=request.user).first() if not request.user.is_anonymous else 0,
+        recommendations=recommendations,
+        score=Score.objects.filter(movie=movie, user=request.user).first() if request.user.is_authenticated else 0,
+
     )
     return render(request, 'movies/movie_page.html', context)
 
@@ -31,8 +34,7 @@ def top_250(request, movie_type: str):
     except ObjectDoesNotExist:
         raise Http404()
     print(movie_type)
-    result = Movie.objects.annotate(
-        avg_score=Avg('score__value')).filter(~Q(avg_score=None)).filter(movie_type=movie_type).order_by('-avg_score')[:250]
+    result = Movie.get_top(movie_type, 250)
     context = dict(
         movies=result,
         movie_type=movie_type,
@@ -44,16 +46,18 @@ def top_250(request, movie_type: str):
 class ScoreView(APIView):
     def put(self, request: Request, movie_id: int):
         score_value = int(request.GET['score'])
+        if request.user.is_anonymous:
+            return Response({'message': 'Login required'}, status=status.HTTP_403_FORBIDDEN)
         movie = Movie.objects.get(pk=movie_id)
         if not movie:
-            return Response({'errors': 'Movie not found'}, status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'Movie not found'}, status.HTTP_404_NOT_FOUND)
         score = Score.objects.filter(movie=movie, user=request.user).first()
         if not score:
             score = Score(movie=movie,
                           user=request.user)
         score.value = score_value
         score.save()
-        return Response({'result': 'success'}, status.HTTP_200_OK)
+        return Response({'status': 'Success'}, status.HTTP_200_OK)
 
 
 class SearchView(APIView):

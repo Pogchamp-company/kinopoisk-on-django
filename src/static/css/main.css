@@ -607,6 +607,10 @@ body {
     background-color: rgb(256, 0, 66);
 }
 
+.rating .rating-grey {
+    background-color: rgba(33,33,33,0.8);
+}
+
 .rating .rating-label {
     display: inline-block;
     width: 100px;
