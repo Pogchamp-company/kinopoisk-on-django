@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import render
@@ -33,7 +35,7 @@ def top_250(request, movie_type: str):
         movie_type = MovieType.objects.get(title=movie_type)
     except ObjectDoesNotExist:
         raise Http404()
-    print(movie_type)
+
     result = Movie.get_top(movie_type, 250)
     context = dict(
         movies=result,
@@ -56,6 +58,7 @@ class ScoreView(APIView):
             score = Score(movie=movie,
                           user=request.user)
         score.value = score_value
+        score.created_at = datetime.now()
         score.save()
         return Response({'status': 'Success'}, status.HTTP_200_OK)
 

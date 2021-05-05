@@ -1,8 +1,11 @@
+import datetime
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
-from django.db.models import Avg, Q, QuerySet
+from django.db.models import Avg, Q, QuerySet, Count
 from django.templatetags.static import static
 from django.utils.functional import cached_property
 
@@ -21,7 +24,7 @@ class Poster(Image):
 
 
 class Score(models.Model):
-    # created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     value = models.IntegerField(validators=[MinLengthValidator(1), MaxLengthValidator(10)])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -96,7 +99,15 @@ class Movie(models.Model, ImageProperties):
 
     @cached_property
     def average_score(self):
-        return round(Score.objects.filter(movie=self).aggregate(Avg('value'))['value__avg'] or 0.0, 1)
+        query_result = (Score.objects.
+                        filter(movie=self).
+                        filter(created_at__lt=(datetime.datetime.now() - settings.IGNORE_SCORE_PERIOD)).
+                        aggregate(Avg('value'), Count('value')))
+
+        if query_result['value__count'] < settings.MIN_SCORE_COUNT_FOR_AVERAGE:
+            return 0.0
+
+        return round(query_result['value__avg'], 1)
 
     @property
     def score_count(self):
@@ -138,7 +149,11 @@ class Movie(models.Model, ImageProperties):
 
     @classmethod
     def get_top(cls, movie_type: MovieType = None, limit: int = None) -> QuerySet:
-        q = cls.objects.annotate(avg_score=Avg('score__value')).filter(~Q(avg_score=None))
+        q = (cls.objects.
+             annotate(avg_score=Avg('score__value')).
+             annotate(count_score=Count('score__value')).
+             filter(count_score__gt=settings.MIN_SCORE_COUNT_FOR_TOP_250))
+
         if movie_type:
             q = q.filter(movie_type=movie_type)
         q = q.order_by('-avg_score')

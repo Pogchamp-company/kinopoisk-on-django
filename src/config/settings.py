@@ -125,7 +125,11 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
+
+IGNORE_SCORE_PERIOD = timedelta(hours=12)
+MIN_SCORE_COUNT_FOR_AVERAGE = 100
+MIN_SCORE_COUNT_FOR_TOP_250 = 500
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
