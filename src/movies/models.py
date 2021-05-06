@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
-from django.db.models import Avg, Q, QuerySet, Count
+from django.db.models import Avg, Q, QuerySet, Count, FloatField, Value
 from django.templatetags.static import static
 from django.utils.functional import cached_property
 
@@ -149,8 +149,12 @@ class Movie(models.Model, ImageProperties):
 
     @classmethod
     def get_top(cls, movie_type: MovieType = None, limit: int = None) -> QuerySet:
+        abs_average = Score.objects.aggregate(avg_score=Avg('value'))['avg_score']
         q = (cls.objects.
-             annotate(avg_score=Avg('score__value')).
+             annotate(avg_score=(Avg('score__value') * Count('score__value', output_field=FloatField()) +
+                                 settings.MIN_SCORE_COUNT_FOR_TOP_250 * abs_average) /
+                                (Count('score__value',
+                                       output_field=FloatField()) + settings.MIN_SCORE_COUNT_FOR_TOP_250)).
              annotate(count_score=Count('score__value')).
              filter(count_score__gt=settings.MIN_SCORE_COUNT_FOR_TOP_250))
 
