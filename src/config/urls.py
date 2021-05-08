@@ -24,3 +24,5 @@ urlpatterns = [
     path('person/', include('person.urls')),
     path('users/', include('users.urls'))
 ]
+
+handler404 = 'errors_handlers.views.http404_page_not_found'

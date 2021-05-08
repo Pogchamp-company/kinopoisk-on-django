@@ -153,8 +153,8 @@ class Movie(models.Model, ImageProperties):
         q = (cls.objects.
              annotate(avg_score=(Avg('score__value') * Count('score__value', output_field=FloatField()) +
                                  settings.MIN_SCORE_COUNT_FOR_TOP_250 * abs_average) /
-                                (Count('score__value',
-                                       output_field=FloatField()) + settings.MIN_SCORE_COUNT_FOR_TOP_250)).
+                                (Count('score__value', output_field=FloatField()) +
+                                 settings.MIN_SCORE_COUNT_FOR_TOP_250)).
              annotate(count_score=Count('score__value')).
              filter(count_score__gt=settings.MIN_SCORE_COUNT_FOR_TOP_250))
 

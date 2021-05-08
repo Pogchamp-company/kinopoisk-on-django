@@ -64,8 +64,12 @@ docker-compose up -d minio
 ```shell
 manage.py initialize_buckets
 ```
-9. Optional: [run seeds](#seed-data)
-10. Run project
+9. Collect static files
+```shell
+manage.py collectstatic
+```
+10. Optional: [run seeds](#seed-data)
+11. Run project
 ```shell
 manage.py runserver
 ```
