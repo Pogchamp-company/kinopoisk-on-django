@@ -40,6 +40,25 @@ def top_250(request, movie_type: str):
     context = dict(
         movies=result,
         movie_type=movie_type,
+        title='ТОП 250',
+        description=f'Подборка лучших {movie_type.title.lower()}ов, собранная алгоритмами КиноПоиск',
+    )
+
+    return render(request, 'movies/top_250.html', context)
+
+
+def top_popular(request, movie_type: str):
+    try:
+        movie_type = MovieType.objects.get(title=movie_type)
+    except ObjectDoesNotExist:
+        raise Http404()
+
+    result = Movie.get_popular(movie_type, 250)
+    context = dict(
+        movies=result,
+        movie_type=movie_type,
+        title=f'Популярные {movie_type.title.lower()}ы',
+        description=f'Подборка популярных {movie_type.title.lower()}ов',
     )
 
     return render(request, 'movies/top_250.html', context)

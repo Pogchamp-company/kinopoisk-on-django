@@ -164,3 +164,14 @@ class Movie(models.Model, ImageProperties):
         if limit:
             q = q[:limit]
         return q
+
+    @classmethod
+    def get_popular(cls, movie_type: MovieType = None, limit: int = None) -> QuerySet:
+        q = (cls.objects.annotate(count_score=Count('score__value')))
+
+        if movie_type:
+            q = q.filter(movie_type=movie_type)
+        q = q.order_by('-count_score')
+        if limit:
+            q = q[:limit]
+        return q
