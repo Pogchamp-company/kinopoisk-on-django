@@ -608,7 +608,7 @@ body {
 }
 
 .rating .rating-grey {
-    background-color: rgba(33,33,33,0.8);
+    background-color: rgba(33, 33, 33, 0.8);
 }
 
 .rating .rating-label {
@@ -1089,7 +1089,7 @@ body {
     margin: 0 0 10px 0;
 }
 
-.container-trailer-block .trailer-block iframe{
+.container-trailer-block .trailer-block iframe {
     border-radius: 0.75rem;
 }
 
@@ -1120,4 +1120,99 @@ body {
     border-radius: 0.75rem;
     border: 1px solid rgb(51, 51, 51);
     max-height: 500px;
+}
+
+.block-movie-title {
+    width: auto;
+    height: 60px;
+    background-color: rgb(64, 64, 64);
+    padding: 5px 10px 0 10px;
+    margin: 10px 15px 0 15px;
+    color: white;
+    border-radius: 0.75rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+    font-size: 30px;
+}
+
+.block-movie-persons {
+    width: 100%;
+    height: auto;
+    background-color: rgb(64, 64, 64);
+    padding: 0px 10px 0px 10px;
+    margin: 10px 15px 10px 15px;
+    color: white;
+    border-radius: 0.75rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+}
+
+.block-movie-persons .block-movie-persons-type {
+    display: inline-block;
+    width: auto;
+    background-color: rgb(58, 58, 58);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+    padding: 0 0.5rem;
+    border-radius: 0.75rem;
+    margin: 10px 50% 0 0;
+    color: #ff7200;
+    font-size: 30px;
+}
+
+.block-movie-persons .block-movie-persons-content {
+    margin-top: 10px;
+}
+
+.block-movie-persons-content .block-movie-persons-content-item {
+    display: inline-block;
+    width: 49.5%;
+    float: right;
+    margin-left: auto;
+    margin-right: 0em;
+    margin-bottom: 10px;
+    background-color: rgb(58, 58, 58);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    border-radius: 0.75rem;
+    color: #ff7200;
+    font-size: 30px;
+}
+
+.block-movie-persons-content .block-movie-persons-content-item:nth-of-type(odd) {
+    float: left;
+    clear: right;
+}
+
+.block-movie-persons-content-item img {
+    display: inline-block;
+    padding: .25rem;
+    background-color: rgb(51, 51, 51);
+    border: 1px solid rgb(51, 51, 51);
+    border-radius: .7rem;
+    max-width: 70px;
+    height: auto;
+}
+
+.block-movie-persons-content-item .block-movie-persons-content-item-info {
+    display: inline-block;
+}
+
+.block-movie-persons-content-item-info .person-name{
+    font-size: 22px;
+    color: white;
+}
+
+.block-movie-persons-content-item-info .person-role{
+    font-size: 18px;
+    color: rgb(153, 153, 153);
 }
