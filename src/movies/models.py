@@ -94,8 +94,13 @@ class Movie(models.Model, ImageProperties):
         verbose_name = 'Фильм'
         verbose_name_plural = 'Фильмы'
 
-    def get_person_in_role(self, role_type: PersonRole.RoleType) -> list[Person]:
-        return list(map(lambda role: role.person, self.roles.filter(role_type=role_type.name).all()))
+    def get_person_in_role(self, role_type: PersonRole.RoleType, limit=None) -> list[Person]:
+        query = self.roles.filter(role_type=role_type.name)
+        if limit:
+            query = query[:limit]
+        else:
+            query = query.all()
+        return list(map(lambda role: role.person, query))
 
     @cached_property
     def average_score(self):

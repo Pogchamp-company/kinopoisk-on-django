@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from django.db.models import Q
 from rest_framework import status
 from .serializers import MovieSerializer, PersonSerializer
-from person.models import Person
+from person.models import Person, PersonRole
 
 
 def movie_page(request, movie_id: int):
@@ -25,9 +25,28 @@ def movie_page(request, movie_id: int):
         movie=movie,
         recommendations=recommendations,
         score=Score.objects.filter(movie=movie, user=request.user).first() if request.user.is_authenticated else 0,
-
+        directors=movie.get_person_in_role(PersonRole.RoleType.DIRECTOR, 3),
+        producers=movie.get_person_in_role(PersonRole.RoleType.PRODUCER, 3),
+        writers=movie.get_person_in_role(PersonRole.RoleType.WRITER, 3),
     )
     return render(request, 'movies/movie_page.html', context)
+
+
+def movie_info(request, movie_id: int):
+    movie = Movie.objects.get(pk=movie_id)
+    if not movie:
+        raise Http404
+
+    # recommendations = (Movie.get_top().filter(~Q(score__user=request.user))[:6]
+    #                    if request.user.is_authenticated else None)
+
+    context = dict(
+        movie=movie,
+        # recommendations=recommendations,
+        # score=Score.objects.filter(movie=movie, user=request.user).first() if request.user.is_authenticated else 0,
+
+    )
+    return render(request, 'movies/movie_info.html', context)
 
 
 def top_250(request, movie_type: str):

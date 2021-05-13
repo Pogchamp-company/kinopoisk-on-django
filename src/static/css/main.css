@@ -1205,14 +1205,20 @@ body {
 
 .block-movie-persons-content-item .block-movie-persons-content-item-info {
     display: inline-block;
+    padding-left: 15px;
 }
 
-.block-movie-persons-content-item-info .person-name{
+.block-movie-persons-content-item-info .person-name {
     font-size: 22px;
     color: white;
 }
 
-.block-movie-persons-content-item-info .person-role{
+.block-movie-persons-content-item-info .person-role {
     font-size: 18px;
     color: rgb(153, 153, 153);
+}
+
+.movie-name {
+    font-size: 30px;
+    color: white;
 }

@@ -22,7 +22,8 @@
                     {% endif %}
                 </div>
                 <div class="block-movie-info-text">
-                    <h3 class="title-smog">{% if movie.title != movie.original_title %}{{ movie.original_title }}{% endif %}</h3>
+                    <h3 class="title-smog">
+                        {% if movie.title != movie.original_title %}{{ movie.original_title }}{% endif %}</h3>
                     <h5>Год: {{ movie.year }}</h5>
                     <h5>Жанр: {{ movie.genres.all | join:", " }}</h5>
                     <h5>Категория: {{ movie.movie_type }}</h5>
@@ -32,25 +33,28 @@
                     <h5>Слоган: {{ movie.slogan }}</h5>
                     <h5>Бюджет: ${{ movie.budget }}</h5>
                     <h5>Режиссер:
-                        {% for director in movie.directors %}
+                        {% for director in directors %}
                             <a class="text-color-link" href="{% url "person.person_page" person_id=director.pk %}">
-                                {{ director }}</a>{% if not forloop.last %}, {% endif %}
+                                {{ director }}</a>,
                         {% empty %}-
                         {% endfor %}
+                        <a href="{% url "movies.movie_info" movie.id %}">...</a>
                     </h5>
                     <h5>Продюсер:
-                        {% for producer in movie.producers %}
+                        {% for producer in producers %}
                             <a class="text-color-link" href="{% url "person.person_page" person_id=producer.pk %}">
-                                {{ producer }}</a>{% if not forloop.last %}, {% endif %}
+                                {{ producer }}</a>,
                         {% empty %}-
                         {% endfor %}
+                        <a href="{% url "movies.movie_info" movie.id %}">...</a>
                     </h5>
                     <h5>Сценарист:
-                        {% for writer in movie.writers %}
+                        {% for writer in writers %}
                             <a class="text-color-link" href="{% url "person.person_page" person_id=writer.pk %}">
-                                {{ writer }}</a>{% if not forloop.last %}, {% endif %}
+                                {{ writer }}</a>,
                         {% empty %}-
                         {% endfor %}
+                        <a href="{% url "movies.movie_info" movie.id %}">...</a>
                     </h5>
                     <h5>Премьера Мир: {% if movie.premiere %}{{ movie.premiere }}{% else %}-{% endif %}</h5>
                     <h5>Премьера РФ: {% if movie.premiere_ru %}{{ movie.premiere_ru }}{% else %}-{% endif %}</h5>
