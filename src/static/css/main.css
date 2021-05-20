@@ -1222,3 +1222,61 @@ body {
     font-size: 30px;
     color: white;
 }
+
+.nizko-fleksyashie-novosti {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px 10px;
+}
+
+.nizko-fleksyashie-novosti h1 {
+    min-width: 100px;
+    background-color: rgb(64, 64, 64);
+    padding: 5px 10px;
+    margin: 5px auto;
+    color: white;
+    border-radius: 0.75rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+    font-size: 30px;
+    text-align: center;
+}
+
+.nizko-fleksyashie-novosti div {
+    width: 100%;
+    background-color: rgb(64, 64, 64);
+    padding: 10px 20px;
+    margin: 10px auto;
+    color: #dbdbdb;
+    border-radius: 0.75rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+    border-image: initial;
+    text-align: center;
+}
+
+.nizko-fleksyashie-novosti div img {
+    padding: .25rem;
+    background-color: rgb(48, 48, 48);
+    border: 1px solid rgb(48, 48, 48);
+    border-radius: .7rem;
+    max-height: 400px;
+    width: auto;
+    margin-bottom: 15px;
+}
+
+.nizko-fleksyashie-novosti div h2 {
+    text-align: center;
+    color: #eeeeee;
+    font-size: 27px;
+}
+
+.nizko-fleksyashie-novosti div h3 {
+    text-align: start;
+    text-indent: 35px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
