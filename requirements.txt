@@ -5,3 +5,4 @@ django-minio-backend==2.5.1
 Pillow==8.1.2
 django-ckeditor==6.0.0
 WhiteNoise==5.2.0
+pytest-django==4.3.0
