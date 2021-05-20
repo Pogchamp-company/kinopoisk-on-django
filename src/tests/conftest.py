@@ -15,18 +15,18 @@ def run_sql(sql):
 
 @pytest.fixture(scope='session')
 def django_db_setup():
-    print('sasasasadsadasd')
+    print('In django db setup')
     from django.conf import settings
 
-    original_db = settings.DATABASES['default']['NAME']
-    test_db = settings.DATABASES['tests']['NAME']
+    original_db = settings.DATABASES['default']['NAME'].removeprefix('test_')
+    test_db = f'test_{original_db}'
 
-    run_sql(f'DROP {test_db} IF EXISTS {test_db}')
-    run_sql(f'CREATE DATABASE {test_db} TEMPLATE {original_db}')
+    run_sql(f'DROP DATABASE IF EXISTS "{test_db}"')
+    run_sql(f'CREATE DATABASE "{test_db}" TEMPLATE "{original_db}"')
 
     yield
 
     for connection in connections.all():
         connection.close()
 
-    run_sql(f'DROP {test_db} IF EXISTS {test_db}')
+    run_sql(f'DROP DATABASE IF EXISTS "{test_db}"')
