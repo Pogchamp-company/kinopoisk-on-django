@@ -5,13 +5,11 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator
 from django.db import models
-from django.db.models import Avg, Q, QuerySet, Count, FloatField, Value
+from django.db.models import Avg, QuerySet, Count, FloatField
 from django.templatetags.static import static
 from django.utils.functional import cached_property
-
 from utils.enums import ChoiceEnum
 from utils.mixins import Image, ImageProperties
-
 from person.models import PersonRole, Person
 
 
@@ -24,7 +22,7 @@ class Poster(Image):
 
 
 class Score(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     value = models.IntegerField(validators=[MinLengthValidator(1), MaxLengthValidator(10)])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -106,7 +104,7 @@ class Movie(models.Model, ImageProperties):
     def average_score(self):
         query_result = (Score.objects.
                         filter(movie=self).
-                        filter(created_at__lt=(datetime.datetime.now() - settings.IGNORE_SCORE_PERIOD)).
+                        filter(updated_at__lt=(datetime.datetime.now() - settings.IGNORE_SCORE_PERIOD)).
                         aggregate(Avg('value'), Count('value')))
 
         if query_result['value__count'] < settings.MIN_SCORE_COUNT_FOR_AVERAGE:

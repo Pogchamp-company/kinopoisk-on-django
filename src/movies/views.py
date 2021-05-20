@@ -1,8 +1,4 @@
-from datetime import datetime
-
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .models import Movie, Score, MovieType
@@ -14,9 +10,7 @@ from person.models import Person, PersonRole
 
 
 def movie_page(request, movie_id: int):
-    movie = Movie.objects.get(pk=movie_id)
-    if not movie:
-        raise Http404
+    movie = get_object_or_404(Movie, pk=movie_id)
 
     recommendations = (Movie.get_top().filter(~Q(score__user=request.user))[:6]
                        if request.user.is_authenticated else None)
@@ -33,27 +27,16 @@ def movie_page(request, movie_id: int):
 
 
 def movie_info(request, movie_id: int):
-    movie = Movie.objects.get(pk=movie_id)
-    if not movie:
-        raise Http404
-
-    # recommendations = (Movie.get_top().filter(~Q(score__user=request.user))[:6]
-    #                    if request.user.is_authenticated else None)
+    movie = get_object_or_404(Movie, pk=movie_id)
 
     context = dict(
         movie=movie,
-        # recommendations=recommendations,
-        # score=Score.objects.filter(movie=movie, user=request.user).first() if request.user.is_authenticated else 0,
-
     )
     return render(request, 'movies/movie_info.html', context)
 
 
 def top_250(request, movie_type: str):
-    try:
-        movie_type = MovieType.objects.get(title=movie_type)
-    except ObjectDoesNotExist:
-        raise Http404()
+    movie_type = get_object_or_404(MovieType, title=movie_type)
 
     result = Movie.get_top(movie_type, 250)
     context = dict(
@@ -67,10 +50,7 @@ def top_250(request, movie_type: str):
 
 
 def top_popular(request, movie_type: str):
-    try:
-        movie_type = MovieType.objects.get(title=movie_type)
-    except ObjectDoesNotExist:
-        raise Http404()
+    movie_type = get_object_or_404(MovieType, title=movie_type)
 
     result = Movie.get_popular(movie_type, 250)
     context = dict(
@@ -96,7 +76,6 @@ class ScoreView(APIView):
             score = Score(movie=movie,
                           user=request.user)
         score.value = score_value
-        score.created_at = datetime.now()
         score.save()
         return Response({'status': 'Success'}, status.HTTP_200_OK)
 
