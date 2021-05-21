@@ -1,13 +1,11 @@
-from django.shortcuts import render
-from movies.models import Movie
-
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 from news.models import News
 
 
-def index(request):
+def single_news_page(request, news_id: int):
     context = dict(
-        preview=Movie.objects.order_by("-id")[:3],
-        news=News.objects.order_by("-id")[:3]
+        news=get_object_or_404(News, pk=news_id)
     )
 
-    return render(request, 'news/home_page.html', context)
+    return HttpResponse('Stub')

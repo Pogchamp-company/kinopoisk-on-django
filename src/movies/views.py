@@ -1,12 +1,11 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
+from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
-from .models import Movie, Score, MovieType
 from rest_framework.views import APIView
-from django.db.models import Q
-from rest_framework import status
-from .serializers import MovieSerializer, PersonSerializer
-from person.models import Person, PersonRole
+from person.models import PersonRole
+from .models import Movie, Score, MovieType
 
 
 def movie_page(request, movie_id: int):
@@ -26,13 +25,13 @@ def movie_page(request, movie_id: int):
     return render(request, 'movies/movie_page.html', context)
 
 
-def movie_info(request, movie_id: int):
+def movie_cast(request, movie_id: int):
     movie = get_object_or_404(Movie, pk=movie_id)
 
     context = dict(
         movie=movie,
     )
-    return render(request, 'movies/movie_info.html', context)
+    return render(request, 'movies/movie_cast.html', context)
 
 
 def top_250(request, movie_type: str):
@@ -78,25 +77,3 @@ class ScoreView(APIView):
         score.value = score_value
         score.save()
         return Response({'status': 'Success'}, status.HTTP_200_OK)
-
-
-class SearchView(APIView):
-    movie_serializer_class = MovieSerializer
-    person_serializer_class = PersonSerializer
-
-    def get(self, request: Request):
-        query_filter = request.GET.get('query')
-        if not query_filter:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
-        movies = Movie.objects.filter(
-            Q(title__icontains=query_filter) | Q(original_title__icontains=query_filter))[:3]
-        persons = Person.objects.filter(
-            Q(fullname__icontains=query_filter) | Q(ru_fullname__icontains=query_filter))[:3]
-
-        response = {
-            # 'topResult': {},
-            'movies': [self.movie_serializer_class(movie).data for movie in movies],
-            'persons': [self.person_serializer_class(person).data for person in persons]
-        }
-
-        return Response(response, status=status.HTTP_200_OK)

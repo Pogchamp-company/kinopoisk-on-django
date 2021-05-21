@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Movie
-from person.models import Person
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -13,9 +12,3 @@ class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = ('id', 'title', 'original_title', 'movie_type')
-
-
-class PersonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Person
-        fields = ('id', 'ru_fullname', 'fullname')

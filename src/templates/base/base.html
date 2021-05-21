@@ -53,7 +53,7 @@
     {% block content %}{% endblock %}
 </div>
 <script>
-    const urlForSearch = '{% url "movies.search" %}';
+    const urlForSearch = '{% url "search" %}';
     const csrfToken = '{% csrf_token %}';
     {% block constants %}{% endblock %}
 </script>
