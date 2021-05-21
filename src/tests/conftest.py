@@ -1,5 +1,5 @@
-import pytest
 from django.db import connections
+from .factories import *
 
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT

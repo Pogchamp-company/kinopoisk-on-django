@@ -4,18 +4,6 @@ from django.urls import reverse
 from faker import Faker
 
 
-@pytest.fixture
-def user_factory():
-    fake = Faker(locale=['en'])
-    name = fake.unique.name()
-    user = User.objects.create_user(username=name,
-                                    email=f'{name.replace(" ", "_")}@example.example',
-                                    password='TestUserPassword')
-
-    user.save()
-    return user
-
-
 @pytest.mark.django_db
 class TestUsers:
     def test_registration(self, client):

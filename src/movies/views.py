@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
@@ -64,12 +65,16 @@ def top_popular(request, movie_type: str):
 
 class ScoreView(APIView):
     def put(self, request: Request, movie_id: int):
-        score_value = int(request.GET['score'])
+        try:
+            score_value = int(request.GET['score'])
+        except (KeyError, ValueError):
+            return Response({'status': 'Failed', 'message': 'Incorrect score value'}, status=status.HTTP_400_BAD_REQUEST)
         if request.user.is_anonymous:
-            return Response({'message': 'Login required'}, status=status.HTTP_403_FORBIDDEN)
-        movie = Movie.objects.get(pk=movie_id)
-        if not movie:
-            return Response({'message': 'Movie not found'}, status.HTTP_404_NOT_FOUND)
+            return Response({'status': 'Failed', 'message': 'Login required'}, status=status.HTTP_403_FORBIDDEN)
+        try:
+            movie = Movie.objects.get(pk=movie_id)
+        except ObjectDoesNotExist:
+            return Response({'status': 'Failed', 'message': 'Movie not found'}, status.HTTP_404_NOT_FOUND)
         score = Score.objects.filter(movie=movie, user=request.user).first()
         if not score:
             score = Score(movie=movie,
