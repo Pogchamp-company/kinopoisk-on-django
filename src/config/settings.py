@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig',
     'person.apps.PersonConfig',
     'users.apps.UsersConfig',
+    'index.apps.IndexConfig'
 ]
 
 MIDDLEWARE = [
@@ -188,3 +189,4 @@ MINIO_CONSISTENCY_CHECK_ON_START = True
 MINIO_POLICY_HOOKS: List[Tuple[str, dict]] = [
     # ('django-backend-dev-private', dummy_policy)
 ]
+LOGIN_URL = '/users/login/'

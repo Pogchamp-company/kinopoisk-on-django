@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Person
 
 
 def person_page(request, person_id: int):
-    person = Person.objects.get(pk=person_id)
+    person = get_object_or_404(Person, pk=person_id)
     context = dict(
         person=person,
         height=person.height / 100 if person.height else None,

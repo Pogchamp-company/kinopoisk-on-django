@@ -1,11 +1,6 @@
-from ckeditor.fields import RichTextField
 from django.contrib import admin
-# from redactor.widgets import RedactorEditor
 
 from .models import News
-
-# admin.site.register(News)
-# admin.site.register(NewsPhoto)
 
 
 class NewsAdmin(admin.ModelAdmin):
