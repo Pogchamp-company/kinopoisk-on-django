@@ -11,7 +11,7 @@ from movies.models import Movie
 class TestIndex:
     def test_index(self, client):
         response = client.get('/')
-        assertTemplateUsed(response, 'news/home_page.html')
+        assertTemplateUsed(response, 'index/home_page.html')
         assert response.status_code == 200
 
     def test_search(self, client):
