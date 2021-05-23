@@ -44,19 +44,23 @@
                     <p class="text_left_panel pl-3">СЕРИАЛЫ</p>
                     <a href="{% url "movies.top250" movie_type='Сериал' %}" class="button_left_panel"
                        style="text-decoration: none">Топ 250 сериалов</a>
-                    <a href="{% url "movies.popular" movie_type='Фильм' %}" class="button_left_panel" style="text-decoration: none">Популярные</a>
+                    <a href="{% url "movies.popular" movie_type='Фильм' %}" class="button_left_panel"
+                       style="text-decoration: none">Популярные</a>
                     <p class="text_left_panel pl-3">ФИЛЬМЫ</p>
                     <a href="{% url "movies.top250" movie_type='Фильм' %}" class="button_left_panel"
                        style="text-decoration: none">Топ 250</a>
-                    <a href="{% url "movies.popular" movie_type='Фильм' %}" class="button_left_panel" style="text-decoration: none">Популярные</a>
+                    <a href="{% url "movies.popular" movie_type='Фильм' %}" class="button_left_panel"
+                       style="text-decoration: none">Популярные</a>
                 </div>
             </div>
             <div class="col-9">
                 {% for news_item in news %}
                     <div class="row featurette">
                         <div class="{% if forloop.counter|divisibleby:2 %}col-md-7{% else %}col-md-5 order-md-2{% endif %}">
-                            <h2 class="featurette-heading">{{ news_item.title }}</h2>
-                            <p class="lead">{{ news_item.preview_content|safe }}</p>
+                            <a href="{% url "news.single_news" news_item.id %}" style="text-decoration:none; color:#000000">
+                                <h2 class="featurette-heading">{{ news_item.title }}</h2>
+                                <p class="lead">{{ news_item.preview_content|safe }}</p>
+                            </a>
                         </div>
                         <div class="{% if forloop.counter|divisibleby:2 %}col-md-5{% else %}col-md-7 order-md-1{% endif %}">
                             <img src="{% if news_item.image %}{{ news_item.image.url }}{% endif %}"
