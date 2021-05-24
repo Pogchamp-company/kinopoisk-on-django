@@ -2,9 +2,11 @@ import asyncio
 import os
 import time
 import xml.etree.ElementTree as xml
-from aiohttp import ClientSession, ClientTimeout
-from json import JSONDecodeError
 from pprint import pprint
+
+from aiohttp import ClientSession, ClientTimeout
+from aiohttp.web_exceptions import HTTPTooManyRequests
+from json import JSONDecodeError
 
 import requests
 import json
@@ -35,6 +37,7 @@ class FILM:
 
     def to_dict(self):
         return {
+            "kp_id": self.kp_id,
             "title": self.ru_name,
             "original_title": self.name,
             "movie_type": self.type,
@@ -69,32 +72,39 @@ class SEARCH:
 
 
 class KP:
-    def __init__(self, token, secret=None):
+    def __init__(self, token, secret=None, requests_limit=15):
         self.token = token
         self.secret = secret
         self.headers = {"X-API-KEY": self.token}
-        self.api_version = 'v2.1'
-        self.staff_api_version = 'v1'
-        self.API = 'https://kinopoiskapiunofficial.tech/api/' + self.api_version + '/'
-        self.STAFF_API = f'https://kinopoiskapiunofficial.tech/api/{self.staff_api_version}/staff'
-        self.secret_API = 'https://videocdn.tv/api/short'
-        self.version = self.api_version + '.2-release'
+        self.api_versions = {
+            'staff': 'v1',
+            'movie': 'v2.1',
+            'top': 'v2.2'
+        }
+        self.base_api_url = 'https://kinopoiskapiunofficial.tech/api/'
+        self.api_endpoints = {
+            'staff': f'{self.base_api_url}{self.api_versions["staff"]}/staff',
+            'movie': f'{self.base_api_url}{self.api_versions["movie"]}/films/' + '{film_id}',
+            'search': f'{self.base_api_url}{self.api_versions["movie"]}/films/search-by-keyword',
+            'top': f'{self.base_api_url}{self.api_versions["top"]}/films/top?type=' + '{type}',
+            'image': 'https://kinopoiskapiunofficial.tech/images/{container}/kp{size}/{kp_id}.jpg'
+        }
         self.about = 'KinoPoiskAPI'
         self.requests_count = 0
-        self.REQUESTS_LIMIT = 15
+        self.REQUESTS_LIMIT = requests_limit
 
     async def get_film(self, film_id: int, session: ClientSession):
         rate_request = await self.request(f'https://rating.kinopoisk.ru/{film_id}.xml', session)
         try:
             kp_rate = xml.fromstring(rate_request)[0].text
-        except IndexError:
+        except (IndexError, TypeError):
             kp_rate = 0
         try:
             imdb_rate = xml.fromstring(rate_request)[1].text
-        except IndexError:
+        except (IndexError, TypeError):
             imdb_rate = 0
 
-        request_json = await self.request(self.API + 'films/' + str(film_id), session)
+        request_json = await self.request(self.api_endpoints['movie'].format(film_id=film_id), session)
         request_json['data']['kp_rate'] = float(kp_rate)
         request_json['data']['imdb_rate'] = float(imdb_rate)
         return FILM(request_json['data'])
@@ -103,7 +113,7 @@ class KP:
         output = []
         for _ in range(10):
             try:
-                request = requests.get(self.API + 'films/search-by-keyword', headers=self.headers,
+                request = requests.get(self.api_endpoints['search'], headers=self.headers,
                                        params={"keyword": query, "page": 1})
                 request_json = json.loads(request.text)
                 for film in request_json['films']:
@@ -120,7 +130,7 @@ class KP:
         output = []
         for page in range(1, 14):
             try:
-                request = requests.get(f'{self.API}films/top?type=BEST_FILMS_LIST&page={page}&listId=1',
+                request = requests.get(self.api_endpoints['top'].format(type='TOP_250_BEST_FILMS') + f'&page={page}',
                                        headers=self.headers
                                        )
                 request_json = json.loads(request.text)
@@ -132,7 +142,7 @@ class KP:
         return output
 
     def get_film_staff(self, film_id: int):
-        request = requests.get(f'{self.STAFF_API}?filmId={film_id}', headers=self.headers)
+        request = requests.get(f'{self.api_endpoints["staff"]}?filmId={film_id}', headers=self.headers)
         try:
             data = json.loads(request.text)
         except JSONDecodeError:
@@ -142,7 +152,7 @@ class KP:
             yield STAFF(staff)
 
     def get_person(self, person_id: int):
-        request = requests.get(f'{self.STAFF_API}/{person_id}', headers=self.headers)
+        request = requests.get(f'{self.api_endpoints["staff"]}/{person_id}', headers=self.headers)
         try:
             data = json.loads(request.text)
         except JSONDecodeError:
@@ -152,32 +162,74 @@ class KP:
             return self.get_person(person_id)
         return PERSON(data)
 
-    async def request(self, url, session):
+    async def _get_image(self, container_name: str, kp_id: int, size=""):
+        async with ClientSession(timeout=ClientTimeout(total=500), headers=self.headers) as session:
+            content = await self.request(self.api_endpoints["image"].format(container=container_name, size=size, kp_id=kp_id), session, 'image/jpeg')
+            return content
+
+    def _save_image(self, filename, data, assets_folder=""):
+        with open(os.path.join(assets_folder, filename), "wb") as f:
+            f.write(data)
+
+    async def get_person_photo(self, person_id: int, assets_folder=None):
+        filename = f"person_{person_id}.jpg"
+        if assets_folder is not None and os.path.exists(os.path.join(assets_folder, filename)):
+            print(f"{filename} exists")
+            return
+        photo = await self._get_image('actor_posters', person_id)
+        if assets_folder is not None and photo:
+            self._save_image(filename, photo, assets_folder)
+        if assets_folder is None:
+            return {filename: photo}
+
+    async def get_film_photo(self, film_id: int, assets_folder=None):
+        large_poster_filename = f"movie_{film_id}.jpg"
+        small_poster_filename = f"movie_{film_id}_small.jpg"
+        large = await self._get_image('posters', film_id)
+        small = await self._get_image('posters', film_id, "_small")
+        resp = {large_poster_filename: large, small_poster_filename: small}
+        if assets_folder is not None and large and small:
+            self._save_image(large_poster_filename, large, assets_folder)
+            self._save_image(small_poster_filename, small, assets_folder)
+        if assets_folder is None:
+            return resp
+
+    async def request(self, url, session, allowed_content_type=None):
         while self.requests_count > self.REQUESTS_LIMIT:
             await asyncio.sleep(.25)
         self.requests_count += 1
         async with session.get(url) as response:
             self.requests_count -= 1
-            html = await response.text()
-            try:
-                return json.loads(html)
-            except JSONDecodeError:
-                if response.status == 200:
-                    return html
-                elif response.status == 404:
-                    return {}
-                pprint(html)
-                raise
+            if response.status == 200:
+                if allowed_content_type and response.content_type != allowed_content_type:
+                    return
+                if response.content_type == 'application/json':
+                    return await response.json()
+                elif response.content_type == 'text/html':
+                    return await response.text()
+                else:
+                    return await response.content.read()
+            elif response.status == 404:
+                return {}
+            elif response.status == 429:
+                print("Limit exceeded")
+                print(f"Old limit: {self.REQUESTS_LIMIT}")
+                if self.REQUESTS_LIMIT > 3:
+                    self.REQUESTS_LIMIT -= 1
+                else:
+                    raise HTTPTooManyRequests
+                print(f"New limit: {self.REQUESTS_LIMIT}")
+                return await self.request(url, session)
 
     async def get_full_film_info(self, film_id):
         person_tasks = []
         async with ClientSession(timeout=ClientTimeout(total=500), headers=self.headers) as session:
             movie = await self.get_film(film_id, session)
-            roles = await self.request(f'{self.STAFF_API}?filmId={film_id}', session)
+            roles = await self.request(f'{self.api_endpoints["staff"]}?filmId={film_id}', session)
             for role in roles:
                 staff = STAFF(role)
                 movie.roles.append(staff.__dict__)
-                task_request = asyncio.create_task(self.request(f'{self.STAFF_API}/{staff.kp_id}', session))
+                task_request = asyncio.create_task(self.request(f'{self.api_endpoints["staff"]}/{staff.kp_id}', session))
                 person_tasks.append(task_request)
             raw_persons = await asyncio.gather(*person_tasks)
             persons = []

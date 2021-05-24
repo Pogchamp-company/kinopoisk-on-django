@@ -1,0 +1,76 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}КиноПоиск. Все фильмы планеты.{% endblock %}
+
+{% block content %}
+    <div class="container bg-white mb-5">
+        <!--Карусель-->
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for _ in preview %}
+                    <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}"
+                        class="{% if forloop.first %}active{% endif %}"></li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for movie in preview %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img class="first-slide" src="{{ movie.big_horizontal_image }}" alt="{{ movie.title }} poster">
+                        <div class="container">
+                            <div class="carousel-caption text-left">
+                                <h1>{{ movie.title }}</h1>
+                                <p><a class="btn btn-lg btn-dark" href="{% url "movies.movie_page" movie.id %}"
+                                      role="button">Смотреть</a></p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-2" style="box-shadow: 0.25px 0 0.25px;">
+                <div class="fixed_left_panel">
+                    <p class="text_left_panel pl-3">МЕДИА</p>
+                    <a href="#" class="button_left_panel" style="text-decoration: none">Новости</a>
+                    <p class="text_left_panel pl-3">СЕРИАЛЫ</p>
+                    <a href="{% url "movies.top250" movie_type='Сериал' %}" class="button_left_panel"
+                       style="text-decoration: none">Топ 250 сериалов</a>
+                    <a href="{% url "movies.popular" movie_type='Фильм' %}" class="button_left_panel"
+                       style="text-decoration: none">Популярные</a>
+                    <p class="text_left_panel pl-3">ФИЛЬМЫ</p>
+                    <a href="{% url "movies.top250" movie_type='Фильм' %}" class="button_left_panel"
+                       style="text-decoration: none">Топ 250</a>
+                    <a href="{% url "movies.popular" movie_type='Фильм' %}" class="button_left_panel"
+                       style="text-decoration: none">Популярные</a>
+                </div>
+            </div>
+            <div class="col-9">
+                {% for news_item in news %}
+                    <div class="row featurette">
+                        <div class="{% if forloop.counter|divisibleby:2 %}col-md-7{% else %}col-md-5 order-md-2{% endif %}">
+                            <a href="{% url "news.single_news" news_item.id %}" style="text-decoration:none; color:#000000">
+                                <h2 class="featurette-heading">{{ news_item.title }}</h2>
+                                <p class="lead">{{ news_item.preview_content|safe }}</p>
+                            </a>
+                        </div>
+                        <div class="{% if forloop.counter|divisibleby:2 %}col-md-5{% else %}col-md-7 order-md-1{% endif %}">
+                            <img src="{% if news_item.image %}{{ news_item.image.url }}{% endif %}"
+                                 class="img-max-width-500">
+                        </div>
+                    </div>
+                    <hr class="featurette-divider">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <hr class="featurette-divider">
+{% endblock %}

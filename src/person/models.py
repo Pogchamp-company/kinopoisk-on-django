@@ -13,7 +13,11 @@ if TYPE_CHECKING:
 
 
 class Photo(Image):
-    person = models.ForeignKey('Person', related_name='photos', on_delete=models.CASCADE)
+    person = models.ForeignKey('Person', related_name='photos', on_delete=models.CASCADE, verbose_name='Персона')
+
+    class Meta:
+        verbose_name = 'Фото персоны'
+        verbose_name_plural = 'Фотографии персон'
 
 
 class PersonRole(models.Model):
@@ -29,11 +33,15 @@ class PersonRole(models.Model):
         VOICE_DIRECTOR = 'Звукорежиссер'
         TRANSLATOR = 'Переводчик'
 
-    role_name = models.CharField(max_length=1000, null=True)
-    role_type = models.CharField(max_length=20, choices=RoleType.choices())
+    role_name = models.CharField(max_length=1000, null=True, verbose_name='Название роли')
+    role_type = models.CharField(max_length=20, choices=RoleType.choices(), verbose_name='Тип')
 
-    person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles')
-    movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE, related_name='roles')
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='roles', verbose_name='Персона')
+    movie = models.ForeignKey('movies.Movie', on_delete=models.CASCADE, related_name='roles', verbose_name='Фильм')
+
+    class Meta:
+        verbose_name = 'Роль в фильме'
+        verbose_name_plural = 'Роли в фильмах'
 
     def __str__(self):
         f_role_name = f' ({self.role_name})' if self.role_name else ''
@@ -42,22 +50,26 @@ class PersonRole(models.Model):
 
 
 class Person(models.Model, ImageProperties):
-    fullname = models.CharField(max_length=150)
-    ru_fullname = models.CharField(max_length=150, null=True)
+    fullname = models.CharField(max_length=150, verbose_name='Полное имя')
+    ru_fullname = models.CharField(max_length=150, null=True, verbose_name='Полное имя (На русском)')
 
-    birth_date = models.DateField(null=True)
-    death = models.DateField(null=True)
+    birth_date = models.DateField(null=True, verbose_name='Дата рождения')
+    death = models.DateField(null=True, verbose_name='Дата смерти')
 
     # САНТИМЕТРы)))))
-    height = models.PositiveIntegerField(null=True)
+    height = models.PositiveIntegerField(null=True, verbose_name='Рост в сантиметрах')
 
     class SexEnum(ChoiceEnum):
         MALE = 'Мужчина'
         FEMALE = 'Женщина'
 
-    sex = models.CharField(max_length=6, choices=SexEnum.choices())
+    sex = models.CharField(max_length=6, choices=SexEnum.choices(), verbose_name='Пол')
 
     movies = models.ManyToManyField('movies.Movie', through='PersonRole', related_name='persons')
+
+    class Meta:
+        verbose_name = 'Персона'
+        verbose_name_plural = 'Персоны'
 
     @property
     def movies_genres(self) -> set['Movie']:
@@ -96,12 +108,12 @@ class Person(models.Model, ImageProperties):
 
     @cached_property
     def age(self) -> int:
-        today = date.today()
+        last_date = self.death if self.death else date.today()
         try:
-            birthday = self.birth_date.replace(year=today.year)
+            birthday = self.birth_date.replace(year=last_date.year)
         except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
-            birthday = self.birth_date.replace(year=today.year, month=self.birth_date.month + 1, day=1)
-        return today.year - self.birth_date.year - 1 if birthday > today else today.year - self.birth_date.year
+            birthday = self.birth_date.replace(year=last_date.year, month=self.birth_date.month + 1, day=1)
+        return last_date.year - self.birth_date.year - 1 if birthday > last_date else last_date.year - self.birth_date.year
 
     @property
     def zodiac_sign(self) -> str:
@@ -114,15 +126,18 @@ class Person(models.Model, ImageProperties):
         d, m = self.birth_date.day, self.birth_date.month
         return zod[bisect.bisect_left(tdays, (datetime(2021, m, d) - datetime(2020, 12, 31)).days)]
 
+    @staticmethod
+    def date_to_string(date):
+        months = ('января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря')
+        return f'{date.day} {months[date.month - 1]}, {date.year}'
+
     @property
     def formatted_birth_date(self) -> str:
         if not self.birth_date:
             return '-'
-        months = ('января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-                  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря')
 
-        return f'{self.birth_date.day} {months[self.birth_date.month - 1]}, ' \
-               f'{self.birth_date.year} • {self.zodiac_sign} • {self.age} {self.age_word}'
+        return f'{self.date_to_string(self.birth_date)} • {self.zodiac_sign} • {self.age} {self.age_word}'
 
     def __str__(self):
         return self.ru_fullname or self.fullname

@@ -18,8 +18,13 @@ from django.urls import path, include
 
 
 urlpatterns = [
+    path('', include('index.urls')),
     path('admin/', admin.site.urls),
-    path('', include('news.urls')),
+    path('news/', include('news.urls')),
     path('movie/', include('movies.urls')),
-    path('person/', include('person.urls'))
+    path('person/', include('person.urls')),
+    path('users/', include('users.urls'))
 ]
+
+handler404 = 'errors_handlers.views.http404_page_not_found'
+handler500 = 'errors_handlers.views.http500_internal_server_error'

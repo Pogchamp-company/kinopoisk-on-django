@@ -1,0 +1,65 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+    <div class="container-kod-new row" style="padding: 10px">
+        <div class="block-movie-title"><a href="{% url "movies.movie_page" movie.id %}" class="movie-name">{{ movie }}</a> | Создатели</div>
+
+        <div class="block-movie-persons">
+            <div class="block-movie-persons-type">Режисёры</div>
+            <div class="block-movie-persons-content">
+                {% for director in movie.directors %}
+                    <div class="block-movie-persons-content-item">
+                        <img src="{{ director.medium_vertical_image }}" alt="" style="width: 55px; height: 75px">
+                        <div class="block-movie-persons-content-item-info">
+                            <a href="{% url "person.person_page" person_id=director.pk %}" class="person-name">{{ director }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="block-movie-persons">
+            <div class="block-movie-persons-type">Продюсеры</div>
+            <div class="block-movie-persons-content">
+                {% for producer in movie.producers %}
+                    <div class="block-movie-persons-content-item">
+                        <img src="{{ producer.medium_vertical_image }}" alt="" style="width: 55px; height: 75px">
+                        <div class="block-movie-persons-content-item-info">
+                            <a href="{% url "person.person_page" person_id=producer.pk %}" class="person-name">{{ producer }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="block-movie-persons">
+            <div class="block-movie-persons-type">Сценаристы</div>
+            <div class="block-movie-persons-content">
+                {% for writer in movie.writers %}
+                    <div class="block-movie-persons-content-item">
+                        <img src="{{ writer.medium_vertical_image }}" alt="" style="width: 55px; height: 75px">
+                        <div class="block-movie-persons-content-item-info">
+                            <a href="{% url "person.person_page" person_id=writer.pk %}" class="person-name">{{ writer }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="block-movie-persons">
+            <div class="block-movie-persons-type">Сценаристы</div>
+            <div class="block-movie-persons-content">
+                {% for actor in movie.actors %}
+                    <div class="block-movie-persons-content-item">
+                        <img src="{{ actor.person.medium_vertical_image }}" alt="" style="width: 55px; height: 75px">
+                        <div class="block-movie-persons-content-item-info">
+                            <a href="{% url "person.person_page" person_id=actor.person_id %}" class="person-name">{{ actor.person }}</a>
+                            <div class="person-role">{{ actor.role_name }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

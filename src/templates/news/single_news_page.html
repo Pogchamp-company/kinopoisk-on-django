@@ -1,0 +1,19 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}КиноПоиск. Все фильмы планеты.{% endblock %}
+
+{% block content %}
+    <div class="container-kod-new row" style="padding: 10px">
+        <div class="nizko-fleksyashie-novosti">
+            <h1>{{ news.title }}</h1>
+            <div>
+                <h2>{{ news.preview_content|safe }}</h2>
+                {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="">
+                {% endif %}
+                {{ news.content|safe }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

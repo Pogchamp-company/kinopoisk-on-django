@@ -77,8 +77,9 @@ function autocomplete(inp, url) {
     the text field element and an array of possible autocompleted values:*/
     let currentFocus;
     /*execute a function when someone writes in the text field:*/
-    inp.addEventListener("input", function (e) {
-        let a, b, i, val = this.value;
+    $(inp).on("input", function (e) {
+        let result_container
+        const val = this.value;
         /*close any already open lists of autocompleted values*/
         closeAllLists();
         if (!val) {
@@ -94,43 +95,33 @@ function autocomplete(inp, url) {
         fetch(`${url}?query=${val}`, requestOptions).then((response) => response.json())
             .then((data) => {
                 console.log(data)
-                a = document.createElement("DIV");
-                a.setAttribute("id", this.id + "autocomplete-list");
-                a.setAttribute("class", "autocomplete-items");
-                this.parentNode.appendChild(a);
-                a.innerHTML = data.window;
+                result_container = $('.autocomplete-items')
+                if (!result_container.length) {
+                    result_container = $("<div/>", {
+                        id: this.id + "autocomplete-list",
+                        "class": "autocomplete-items"
+                    })
+                    $(this).parent().append(result_container)
+                }
+                let result_temp = '';
+                if (data.movies.length) {
+                    result_temp += `<h3>Фильмы и сериалы</h3>
+                                    ${data.movies.map(
+                        movie => `<div><a href="/movie/${movie.id}" class="result" style="text-decoration: none"><h5>${movie.title}</h5></a></div>`).join('')}
+                                    `
+                }
+                if (data.persons.length) {
+                    result_temp += `<h3>Персоны</h3>
+                                     ${data.persons.map(
+                        person => `<a href="/person/${person.id}" class="result" style="text-decoration: none"><h5>${person.ru_fullname ? person.ru_fullname : person.fullname}</h5></a>`).join('')}
+                                    `
+                }
+                result_container.html(result_temp);
+                result_container.show()
             }).catch((error) => console.log(error))
-
-        // a = document.createElement("DIV");
-        // a.setAttribute("id", this.id + "autocomplete-list");
-        // a.setAttribute("class", "autocomplete-items");
-        // /*append the DIV element as a child of the autocomplete container:*/
-        // this.parentNode.appendChild(a);
-        // /*for each item in the array...*/
-        // for (i = 0; i < arr.length; i++) {
-        //     /*check if the item starts with the same letters as the text field value:*/
-        //     if (arr[i].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
-        //         /*create a DIV element for each matching element:*/
-        //         b = document.createElement("DIV");
-        //         /*make the matching letters bold:*/
-        //         b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-        //         b.innerHTML += arr[i].substr(val.length);
-        //         /*insert a input field that will hold the current array item's value:*/
-        //         b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-        //         /*execute a function when someone clicks on the item value (DIV element):*/
-        //         b.addEventListener("click", function (e) {
-        //             /*insert the value for the autocomplete text field:*/
-        //             inp.value = this.getElementsByTagName("input")[0].value;
-        //             /*close the list of autocompleted values,
-        //             (or any other open lists of autocompleted values:*/
-        //             closeAllLists();
-        //         });
-        //         a.appendChild(b);
-        //     }
-        // }
     });
     /*execute a function presses a key on the keyboard:*/
-    inp.addEventListener("keydown", function (e) {
+    $(inp).on("keydown", function (e) {
         let x = document.getElementById(this.id + "autocomplete-list");
         if (x) x = x.getElementsByTagName("div");
         if (e.keyCode === 40) {
@@ -150,7 +141,10 @@ function autocomplete(inp, url) {
             e.preventDefault();
             if (currentFocus > -1) {
                 /*and simulate a click on the "active" item:*/
-                if (x) x[currentFocus].click();
+                if (x) {
+                    history.pushState({}, "", $(x[currentFocus]).find('a').attr("href"))
+                    location.reload()
+                }
             }
         }
     });
@@ -174,20 +168,25 @@ function autocomplete(inp, url) {
     }
 
     function closeAllLists(elmnt) {
-        /*close all autocomplete lists in the document,
-        except the one passed as an argument:*/
-        const x = document.getElementsByClassName("autocomplete-items");
-        for (let i = 0; i < x.length; i++) {
-            if (elmnt !== x[i] && elmnt !== inp) {
-                x[i].parentNode.removeChild(x[i]);
-            }
-        }
+        $('.autocomplete-items').hide()
     }
 
     /*execute a function when someone clicks in the document:*/
     document.addEventListener("click", function (e) {
-        closeAllLists(e.target);
-    });
+        if (!$(e.target).hasClass("movie-search")) {
+            closeAllLists(e.target);
+        }
+    })
+
+    $(inp).on("click", function (e) {
+        $('.autocomplete-items').show()
+    })
+    ;
+}
+
+try {
+    autocomplete(document.getElementsByClassName("movie-search")[0], urlForSearch)
+} catch {
 }
 
 /*скролер*/
@@ -280,5 +279,79 @@ $('.scroller-left').click(function () {
     });
 })
 
-autocomplete(document.getElementsByClassName("movie-search")[0], urlForSearch);
+$(document).ready(function () {
+
+    if (!$('*').is('.form-panel')) {
+        console.log('лицей вечен');
+        return;
+    }
+
+    var panelOne = $('.form-panel.two').height(),
+        panelTwo = $('.form-panel.two')[0].scrollHeight;
+
+    $('.form-panel.two').not('.form-panel.two.active').on('click', function (e) {
+
+        $('.form-toggle').addClass('visible');
+        $('.form-panel.one').addClass('hidden');
+        $('.form-panel.two').addClass('active');
+        $('.form').animate({
+            'height': panelTwo
+        }, 200);
+    });
+
+    $('.form-toggle').on('click', function (e) {
+        $(this).removeClass('visible');
+        $('.form-panel.one').removeClass('hidden');
+        $('.form-panel.two').removeClass('active');
+        $('.form').animate({
+            'height': panelOne
+        }, 200);
+    });
+});
+
+function updateStars(icon) {
+    let icon_index = icon.index();
+    icon.parent().children().each(function () {
+        el = $(this);
+
+        if (el.index() <= icon_index) {
+            el.css({'color': 'gold'});
+        } else {
+            el.css({'color': 'black'});
+        }
+    });
+}
+
+$('.score-star').click(
+    function (e) {
+        let icon = $(this);
+        let score = icon.index() + 1;
+        const requestOptions = {
+            method: "PUT",
+            headers: {"X-CSRFToken": $(csrfToken).val()},
+        };
+        fetch(`${urlForScore}?score=${score}`, requestOptions).then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+            }).catch((error) => console.log(error));
+        icon.parent().addClass('locked');
+        updateStars(icon);
+    }
+).mouseover(
+    function (e) {
+        let icon = $(this);
+        if (!icon.parent().hasClass('locked')) {
+            updateStars(icon);
+        }
+    }
+).mouseout(
+    function (e) {
+        let icon = $(this);
+        if (!icon.parent().hasClass('locked')) {
+            icon.parent().children().each(function () {
+                $(this).css({'color': 'black'});
+            });
+        }
+    }
+)
 

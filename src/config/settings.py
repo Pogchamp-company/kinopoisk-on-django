@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 from os import getenv
 from datetime import timedelta
@@ -25,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '@oowa+)%q57uxhffto99*-b+mt%63!@r&*#17mqstv&%fr9*2*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(getenv('DEBUG', False))
 
 ALLOWED_HOSTS = ["*"]
 
@@ -38,13 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     'rest_framework',
     'django_minio_backend',
+    'ckeditor',
 
     'movies.apps.MoviesConfig',
     'news.apps.NewsConfig',
     'person.apps.PersonConfig',
+    'users.apps.UsersConfig',
+    'index.apps.IndexConfig'
 ]
 
 MIDDLEWARE = [
@@ -56,6 +61,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if not DEBUG:
+    MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'config.urls'
 
@@ -121,13 +129,20 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
+
+IGNORE_SCORE_PERIOD = timedelta(hours=12)
+MIN_SCORE_COUNT_FOR_AVERAGE = 100
+MIN_SCORE_COUNT_FOR_TOP_250 = 500
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+if 'collectstatic' in sys.argv or not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+else:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # #################### #
 # django_minio_backend #
@@ -163,13 +178,15 @@ MINIO_ACCESS_KEY = getenv('MINIO_ACCESS_KEY', 'minio')
 MINIO_SECRET_KEY = getenv('MINIO_SECRET_KEY', 'minio123')
 MINIO_USE_HTTPS = False
 MINIO_PRIVATE_BUCKETS = [
-    'gachi'
+    'images',
+    'news-images'
 ]
 MINIO_PUBLIC_BUCKETS = [
-    'images',
+    'avatars'
 ]
 MINIO_URL_EXPIRY_HOURS = timedelta(days=1)  # Default is 7 days (longest) if not defined
 MINIO_CONSISTENCY_CHECK_ON_START = True
 MINIO_POLICY_HOOKS: List[Tuple[str, dict]] = [
     # ('django-backend-dev-private', dummy_policy)
 ]
+LOGIN_URL = '/users/login/'
