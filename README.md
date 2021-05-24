@@ -5,7 +5,7 @@
     * [Full](#full)
 * [Getting Started](#getting-started)
     * [Prerequisites](#prerequisites)
-    * [Installing](#installing)
+    * [Install & Run project](#install--run-project)
     * [Seed data](#seed-data)
         * [Base (Top 250 kinopoisk movies)](#base-top-250-kinopoisk-movies)
         * [Add movie from kinopoisk](#add-movie-from-kinopoisk)
@@ -37,7 +37,7 @@ watch news
 2. [PostgreSQL](https://www.postgresql.org)
 3. [Minio](https://docs.min.io)
 
-### Installing
+### Install & Run project
 
 1. Clone repo 
 ```shell
@@ -101,6 +101,14 @@ Run
 ```shell
 manage.py seed_users {users_count}
 manage.py seed_scores
+```
+
+## Run tests
+
+<b>!Warning:</b> [seed data](#seed-data) before running tests
+
+```shell
+bash run_tests.sh
 ```
 
 
