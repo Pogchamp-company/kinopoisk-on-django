@@ -27,3 +27,4 @@ urlpatterns = [
 ]
 
 handler404 = 'errors_handlers.views.http404_page_not_found'
+handler500 = 'errors_handlers.views.http500_internal_server_error'
