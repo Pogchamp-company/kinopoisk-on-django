@@ -191,5 +191,5 @@ MINIO_POLICY_HOOKS: List[Tuple[str, dict]] = [
 ]
 LOGIN_URL = '/users/login/'
 
-import django_on_heroku
-django_on_heroku.settings(locals())
+# import django_on_heroku
+# django_on_heroku.settings(locals())
