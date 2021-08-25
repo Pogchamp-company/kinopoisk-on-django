@@ -132,11 +132,11 @@ dmypy.json
 
 .idea/
 
-src/parser/assets/
-src/parser/movies.json
-src/parser/persons.json
-src/static/ckeditor/
-src/static/admin/
-src/static/rest_framework/
-/src/seed/movies.json
-/src/seed/persons.json
+backend/parser/assets/
+backend/parser/movies.json
+backend/parser/persons.json
+backend/static/ckeditor/
+backend/static/admin/
+backend/static/rest_framework/
+/backend/seed/movies.json
+/backend/seed/persons.json

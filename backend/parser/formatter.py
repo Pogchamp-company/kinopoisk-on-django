@@ -54,7 +54,7 @@ if __name__ == '__main__':
         movie_list_json = load_json('movies.json')
         person_list_json = load_json('persons.json')
     except FileNotFoundError:
-        print('Run src/parser.parser.py to get raw json data')
+        print('Run backend/parser.parser.py to get raw json data')
         raise
 
     movies_model_list = [

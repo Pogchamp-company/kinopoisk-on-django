@@ -52,7 +52,7 @@ pip install -r requirements.txt
 5. Set [env variables](#environment-variables)
 6. Migrate database
 ```shell
-# cd src
+# cd backend
 manage.py migrate
 ```
 7. Run minio
