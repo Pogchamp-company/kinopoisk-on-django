@@ -16,6 +16,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser: ArgumentParser):
         parser.add_argument('--percentage', type=int, default=100, choices=range(1, 101))
         parser.add_argument('--median', type=float, default=7)
+        parser.add_argument('--max_commit_count', type=int, default=1000)
 
     def handle(self, *args, **options):
         percentage = options['percentage']
@@ -23,6 +24,7 @@ class Command(BaseCommand):
         users_to_score = int(len(users) / 100 * percentage)
         median: float = options['median'] - 1
         assert 0 <= median <= 9
+        max_commit_count = options['max_commit_count']
         Score.objects.filter(user__username__startswith='TestUser').delete()
         program_start = time.time()
         scores = []
@@ -43,6 +45,10 @@ class Command(BaseCommand):
                                  user=user,
                                  value=random.choices(range(1, 11), weights, k=1)[0])
                            for user in random.choices(users, k=users_to_score)])
+            if len(scores) >= max_commit_count:
+                print(f'Bulk dump for {len(scores)} entries')
+                Score.objects.bulk_create(scores)
+                scores.clear()
             print(f'Time: {time.time() - start}')
         print(f'Score collected! Time: {time.time() - program_start}')
         Score.objects.bulk_create(scores)
