@@ -1,0 +1,30 @@
+.poster__image {
+  //width: calc(80vh / 40 * 27);
+  //@media (max-width: 900px) {
+  //  width: 100%;
+  //}
+  aspect-ratio: 27 / 40;
+  height: 80vh;
+  max-width: 90vw;
+}
+
+.poster__description {
+  position: absolute;
+  bottom: 25px;
+  left: 70px;
+  color: white;
+}
+
+.poster__container {
+  padding: 10px;
+  position: relative;
+  display: inline-block;
+}
+
+.poster__carousel {
+  display: inline-block;
+  position: relative;
+  margin-top: 5px;
+  box-shadow: -1px -1px 24px 0px rgba(0, 0, 0, 0.59);
+  background-color: #333333;
+}
