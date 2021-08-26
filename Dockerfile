@@ -1,0 +1,1 @@
+RUN cd src && gunicorn config.wsgi

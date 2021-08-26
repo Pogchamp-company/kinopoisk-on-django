@@ -1,0 +1,5 @@
+FROM minio/minio
+ENV MINIO_ACCESS_KEY="minio"
+ENV MINIO_SECRET_KEY="minio123"
+CMD ["server", "/data"]
+EXPOSE 9001

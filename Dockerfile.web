@@ -1,0 +1,7 @@
+FROM python
+
+ADD requirements.txt .
+RUN pip --no-cache-dir  install -r requirements.txt
+COPY . .
+WORKDIR /src
+RUN python manage.py collectstatic --noinput

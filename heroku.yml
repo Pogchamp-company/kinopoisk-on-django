@@ -1,0 +1,18 @@
+build:
+  docker:
+    web: Dockerfile.web
+    minio: Dockerfile.minio
+run:
+  web: gunicorn config.wsgi
+  migrate:
+    image: web
+    command:
+      - python3 manage.py migrate
+  createsuperuser:
+    image: web
+    command:
+      - echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@app.local', 'admin')" | python3 manage.py shell
+release:
+  image: web
+  command:
+    - python3 manage.py collectstatic --noinput
