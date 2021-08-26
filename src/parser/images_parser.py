@@ -10,14 +10,14 @@ def _get_tasks(objects, worker, *args, **kwargs):
 
 
 async def get_movies_posters(kp: KP, assets_folder: str):
-    movies = load_json('movies.json')
+    movies = load_json('parser/movies.json')
     print("Movies started")
     await asyncio.gather(*_get_tasks(movies, kp.get_film_photo, assets_folder=assets_folder))
     print("Movies Done!")
 
 
 async def get_persons_photos(kp: KP, assets_folder: str):
-    persons = load_json('persons.json')
+    persons = load_json('parser/persons.json')
     print("Persons started")
     await asyncio.gather(*_get_tasks(persons, kp.get_person_photo, assets_folder=assets_folder))
     print("Persons Done")
