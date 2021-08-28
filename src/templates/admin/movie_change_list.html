@@ -1,0 +1,9 @@
+{% extends 'admin/change_list.html' %}
+{% block object-tools %}
+    <form action="{% url "movies.add_movie_from_kp" %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="kp_id" placeholder="ИД с кинописка, мудила" required>
+        <input type="submit" value="Импорт"/>
+    </form>
+    {{ block.super }}
+{% endblock %}

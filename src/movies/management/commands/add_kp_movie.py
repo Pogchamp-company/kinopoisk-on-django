@@ -65,9 +65,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         movie_id = options['movie_id']
-        kinopoisk = KP(options['api_key'])
+        self.f(movie_id, options['api_key'])
+
+    def f(self, movie_id, api_key):
+        print(api_key)
+        kinopoisk = KP(api_key)
         self.stdout.write("Collect data")
-        loop = asyncio.get_event_loop()
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         future = asyncio.ensure_future(self._get_movie_info(kinopoisk, movie_id))
         loop.run_until_complete(future)
         full_movie_info: dict = future.result()

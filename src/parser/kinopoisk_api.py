@@ -18,7 +18,9 @@ class FILM:
         self.name = data['nameRu'] if data['nameEn'] == '' else data['nameEn']
         self.ru_name = data['nameRu']
         self.type = data['type']
-        self.year = data['year'].split('-')[0] if data['type'] != 'FILM' else data['year']
+        print(data['year'])
+        self.year = (data['year'] if isinstance(data['year'], int) else data['year'].split('-')[0]) \
+            if data['type'] != 'FILM' else data['year']
         self.duration = data['filmLength']
         self.tagline = data['slogan'] if data['slogan'] is not None else '-'
         self.description = data['description']
