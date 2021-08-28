@@ -176,7 +176,7 @@ dummy_policy = {"Version": "2012-10-17",
 MINIO_ENDPOINT = getenv('MINIO_ENDPOINT', '127.0.0.1:9001')
 MINIO_ACCESS_KEY = getenv('MINIO_ACCESS_KEY', 'minio')
 MINIO_SECRET_KEY = getenv('MINIO_SECRET_KEY', 'minio123')
-MINIO_USE_HTTPS = False
+MINIO_USE_HTTPS = getenv('MINIO_USE_HTTPS', False)
 MINIO_PRIVATE_BUCKETS = [
     'images',
     'news-images'
