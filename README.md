@@ -77,13 +77,13 @@ manage.py runserver
 
 ### Seed data
 #### Base (Top 250 kinopoisk movies)
-1. [Generate seeders json](https://github.com/Pogchamp-company/kinopoisk_on_django/tree/develop/src/parser#generate-seeds) or download this in [release](https://github.com/Pogchamp-company/kinopoisk_on_django/releases/tag/v0.1-alpha)
+1. [Generate seeders json](https://github.com/Pogchamp-company/kinopoisk_on_django/tree/master/src/parser#generate-seeds) or download this in [release](https://github.com/Pogchamp-company/kinopoisk_on_django/releases/tag/v0.2-beta)
 2. Run
 ```shell
 manage.py loaddata seed/movies.json
 manage.py loaddata seed/persons.json
 ``` 
-3. [Get posters](https://github.com/Pogchamp-company/kinopoisk_on_django/tree/develop/src/parser#collect-images)
+3. [Get posters](https://github.com/Pogchamp-company/kinopoisk_on_django/tree/master/src/parser#collect-images)
 4. Run
 ```shell
 manage.py load_posters
@@ -133,7 +133,7 @@ bash run_tests.sh
 
 ## Authors
 
-* **Alexandrov Roman** - *Documentation, Backend* - [Github](https://github.com/AlexandrovRoman)
+* **Roman Alexandrov** - *Documentation, Backend* - [Github](https://github.com/AlexandrovRoman)
 * **Artem Golovin** - *Backend* - [Github](https://github.com/RustyGuard)
 * **Sergey Sirotkin** - *Main frontend developer* - [Github](https://github.com/najisirotkin)
 

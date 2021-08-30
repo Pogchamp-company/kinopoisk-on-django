@@ -18,9 +18,7 @@ class FILM:
         self.name = data['nameRu'] if data['nameEn'] == '' else data['nameEn']
         self.ru_name = data['nameRu']
         self.type = data['type']
-        print(data['year'])
-        self.year = (data['year'] if isinstance(data['year'], int) else data['year'].split('-')[0]) \
-            if data['type'] != 'FILM' else data['year']
+        self.year = data['year'].split('-')[0] if not isinstance(data['year'], int) else data['year']
         self.duration = data['filmLength']
         self.tagline = data['slogan'] if data['slogan'] is not None else '-'
         self.description = data['description']
@@ -180,6 +178,7 @@ class KP:
             return
         photo = await self._get_image('actor_posters', person_id)
         if assets_folder is not None and photo:
+            print(f'{filename} collected')
             self._save_image(filename, photo, assets_folder)
         if assets_folder is None:
             return {filename: photo}
@@ -241,24 +240,6 @@ class KP:
                 except KeyError:
                     pass
             return movie.to_dict(), persons
-
-
-class CACHE:
-    def __init__(self):
-        self.PATH = os.path.dirname(os.path.abspath(__file__))
-
-    def load(self) -> dict:
-        try:
-            with open(self.PATH + '/cache.json', 'r') as f:
-                return json.loads(f.read())
-        except FileNotFoundError:
-            with open(self.PATH + '/cache.json', 'w') as f:
-                f.write('{}')
-                return {}
-
-    def write(self, cache: dict, indent: int = 4):
-        with open(self.PATH + '/cache.json', 'w') as f:
-            return json.dump(cache, f, indent=indent)
 
 
 class STAFF:

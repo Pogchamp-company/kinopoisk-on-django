@@ -103,12 +103,15 @@ if __name__ == '__main__':
                 })
                 last_genre_id += 1
         for role in movie_json['roles']:
-            person_model_list.append({
-                'model': 'person.personrole',
-                'pk': last_role_id,
-                'fields': get_formatted_role_fields(role, i, persons_kp_id_map[role['kp_id']])
-            })
-            last_role_id += 1
+            try:
+                person_model_list.append({
+                    'model': 'person.personrole',
+                    'pk': last_role_id,
+                    'fields': get_formatted_role_fields(role, i, persons_kp_id_map[role['kp_id']])
+                })
+                last_role_id += 1
+            except KeyError:
+                pass
         movies_model_list.append({
             'model': 'movies.movie',
             'pk': i,

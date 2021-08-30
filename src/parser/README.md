@@ -24,6 +24,6 @@ Run images_parser.py
 ### Seed images
 Run 
 ```shell
-manage.py loaddata seed/movies.json
-manage.py loaddata seed/persons.json
+manage.py load_posters
+manage.py load_photos
 ```

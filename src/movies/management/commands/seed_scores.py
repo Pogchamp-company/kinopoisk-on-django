@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser: ArgumentParser):
         parser.add_argument('--percentage', type=int, default=100, choices=range(1, 101))
         parser.add_argument('--median', type=float, default=7)
-        parser.add_argument('--max_commit_count', type=int, default=1000)
+        parser.add_argument('--max_commit_count', type=float, default=float('inf'))
 
     def handle(self, *args, **options):
         percentage = options['percentage']

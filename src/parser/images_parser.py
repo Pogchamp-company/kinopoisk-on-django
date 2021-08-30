@@ -30,8 +30,8 @@ async def main():
         pass
     program_start = time.time()
     kinopoisk = KP(token=getenv('KP_API_KEY'), requests_limit=50)
-    await get_movies_posters(kinopoisk, 'assets')
-    print(round((time.time() - program_start) / 60, 2))
+    # await get_movies_posters(kinopoisk, 'assets')
+    # print(round((time.time() - program_start) / 60, 2))
     await get_persons_photos(kinopoisk, 'assets')
     print(round((time.time() - program_start) / 60, 2))
 

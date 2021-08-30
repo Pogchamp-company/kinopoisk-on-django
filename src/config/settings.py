@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 import sys
+from urllib.parse import urlparse
 from pathlib import Path
 from os import getenv
 from datetime import timedelta
@@ -88,17 +89,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+__database_info = urlparse(getenv('DATABASE_URI', 'postgresql+psycopg2://postgres@localhost:5432/KOD'))
+__db_password = p.split('@')[0] if (p := __database_info.netloc.split(':')[1]) and '@' in p else None
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': getenv('DATABASE_NAME', 'KOD'),
-        'USER': getenv('POSTGRESQL_USER', 'postgres'),
-        'PASSWORD': getenv('POSTGRESQL_PASSWORD'),
-        'HOST': getenv('POSTGRESQL_HOST', 'localhost'),
-        'PORT': int(getenv('POSTGRESQL_PORT', 5432)),
+        'NAME': __database_info.path.removesuffix('/'),
+        'USER': __database_info.username,
+        'PASSWORD': __db_password,
+        'HOST': __database_info.hostname,
+        'PORT': __database_info.port,
     },
     # 'AUTOCOMMIT': False,
 }
+
+del __database_info, __db_password, p
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
