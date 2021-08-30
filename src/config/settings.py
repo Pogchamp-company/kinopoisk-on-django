@@ -95,7 +95,7 @@ __db_password = p.split('@')[0] if (p := __database_info.netloc.split(':')[1]) a
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': __database_info.path.removesuffix('/'),
+        'NAME': __database_info.path.removeprefix('/'),
         'USER': __database_info.username,
         'PASSWORD': __db_password,
         'HOST': __database_info.hostname,
