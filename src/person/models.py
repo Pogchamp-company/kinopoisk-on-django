@@ -1,4 +1,5 @@
 from itertools import starmap
+from random import randint
 from typing import TYPE_CHECKING
 
 from django.db import models
@@ -50,6 +51,7 @@ class PersonRole(models.Model):
 
 
 class Person(models.Model, ImageProperties):
+    kp_id = models.PositiveIntegerField(unique=True)
     fullname = models.CharField(max_length=150, verbose_name='Полное имя')
     ru_fullname = models.CharField(max_length=150, null=True, verbose_name='Полное имя (На русском)')
 

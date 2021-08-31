@@ -5,10 +5,10 @@ wget https://github.com/Pogchamp-company/kinopoisk_on_django/releases/download/v
 unzip assets.zip
 python formatter.py
 cd ..
-python manage.py shell -c 'from movies.models import Movie;Movie.objects.all().delete()'
+python manage.py shell -c 'from movies.models import Movie;from persons.models import Person;Movie.objects.all().delete();Person.objects.all().delete()'
 python manage.py loaddata seed/movies.json
 python manage.py loaddata seed/persons.json
 python manage.py load_posters
 python manage.py load_photos
 python manage.py seed_users 10000
-python manage.py seed_scores
+python manage.py seed_scores --median 8 --max_commit_count 50000

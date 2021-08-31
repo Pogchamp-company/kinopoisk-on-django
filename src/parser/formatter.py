@@ -2,6 +2,7 @@ def get_formatted_person_fields(person: dict):
     if len(person['sex']) > 6:
         person['sex'] = 'MALE'
     return {
+        'kp_id': person['kp_id'],
         'fullname': person['fullname'] or person['ru_fullname'],
         'ru_fullname': person['ru_fullname'],
         'birth_date': person['birth_date'],
@@ -29,6 +30,7 @@ def get_formatted_role_fields(role: dict, movie, person):
 def get_formatted_movie_fields(movie_json: dict, movie_genres: list = None):
     reformat_casing = lambda string: string.replace('-', '_') if string else None
     fields = {
+        'kp_id': movie_json['kp_id'],
         'movie_type': 2 if movie_json['movie_type'] == 'FILM' else 1,
         'title': movie_json['title'],
         'original_title': movie_json['original_title'] if movie_json['original_title'] else movie_json['title'],

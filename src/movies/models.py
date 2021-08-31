@@ -1,4 +1,5 @@
 import datetime
+from random import randint
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -61,6 +62,7 @@ class MovieTrailer(models.Model):
 
 
 class Movie(models.Model, ImageProperties):
+    kp_id = models.PositiveIntegerField(unique=True)
     title = models.CharField(max_length=150, verbose_name='Название')
     original_title = models.CharField(max_length=150, verbose_name='Оригинальное название')
     genres = models.ManyToManyField('Genre', related_name='movies', verbose_name='Жанры')
