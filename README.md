@@ -147,8 +147,9 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 
 | Variable        | Short description | Default |
 | ------------- |:-------------:| -----:|
-| POSTGRESQL_USER | PostgreSQL user | postgres |
-| POSTGRESQL_PASSWORD | PostgreSQL user password | None |
-| POSTGRESQL_HOST | PostgreSQL host | localhost |
-| POSTGRESQL_PORT | PostgreSQL port | 5432 |
-| DATABASE_NAME | PostgreSQL database | KOD |
+| SECRET_KEY | App session secret key | @oowa+)%q57uxhffto99*-b+mt%63!@r&*#17mqstv&%fr9*2* |
+| DATABASE_URI | PostgreSQL connection URI | postgresql+psycopg2://postgres@localhost:5432/KOD |
+| MINIO_ENDPOINT | Endpoint to connect minio | 127.0.0.1:9001 |
+| MINIO_ACCESS_KEY | Minio user | minio |
+| MINIO_SECRET_KEY | Minio password | minio123 |
+| MINIO_USE_HTTPS | - | False |
