@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@oowa+)%q57uxhffto99*-b+mt%63!@r&*#17mqstv&%fr9*2*'
+SECRET_KEY = getenv('SECRET_KEY', '@oowa+)%q57uxhffto99*-b+mt%63!@r&*#17mqstv&%fr9*2*')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(getenv('DEBUG', False))
@@ -180,8 +180,8 @@ dummy_policy = {"Version": "2012-10-17",
                 ]}
 
 MINIO_ENDPOINT = getenv('MINIO_ENDPOINT', '127.0.0.1:9001')
-MINIO_ACCESS_KEY = getenv('MINIO_ACCESS_KEY', 'minio')
-MINIO_SECRET_KEY = getenv('MINIO_SECRET_KEY', 'minio123')
+MINIO_ACCESS_KEY = getenv('MINIO_ACCESS_KEY', getenv('MINIO_ROOT_USER', 'minio'))
+MINIO_SECRET_KEY = getenv('MINIO_SECRET_KEY', getenv('MINIO_ROOT_PASSWORD', 'minio123'))
 MINIO_USE_HTTPS = bool(getenv('MINIO_USE_HTTPS', False))
 MINIO_PRIVATE_BUCKETS = [
     'images',
