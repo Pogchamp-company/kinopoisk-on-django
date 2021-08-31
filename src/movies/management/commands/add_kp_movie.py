@@ -42,7 +42,7 @@ class Command(BaseCommand):
             os.mkdir(dirname)
 
     def add_person(self, raw_person_data: dict, photos) -> tuple[int, Person]:
-        kp_id = int(raw_person_data.pop('kp_id'))
+        kp_id = int(raw_person_data.get('kp_id'))
         person_data = get_formatted_person_fields(raw_person_data)
         person_data['birth_date'] = date(*map(int, birth_date.split('-'))) \
             if (birth_date := person_data['birth_date']) else None
@@ -77,14 +77,14 @@ class Command(BaseCommand):
         future = asyncio.ensure_future(self._get_movie_info(kinopoisk, movie_id))
         loop.run_until_complete(future)
         full_movie_info: dict = future.result()
-        self.stdout.write("Data received")
+        self.stdout.write(self.style.SUCCESS("Data received"))
 
         movie_info: dict = full_movie_info['movie']
         genres = [Genre.objects.get_or_create(title=genre)[0] for genre in movie_info['genres']]
         formatted_movie_info = get_formatted_movie_fields(movie_info)
         # movie = Movie.objects.filter(**formatted_movie_info).first()
         if Movie.objects.filter(**formatted_movie_info).exists():
-            self.stdout.write(f"Movie {movie_id} exists in this database")
+            self.stdout.write(self.style.WARNING(f"Movie {movie_id} exists in this database"))
             return
         formatted_movie_info['movie_type_id'] = formatted_movie_info.pop('movie_type')
         movie: Movie = Movie(**formatted_movie_info)
@@ -92,7 +92,7 @@ class Command(BaseCommand):
         self.stdout.write(f"Movie {movie} created")
         for genre in genres:
             movie.genres.add(genre)
-        self.stdout.write("Movie saved")
+        self.stdout.write(self.style.SUCCESS("Movie saved"))
         photos = {self._get_kp_id_from_image_data(image_data): image_data for image_data in full_movie_info['photos']}
 
         persons_kp_id_map = {}
@@ -101,11 +101,11 @@ class Command(BaseCommand):
             kp_id, person = self.add_person(raw_person_data, photos)
             persons_kp_id_map[kp_id] = person
 
-        self.stdout.write("Persons saved")
+        self.stdout.write(self.style.SUCCESS("Persons saved"))
 
         for role in movie_info['roles']:
             PersonRole(**get_formatted_role_fields(role, movie, persons_kp_id_map[int(role['kp_id'])])).save()
-        self.stdout.write("Roles saved")
+        self.stdout.write(self.style.SUCCESS("Roles saved"))
 
         for filename, image_bin in full_movie_info['posters'].items():
             if not image_bin:
@@ -123,4 +123,4 @@ class Command(BaseCommand):
             finally:
                 os.remove(file_path)
         os.rmdir('temp')
-        self.stdout.write("Posters saved")
+        self.stdout.write(self.style.SUCCESS("Posters saved"))
