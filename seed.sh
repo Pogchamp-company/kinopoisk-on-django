@@ -5,7 +5,7 @@ wget https://github.com/Pogchamp-company/kinopoisk_on_django/releases/download/v
 unzip assets.zip
 python formatter.py
 cd ..
-python manage.py shell -c 'from movies.models import Movie;from persons.models import Person;Movie.objects.all().delete();Person.objects.all().delete()'
+python manage.py shell -c 'from movies.models import Movie;from person.models import Person;Movie.objects.all().delete();Person.objects.all().delete()'
 python manage.py loaddata seed/movies.json
 python manage.py loaddata seed/persons.json
 python manage.py load_posters

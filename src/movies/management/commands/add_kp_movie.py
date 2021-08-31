@@ -65,9 +65,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         movie_id = options['movie_id']
-        self.f(movie_id, options['api_key'])
+        self.main(movie_id, options['api_key'])
 
-    def f(self, movie_id, api_key):
+    def main(self, movie_id, api_key):
         print(api_key)
         kinopoisk = KP(api_key)
         self.stdout.write("Collect data")

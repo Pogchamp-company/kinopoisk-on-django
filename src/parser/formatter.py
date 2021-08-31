@@ -56,7 +56,7 @@ if __name__ == '__main__':
         movie_list_json = load_json('movies.json')
         person_list_json = load_json('persons.json')
     except FileNotFoundError:
-        print('Run src/parser.parser.py to get raw json data')
+        print('Run src/parser/parser.py to get raw json data')
         raise
 
     movies_model_list = [
@@ -78,6 +78,8 @@ if __name__ == '__main__':
     person_model_list = []
     persons_kp_id_map = {}
     for i, person in enumerate(person_list_json, 1):
+        if person['kp_id'] in persons_kp_id_map:
+            continue
         persons_kp_id_map[person['kp_id']] = i
         person_model_list.append({
             'model': 'person.person',

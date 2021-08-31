@@ -32,6 +32,6 @@ def add_movie_from_kp(request):
         return 'мудила'
 
     c = Command()
-    c.f(int(kp_id), getenv('KP_API_KEY'))
+    c.main(int(kp_id), getenv('KP_API_KEY'))
 
     return redirect('/admin/movies/movie/')
