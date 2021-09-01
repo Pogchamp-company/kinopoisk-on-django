@@ -7,14 +7,15 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import React from "react";
 import "./Header.scss"
+import {Link} from "react-router-dom";
 
 export function Header() {
     return (
         <header className={"nav-container"}>
-            <div className={"nav-icons-container"}>
+            <Link to={"/"} className={"nav-icons-container"}>
                 <img className={"nav__image big"} src={image} alt={"Logo"}/>
                 <MovieIcon className={"nav__image small"} fontSize={"large"}/>
-            </div>
+            </Link>
             <TextField className={"search-input"}
                        placeholder="Поиск"
                        InputProps={{

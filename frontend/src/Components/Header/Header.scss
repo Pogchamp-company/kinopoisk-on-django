@@ -1,10 +1,12 @@
+@import "src/variables";
+
 .nav-container {
   display: flex;
-  background-color: #333333;
+  background-color: $header-background-color;
   padding: 10px;
   justify-content: space-between;
   justify-items: center;
-  color: #ffffff;
+  color: $header-color;
   position: sticky;
   top: 0;
   z-index: 10000;
@@ -31,12 +33,17 @@
   margin: 0 5px;
 }
 
+.nav-icons-container svg:hover {
+  color: $primary-color-500;
+}
+
 .nav__image.big {
   @media (max-width: 900px) {
     display: none;
   }
 }
 .nav__image.small {
+  color: $header-color;
   @media (min-width: 900px) {
     display: none;
   }

@@ -1,14 +1,16 @@
+@import "src/variables";
+
 .news__container {
   max-width: 855px;
 }
 
 .news__item {
   text-decoration: none;
-  color: black;
   position: relative;
   display: flex;
   margin: 5px 5px 15px;
-  background: #808080;
+  background: $gray-color-100;
+  color: $gray-color-1000;
   padding: 5px;
   border-radius: 5px;
   @media (max-width: 900px) {
@@ -28,6 +30,8 @@
     border-radius: 5px;
     object-fit: cover;
     opacity: 0.85;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 
   div {
@@ -38,7 +42,7 @@
 }
 
 .news__item:hover {
-  background-color: #666666;
+  background-color: $gray-color-200;
 }
 
 .news__item:nth-child(2n) {

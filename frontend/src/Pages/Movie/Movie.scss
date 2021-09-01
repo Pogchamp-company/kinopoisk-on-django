@@ -1,0 +1,110 @@
+@import "src/variables";
+
+$media-width: 900px;
+
+.movie-poster__container {
+  //min-width: 500px;
+  img {
+    aspect-ratio: 27 / 40;
+    width: 100%;
+    max-width: 450px;
+  }
+
+}
+
+.movie-page-container {
+  display: flex;
+  flex-direction: column;
+  //align-items: center;
+
+  @media (min-width: $media-width) {
+    gap: 10px;
+    flex-direction: row;
+    justify-content: center;
+    padding: 15px;
+  }
+}
+
+.movie-page__info {
+  //max-width: 900vw;
+
+  h5 {
+    line-height: 20px;
+  }
+}
+
+.movie-page__main-info {
+  background-color: $gray-color-300;
+  padding: 5px;
+  max-width: 600px;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+
+    p {
+      text-align: right;
+    }
+  }
+}
+
+.movie-page-info__persons {
+  overflow: auto;
+  white-space: nowrap;
+  max-width: 600px;
+
+  &::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $gray-color-500;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $gray-color-600;
+    //border: thick red;
+    //box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+    border: 1px solid $gray-color-300;
+  }
+
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: $gray-color-300;
+  gap: 5px;
+  padding: 5px;
+}
+
+.person-card {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: $gray-color-500;
+  padding: 5px;
+
+  .person-card__name {
+    color: white;
+    font-size: 15px;
+  }
+
+  .person-card__role {
+    font-size: 10px;
+    @media (min-width: $media-width) {
+      //font-size: 20px;
+    }
+  }
+
+  img {
+    height: 45px;
+    aspect-ratio: 27 / 40;
+
+  }
+}
+
+.movie-page__roles {
+  h3 {
+    margin-top: 15px;
+  }
+}
