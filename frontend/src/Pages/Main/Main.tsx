@@ -1,8 +1,9 @@
+import React from 'react';
 import Carousel from "react-material-ui-carousel";
 import "./Main.scss"
-import img_1 from "../../images/img_1.png"
-import img_2 from "../../images/img_2.png"
-import img_3 from "../../images/img_3.png"
+// import img_1 from "../../images/img_1.png"
+// import img_2 from "../../images/img_2.png"
+// import img_3 from "../../images/img_3.png"
 import {Poster} from "../../Components/Poster/Poster";
 import {NewsItem} from "../../Components/NewsItem/NewsItem";
 
@@ -16,13 +17,13 @@ export function MainPage() {
                           className={"poster__carousel"}
                 >
                     <Poster movie={{
-                        name: 'Аватар: Легенда об Аанге', src: img_1,
+                        name: 'Аватар: Легенда об Аанге', src: "/static/img/img_1.png",
                     }}/>
                     <Poster movie={{
-                        name: 'Гравити Фолз', src: img_2,
+                        name: 'Гравити Фолз', src: "/static/img/img_2.png",
                     }}/>
                     <Poster movie={{
-                        name: 'Друзья', src: img_3,
+                        name: 'Друзья', src: "/static/img/img_3.png",
                     }}/>
                 </Carousel>
                 <div className={"news__container"}>

@@ -25,7 +25,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <BrowserRouter>
+            <BrowserRouter basename={"/react"}>
                 <Header/>
                 <Switch>
                     {/*<MainPage/>*/}

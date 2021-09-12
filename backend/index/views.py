@@ -21,6 +21,10 @@ def index(request):
     return render(request, 'index/home_page.html', context)
 
 
+def react_index(request, page=''):
+    return render(request, 'index.html')
+
+
 class SearchView(APIView):
     movie_serializer_class = MovieSerializer
     person_serializer_class = PersonSerializer

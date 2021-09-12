@@ -1,0 +1,24 @@
+@import "src/variables";
+
+.stars__container {
+  width: max-content;
+  margin: 0 auto;
+
+  svg {
+    transform-origin: center;
+    color: $gray-color-1000;
+  }
+
+  svg:hover {
+    transform: scale(1.2);
+  }
+
+  &:hover svg {
+    color: $primary-color-500;
+  }
+
+  & svg:hover ~ svg {
+    color: $gray-color-1000;
+  }
+
+}
