@@ -58,7 +58,6 @@ class Person(models.Model, ImageProperties):
     birth_date = models.DateField(null=True, verbose_name='Дата рождения')
     death = models.DateField(null=True, verbose_name='Дата смерти')
 
-    # САНТИМЕТРы)))))
     height = models.PositiveIntegerField(null=True, verbose_name='Рост в сантиметрах')
 
     class SexEnum(ChoiceEnum):
@@ -113,7 +112,7 @@ class Person(models.Model, ImageProperties):
         last_date = self.death if self.death else date.today()
         try:
             birthday = self.birth_date.replace(year=last_date.year)
-        except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
+        except ValueError:  # raised when birthdate is February 29 and the current year is not a leap year
             birthday = self.birth_date.replace(year=last_date.year, month=self.birth_date.month + 1, day=1)
         return last_date.year - self.birth_date.year - 1 if birthday > last_date else last_date.year - self.birth_date.year
 

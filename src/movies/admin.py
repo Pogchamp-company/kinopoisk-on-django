@@ -1,9 +1,8 @@
-import sys
 from os import getenv
 
 from django.contrib import admin
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
-from django.urls import reverse
 
 from .management.commands.add_kp_movie import Command
 from .models import Genre, Movie, MovieType, Poster, MovieTrailer
@@ -27,9 +26,8 @@ admin.site.register(MovieTrailer, MovieTrailerAdmin)
 
 def add_movie_from_kp(request):
     kp_id = request.POST.get('kp_id')
-    print(kp_id)
     if not request.user.is_superuser:
-        return 'мудила'
+        return HttpResponseForbidden()
 
     c = Command()
     c.main(int(kp_id), getenv('KP_API_KEY'))

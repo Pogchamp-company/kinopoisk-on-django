@@ -44,7 +44,7 @@ class FILM:
             "year": self.year,
             "slogan": self.tagline,
             "description": self.description,
-            "duration": self.duration + ":00",
+            "duration": self.duration + ":00" if self.duration else None,
             "premiere": self.premiere,
             "premiere_ru": self.premiere_ru,
             "rating_mpaa": self.mpaa_rating,

@@ -58,7 +58,7 @@
                     </h5>
                     <h5>Премьера Мир: {% if movie.premiere %}{{ movie.premiere }}{% else %}-{% endif %}</h5>
                     <h5>Премьера РФ: {% if movie.premiere_ru %}{{ movie.premiere_ru }}{% else %}-{% endif %}</h5>
-                    <h5>Время: {{ movie.duration }}</h5>
+                    <h5>Время: {% if movie.duration %}{{ movie.duration }}{% else %}-{% endif %}</h5>
                 </div>
             </div>
             <div class="block-movie-statistic">
@@ -68,21 +68,23 @@
                     </div>
                     <div class="qty-rating">{{ movie.score_count | intword }}</div>
                 </div>
-                <div class="container-actors">
-                    <div class="container-actors-block">
-                        {% for actor in movie.actors %}
-                            <div class="actor-block">
-                                <div class="row px-3">
-                                    <div class="actor-info">
-                                        <a class="actor-name"
-                                           href="{% url "person.person_page" person_id=actor.person_id %}">{{ actor.person }}</a>
-                                        <div class="actor-description text">{{ actor.role_name }}</div>
+                {% if movie.actors %}
+                    <div class="container-actors">
+                        <div class="container-actors-block">
+                            {% for actor in movie.actors %}
+                                <div class="actor-block">
+                                    <div class="row px-3">
+                                        <div class="actor-info">
+                                            <a class="actor-name"
+                                               href="{% url "person.person_page" person_id=actor.person_id %}">{{ actor.person }}</a>
+                                            <div class="actor-description text">{{ actor.role_name }}</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
         {% if movie.trailers.exists %}

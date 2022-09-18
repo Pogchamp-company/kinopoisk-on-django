@@ -48,7 +48,9 @@ class Command(BaseCommand):
             if (birth_date := person_data['birth_date']) else None
         person_data['death'] = date(*map(int, birth_date.split('-'))) \
             if (birth_date := person_data['death']) else None
-        person: Person = Person.objects.get_or_create(**person_data)[0]
+        person: Person = Person.objects.filter(kp_id=kp_id).first()
+        if not person:
+            person = Person.objects.create(**person_data)
         if not person.photos.exists() and (image_bin := next(iter(photos[kp_id].values()))):
             self.safe_mkdir('temp')
             file_path = os.path.join('temp', next(iter(photos[kp_id])))

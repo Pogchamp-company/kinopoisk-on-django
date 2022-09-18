@@ -71,7 +71,7 @@ class Movie(models.Model, ImageProperties):
     year = models.IntegerField(validators=[MinValueValidator(1895)], verbose_name='Год выхода')
     slogan = models.CharField(max_length=500, verbose_name='Слоган')
     description = models.TextField(null=True, verbose_name='Описание')
-    duration = models.DurationField(verbose_name='Продолжительность')
+    duration = models.DurationField(null=True, verbose_name='Продолжительность')
     budget = models.IntegerField(validators=[MinValueValidator(0)], verbose_name='Бюджет')
     premiere = models.DateField(null=True, verbose_name='Премьера (мир)')
     premiere_ru = models.DateField(null=True, verbose_name='Премьера (Россия)')
